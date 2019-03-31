@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Search {
+    //the list of recipes from a search
     public Recipe[] results;
-    public String baseUri;
-    public int offset;
-    public int number;
+
+    //the number of results returned
     public int totalResults;
 }

@@ -14,7 +14,9 @@ import java.net.URL;
 
 public class Spoonacular {
 
-    /* This method allows you to get search results in bulk*/
+    /* This method allows you to get search results in bulk;
+    *  used to convert a search that yields
+    *  multiple results into a list of Recipes*/
     private static Recipe[] searchBulk(String ids) throws IOException {
 
         //request bulk recipe information
@@ -49,7 +51,7 @@ public class Spoonacular {
         return recipes;
     }
 
-    /*This method writes results to externam=l files, this is good for testing and saving on API calls*/
+    /*This method writes results to external files, this is good for testing and saving on API calls*/
     private static void writeToExternalFile(StringBuffer json, String fileName ){
         try {
             FileOutputStream outputStream = new FileOutputStream(fileName);
@@ -162,6 +164,8 @@ public class Spoonacular {
         return searchBulk(ids);
     }
 
+
+    /*This method returns a list of similar recipes given an id; will be very useful when offering alternatives*/
     public static Recipe[] getSimilarRecipes(int id) throws IOException {
         StringBuffer json = new StringBuffer();
         try{
