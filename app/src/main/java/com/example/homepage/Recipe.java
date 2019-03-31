@@ -1,5 +1,8 @@
 package com.example.homepage;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Recipe {
 
     public int id;
@@ -16,5 +19,5 @@ public class Recipe {
     public boolean veryHealthy;
     public boolean cheap;
     public boolean veryPopular;
-
+    public int likes;
 }
