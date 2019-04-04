@@ -208,6 +208,5 @@ public class Spoonacular {
 
     /*Used for API testing*/
     public static void main (String args[]) throws IOException {
-
     }
 }
