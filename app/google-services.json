@@ -1,14 +1,14 @@
 {
   "project_info": {
-    "project_number": "317456227351",
-    "firebase_url": "https://thyme2eat.firebaseio.com",
-    "project_id": "thyme2eat",
-    "storage_bucket": "thyme2eat.appspot.com"
+    "project_number": "950299290258",
+    "firebase_url": "https://thyme2eat-f32bd.firebaseio.com",
+    "project_id": "thyme2eat-f32bd",
+    "storage_bucket": "thyme2eat-f32bd.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:317456227351:android:e761b66041bf1832",
+        "mobilesdk_app_id": "1:950299290258:android:e761b66041bf1832",
         "android_client_info": {
           "package_name": "com.example.homepage"
         }
@@ -16,14 +16,14 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDkP1cOmuRkO9BZtvCmCkBHQ2-O4dnfBpQ"
+          "current_key": "AIzaSyA57t8B-8OmW0nBlNj8AKOgiIytvjIfq58"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "317456227351-ho454pmham1vpe0h6armrt7hu9j2srmf.apps.googleusercontent.com",
+              "client_id": "950299290258-02gkufpi2bbb0gd3kmgaraiahtd868i4.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
