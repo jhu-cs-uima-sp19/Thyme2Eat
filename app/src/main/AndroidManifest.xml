@@ -10,6 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".ViewRecipe"
+            android:label="@string/title_activity_view_recipe"
+            android:theme= "@style/AppTheme"></activity>
+        <activity
             android:name=".MainActivity"
             android:label="My Meal Plan"
             android:theme="@style/AppTheme.NoActionBar">
