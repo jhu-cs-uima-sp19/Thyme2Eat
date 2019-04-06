@@ -26,7 +26,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/ingredients_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="Phasellus eleifend pellentesque aliquam netus aptent facilisis per ut accumsan dui Volutpat curae magna nam metus faucibus sapien aliquet faucibus cursus potenti Sagittis porttitor morbi nullam varius nostra vehicula potenti proin malesuada primis auctor Elementum bibendum litora porttitor pellentesque phasellus porttitor consectetur turpis Suspendisse rutrum amet cursus vitae nibh imperdiet eros cubilia Hac tempus sodales eleifend dictum dui felis sed Posuere fusce donec convallis morbi pretium sit duis eros nec torquent arcu Fames nullam ullamcorper arcu placerat rutrum arcu tristique euismod duis varius porta netus"

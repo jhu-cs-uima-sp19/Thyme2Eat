@@ -1,12 +1,22 @@
 package com.example.homepage;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
 
 
 public class ViewIngredientsFragment extends Fragment {
@@ -18,6 +28,12 @@ public class ViewIngredientsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private HashMap<String, String> ingredients;
+    private TextView ingredients_text;
+    private View view;
+
+    private DatabaseReference mDatabase;
+    private DataSnapshot dataSnapshot;
 
     public ViewIngredientsFragment() {
         // Required empty public constructor
@@ -41,6 +57,17 @@ public class ViewIngredientsFragment extends Fragment {
         return fragment;
     }
 
+    ValueEventListener postListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            ingredients = (HashMap<String, String>)dataSnapshot.getValue();
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+        }
+    };
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,9 +81,19 @@ public class ViewIngredientsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_view_ingredients, container, false);
+        view = inflater.inflate(R.layout.fragment_view_ingredients, container, false);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase.child("plan").child("2019;03;21").child("chicken parmesan").child("ingredients").addValueEventListener(postListener);
+        String i = "";
+        ingredients_text = (TextView)view.findViewById(R.id.ingredients_text);
+        if (ingredients != null) {
+            for (String key : ingredients.keySet()) {
+                i+=key + " " + ingredients.get(key) + "\n";
+            }
+        }
+        ingredients_text.setText(i);
+        return view;
     }
-
 
     @Override
     public void onDetach() {
