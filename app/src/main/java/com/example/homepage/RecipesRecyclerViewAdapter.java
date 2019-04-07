@@ -1,12 +1,16 @@
 package com.example.homepage;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.homepage.dummy.DummyContent.DummyItem;
 import com.google.firebase.database.DataSnapshot;
@@ -61,6 +65,7 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
     public void onBindViewHolder(final ViewHolder holder, int position) {
         Log.w("myApp", "atBindView");
         ((ViewHolder) holder).bindView(position);
+
         /*
         holder.mItem = mValues.get(position);
         holder.mIdView.setText(mValues.get(position).id);
@@ -98,12 +103,21 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
         public final View mView;
         public final TextView dateView;
         public final TextView timeView;
+        public final ImageView image;
+
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
             dateView = (TextView) view.findViewById(R.id.dateText);
             timeView = (TextView) view.findViewById(R.id.timeText);
+            image = (ImageView) view.findViewById(R.id.image);
+            image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    System.out.println(getAdapterPosition());
+                }
+            });
             view.setOnClickListener(this);
         }
 
@@ -115,5 +129,6 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
         public void onClick(View view) {
 
         }
+
     }
 }
