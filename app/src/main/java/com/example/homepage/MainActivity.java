@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //mealList = new ArrayList<Recipe>();
+        mealList = new ArrayList<Recipe>();
         mDatabase = FirebaseDatabase.getInstance().getReference().child("plan");
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override

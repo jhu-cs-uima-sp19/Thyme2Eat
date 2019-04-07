@@ -1,24 +1,35 @@
 package com.example.homepage;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
 
 public class UserPreferences extends AppCompatActivity {
 
+    Button confirm;
+    SharedPreferences myPreferences;
+    SharedPreferences.Editor editor;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_preferences);
+        myPreferences = getSharedPreferences("oreferences", Context.MODE_PRIVATE);
+        editor = myPreferences.edit();
         Spinner cuisine_spinner = (Spinner) findViewById(R.id.cuisine_spinner);
         final String[] select_cuisine = {
                 "Select Cuisine(s)", "african", "chinese", "japanese", "korean", "vietnamese", "thai", "indian", "british", "irish", "french", "italian",
                 "mexican", "spanish", "middle eastern", "jewish", "american", "cajun", "southern", "greek", "german", "nordic",
                 "eastern european", "caribbean", "latin american"};
 
-        ArrayList<StateVO> cuisine_listVOs = new ArrayList<>();
+        final ArrayList<StateVO> cuisine_listVOs = new ArrayList<>();
         for (int i = 0; i < select_cuisine.length; i++) {
             StateVO stateVO = new StateVO();
             stateVO.setTitle(select_cuisine[i]);
@@ -57,6 +68,17 @@ public class UserPreferences extends AppCompatActivity {
         PreferenceAdapter allergies_adapter = new PreferenceAdapter(UserPreferences.this, 0,
                 allergies_listVOs);
         allergies_spinner.setAdapter(allergies_adapter);
+
+        confirm = findViewById(R.id.button);
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (StateVO s: cuisine_listVOs) {
+                    if (s.isSelected()) {
+                    }
+                }
+            }
+        });
 
     }
 }

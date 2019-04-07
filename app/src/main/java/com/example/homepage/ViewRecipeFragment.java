@@ -75,7 +75,7 @@ public class ViewRecipeFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_view_recipe, container, false);
         recipe_text = (TextView)view.findViewById(R.id.recipe_text);
-        recipe_text.setText(recipe);
+        recipe_text.setText(ViewRecipe.instructions);
         // Inflate the layout for this fragment
         return view;
     }

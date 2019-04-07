@@ -9,13 +9,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class ViewRecipe extends AppCompatActivity {
 
     private Fragment viewRecipe;
     private Fragment viewIngredients;
     private FragmentTransaction transaction;
-    public String instructions;
-    public String ingredients;
+    public static String instructions;
+    public static ArrayList<Ingredient> ingredients;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -44,6 +46,9 @@ public class ViewRecipe extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_recipe);
+        int index = getIntent().getIntExtra("index", 0);
+        instructions = MainActivity.mealList.get(index).instructions;
+        ingredients = MainActivity.mealList.get(index).extendedIngredients;
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);

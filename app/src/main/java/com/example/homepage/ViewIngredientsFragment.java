@@ -85,6 +85,11 @@ public class ViewIngredientsFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_view_ingredients, container, false);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         ingredients_text = (TextView)view.findViewById(R.id.ingredients_text);
+        if (ingredients_string == "") {
+            for (Ingredient i : ViewRecipe.ingredients) {
+                ingredients_string += i.toString();
+            }
+        }
         ingredients_text.setText(ingredients_string);
         return view;
     }
