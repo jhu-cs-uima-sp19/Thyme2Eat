@@ -115,7 +115,9 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
             image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    System.out.println(getAdapterPosition());
+                    Intent intent = new Intent(mView.getContext(), ViewRecipe.class);
+                    intent.putExtra("index", getAdapterPosition());
+                    mView.getContext().startActivity(intent);
                 }
             });
             view.setOnClickListener(this);

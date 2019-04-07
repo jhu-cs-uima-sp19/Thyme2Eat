@@ -14,6 +14,8 @@ public class ViewRecipe extends AppCompatActivity {
     private Fragment viewRecipe;
     private Fragment viewIngredients;
     private FragmentTransaction transaction;
+    public String instructions;
+    public String ingredients;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
