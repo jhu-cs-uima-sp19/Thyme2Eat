@@ -7,14 +7,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 
 public class MealPlan extends Fragment {
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter mAdapter;
+    public RecyclerView recyclerView;
+    private RecipesRecyclerViewAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private DatabaseReference mDatabase;
 
@@ -57,6 +58,7 @@ public class MealPlan extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
@@ -65,6 +67,7 @@ public class MealPlan extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_meal_plan, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
+        recyclerView.setAdapter(mAdapter);
         recyclerView.setHasFixedSize(true);
 
         //layoutManager = new LinearLayoutManager(this);
@@ -72,7 +75,6 @@ public class MealPlan extends Fragment {
 
         //mAdapter = new MyAdapter(myDataset);
         recyclerView.setAdapter(mAdapter);
-
         return view;
     }
 

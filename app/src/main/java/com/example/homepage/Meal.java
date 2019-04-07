@@ -1,6 +1,7 @@
 package com.example.homepage;
 
 public class Meal {
+    public int id;
     private String date;
     private String time;
 
