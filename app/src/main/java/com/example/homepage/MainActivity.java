@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private DatabaseReference mDatabase;
-    public static ArrayList<Meal> mealList;
+    public static ArrayList<Recipe> mealList;
     private RecipeFragment mealPlan;
     private Fragment editMealPlan;
     private FragmentTransaction transaction;
@@ -39,21 +39,32 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        mealList = new ArrayList<Meal>();
+        //mealList = new ArrayList<Recipe>();
         mDatabase = FirebaseDatabase.getInstance().getReference().child("plan");
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                mealList = new ArrayList<Recipe>();
                 Log.w("data", "in snap");
                 String date;
                 String time;
+                String instruct;
+                ArrayList<Ingredient> ingreds;
                 for (DataSnapshot dates : dataSnapshot.getChildren()) {
                     date = dates.getKey();
                     for (DataSnapshot meal : dates.getChildren()) {
+                        ingreds = new ArrayList<>();
                         time = meal.child("time").getValue().toString();
                         Log.w("myApp", time + date);
-                        Meal m = new Meal(date, time);
-                        mealList.add(m);
+                        instruct = meal.child("instructions").getValue().toString();
+                        for (DataSnapshot ingred : meal.child("ingredients").getChildren()) {
+                            Ingredient i = new Ingredient(ingred.getKey().toString(),
+                                    Double.parseDouble(ingred.child("amount").getValue().toString()),
+                                    ingred.child("unit").getValue().toString());
+                            ingreds.add(i);
+                        }
+                        Recipe r = new Recipe(date, time, instruct, ingreds);
+                        mealList.add(r);
                         break;
                     }
                 }

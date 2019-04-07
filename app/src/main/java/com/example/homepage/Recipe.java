@@ -1,9 +1,35 @@
 package com.example.homepage;
 
+import android.util.Log;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import java.util.ArrayList;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Recipe {
+
+    public Recipe (String date, String time, String instruct, ArrayList<Ingredient> ingreds) {
+        this.date = date;
+        this.time = time;
+        this.instructions = instruct;
+        this.extendedIngredients = ingreds;
+        Log.w("test", date + time + instruct + ingreds.toString());
+    }
+
+    public String getDate() {
+        return this.date;
+    }
+
+    public String getTime() {
+        return this.time;
+    }
+
+
+    //Date of recipe in plan
+    public String date;
+    //Time for recipe in plan
+    public String time;
 
     //id needed to search recipe info
     public int id;
@@ -24,7 +50,7 @@ public class Recipe {
     public int servings;
 
     //list of all ingredients present in the recipe
-    public Ingredient[] extendedIngredients;
+    public ArrayList<Ingredient> extendedIngredients;
 
     //list of boolean values for recipe types
     public boolean vegetarian;
