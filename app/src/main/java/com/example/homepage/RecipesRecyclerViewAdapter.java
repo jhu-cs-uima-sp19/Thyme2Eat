@@ -1,14 +1,19 @@
 package com.example.homepage;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.support.v7.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -118,6 +123,63 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                     Intent intent = new Intent(mView.getContext(), ViewRecipe.class);
                     intent.putExtra("index", getAdapterPosition());
                     mView.getContext().startActivity(intent);
+                }
+            });
+            image.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    PopupMenu popupMenu = new PopupMenu(mView.getContext(), v);
+                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        public boolean onMenuItemClick(MenuItem item) {
+                            if (item.getTitle().toString().equals("Delete")) {
+                                AlertDialog.Builder alert = new AlertDialog.Builder(mView.getContext());
+                                alert.setMessage("Are you sure you want to delete this recipe from your meal plan?");
+                                alert.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                                    public void onClick (DialogInterface dialog, int which) {
+                                        Recipe r = MainActivity.mealList.get(getAdapterPosition());
+                                        MainActivity.mDatabase.child(r.getDate()).setValue(null);
+                                        MainActivity.mealList.remove(getAdapterPosition());
+                                        RecipesRecyclerViewAdapter.this.notifyItemRemoved(getAdapterPosition());
+                                        dialog.cancel();
+                                    }
+                                });
+                                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                    public void onClick (DialogInterface dialog, int which) {
+                                        dialog.cancel();
+                                    }
+                                });
+                                alert.show();
+                                /*
+                                new AlertDialog.Builder(mView.getContext())
+                                        .setMessage(
+                                                "Are you sure you want to delete this recipe from your meal plan?")
+                                        .setPositiveButton(
+                                                "OK",
+                                                new DialogInterface.OnClickListener() {
+                                                    public void onClick (DialogInterface dialog, int which) {
+                                                        Recipe r = MainActivity.mealList.get(getAdapterPosition());
+                                                        MainActivity.mDatabase.child(r.getDate()).setValue(null);
+                                                        MainActivity.mealList.remove(getAdapterPosition());
+                                                        RecipesRecyclerViewAdapter.this.notifyItemRemoved(getAdapterPosition());
+                                                        dialog.cancel();
+                                                    }
+                                                }).show();
+                                                */
+                                /*
+                                Recipe r = MainActivity.mealList.get(getAdapterPosition());
+                                MainActivity.mDatabase.child(r.getDate()).setValue(null);
+                                MainActivity.mealList.remove(getAdapterPosition());
+                                RecipesRecyclerViewAdapter.this.notifyItemRemoved(getAdapterPosition());
+                                */
+                            }
+                            return true;
+                        }
+                    });
+                    popupMenu.setGravity(Gravity.END);
+                    popupMenu.inflate(R.menu.popup_menu);
+                    popupMenu.show();
+
+                    return false;
                 }
             });
             view.setOnClickListener(this);

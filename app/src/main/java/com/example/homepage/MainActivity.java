@@ -29,7 +29,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private DatabaseReference mDatabase;
+    public static DatabaseReference mDatabase;
     public static ArrayList<Recipe> mealList;
     public static ArrayList<String> stringShopList;
     private RecipeFragment mealPlan;
