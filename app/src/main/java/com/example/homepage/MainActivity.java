@@ -3,12 +3,9 @@ package com.example.homepage;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -17,6 +14,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,6 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity
     private FragmentTransaction transaction;
     private Menu menu;
     private MenuItem edit;
+    private Button addMeals;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,21 +53,34 @@ public class MainActivity extends AppCompatActivity
                 String date;
                 String time;
                 String instruct;
+                String image = "";
+                String title = "";
                 ArrayList<Ingredient> ingreds;
                 for (DataSnapshot dates : dataSnapshot.getChildren()) {
                     date = dates.getKey();
                     for (DataSnapshot meal : dates.getChildren()) {
-                        ingreds = new ArrayList<>();
-                        time = meal.child("time").getValue().toString();
+                        title = meal.getKey();
+                        time = "0:00-23:59pm";
+                        if (meal.child("time").exists())
+                            time = meal.child("time").getValue().toString();
                         Log.w("myApp", time + date);
-                        instruct = meal.child("instructions").getValue().toString();
-                        for (DataSnapshot ingred : meal.child("ingredients").getChildren()) {
-                            Ingredient i = new Ingredient(ingred.getKey().toString(),
-                                    Double.parseDouble(ingred.child("amount").getValue().toString()),
-                                    ingred.child("unit").getValue().toString());
-                            ingreds.add(i);
+                        instruct = "Insert Instructions Here";
+                        if (meal.child("instructions").exists())
+                            instruct = meal.child("instructions").getValue().toString();
+                        ingreds = new ArrayList<>();
+                        if (meal.child("ingredients").exists()) {
+                            for (DataSnapshot ingred : meal.child("ingredients").getChildren()) {
+                                if (ingred.child("amount").exists() && ingred.child("unit").exists()) {
+                                    Ingredient i = new Ingredient(ingred.getKey(),
+                                            Double.parseDouble(ingred.child("amount").getValue().toString()),
+                                            ingred.child("unit").getValue().toString());
+                                    ingreds.add(i);
+                                }
+                            }
                         }
-                        Recipe r = new Recipe(date, time, instruct, ingreds);
+                        if (meal.child("image").exists())
+                            image = meal.child("image").getValue().toString();
+                        Recipe r = new Recipe(title,date, time, instruct, ingreds, image);
                         mealList.add(r);
                         break;
                     }
@@ -84,19 +98,26 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        editMealPlan = new EditMealPlan();
         mealPlan = new RecipeFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, mealPlan).commit();
         Log.w("myApp", "hello");
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        addMeals = (Button)findViewById(R.id.addMeals);
+        addMeals.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //DO NOT UNCOMMENT THIS CODE HERE!!!!!
+              //new Spoonacular().execute("searchRandom");
+            }
+        });
     }
 
     @Override
@@ -123,27 +144,6 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        edit = menu.findItem(R.id.action_edit);
-        System.out.println(edit.getTitle());
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_edit && edit.getTitle().equals("Edit")) {
-            edit.setIcon(R.drawable.close);
-            edit.setTitle("Close");
-            transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.fragment_container, editMealPlan);
-            transaction.addToBackStack(null);
-            transaction.commit();
-        } else if (id == R.id.action_edit && edit.getTitle().equals("Close")) {
-            edit.setIcon(R.drawable.edit);
-            edit.setTitle("Edit");
-            transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.fragment_container, mealPlan);
-            transaction.addToBackStack(null);
-            transaction.commit();
-        }
-
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -170,5 +170,4 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
 }

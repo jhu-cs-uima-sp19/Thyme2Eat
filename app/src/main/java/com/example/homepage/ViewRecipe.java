@@ -16,8 +16,10 @@ public class ViewRecipe extends AppCompatActivity {
     private Fragment viewRecipe;
     private Fragment viewIngredients;
     private FragmentTransaction transaction;
+    public static String title;
     public static String instructions;
     public static ArrayList<Ingredient> ingredients;
+    public static String imageUrl;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -49,6 +51,8 @@ public class ViewRecipe extends AppCompatActivity {
         int index = getIntent().getIntExtra("index", 0);
         instructions = MainActivity.mealList.get(index).instructions;
         ingredients = MainActivity.mealList.get(index).extendedIngredients;
+        imageUrl = MainActivity.mealList.get(index).image;
+        title = MainActivity.mealList.get(index).title;
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);

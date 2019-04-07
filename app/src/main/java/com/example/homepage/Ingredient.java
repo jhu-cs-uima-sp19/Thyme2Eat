@@ -5,14 +5,60 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Ingredient {
 
+
+
+    public class Fraction {
+
+        private int numerator, denominator;
+
+        public Fraction(double decimal) {
+
+            String stringNumber = String.valueOf(decimal);
+            int numberDigitsDecimals = stringNumber.length() - 1 - stringNumber.indexOf('.');
+            int denominator = 1;
+            for (int i = 0; i < numberDigitsDecimals; i++) {
+                decimal *= 10;
+                denominator *= 10;
+            }
+
+            int numerator = (int) Math.round(decimal);
+            int greatestCommonFactor = greatestCommonFactor(numerator, denominator);
+            this.numerator = numerator / greatestCommonFactor;
+            this.denominator = denominator / greatestCommonFactor;
+        }
+
+        public String toString() {
+            return String.valueOf(numerator) + "/" + String.valueOf(denominator);
+        }
+
+        public int greatestCommonFactor(int num, int denom) {
+            if (denom == 0) {
+                return num;
+            }
+            return greatestCommonFactor(denom, num % denom);
+        }
+    }
+
     public Ingredient(String name, double amount, String unit) {
         this.name = name;
         this.amount = amount;
         this.unit = unit;
     }
 
+    public Ingredient() {
+
+    }
+
     public String toString() {
-       return "Name: " + this.name + " Amount: " + this.amount + " Unit: " + this.unit + "\n";
+        String amount;
+        if (Double.valueOf(this.amount) %1 !=0)
+            amount = new Fraction(Double.valueOf(this.amount)).toString();
+        else
+            amount = String.valueOf(Math.round(Double.valueOf(this.amount)));
+        if (this.unit == "")
+            return "\u2022 " + amount + " " + this.name + "\n\n";
+        else
+            return "\u2022 " + amount + " " +  this.unit + " of " + this.name + "\n\n";
     }
 
     //ingredient id (may be useful for something but for now not used)
@@ -38,6 +84,8 @@ public class Ingredient {
 
     //image URL of the ingredient
     public String image;
+
+    public String originalString;
 
     //any other information that is needed for this ingredient
     public String[] metaInformation;

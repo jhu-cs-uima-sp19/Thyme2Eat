@@ -1,10 +1,14 @@
 package com.example.homepage;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -13,6 +17,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.util.HashMap;
 
 
@@ -28,6 +37,9 @@ public class ViewRecipeFragment extends Fragment {
     private View view;
     private TextView recipe_text;
     private String recipe = "";
+    private Bitmap image;
+    private ImageView imageView;
+    private TextView title;
 
     public ViewRecipeFragment() {
         // Required empty public constructor
@@ -50,6 +62,39 @@ public class ViewRecipeFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
+    class getImage extends AsyncTask<String, Bitmap, Bitmap> {
+
+        private Exception exception;
+
+        protected Bitmap doInBackground(String... urls) {
+            try {
+                java.net.URL url = new java.net.URL(urls[0]);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+                Bitmap myBitmap = BitmapFactory.decodeStream(input);
+                image = myBitmap;
+                File file = new File("C:/Users/jawhi/AndroidStudioProjects/Thyme2Eat", "test.png");
+                try (FileOutputStream out = new FileOutputStream(file)) {
+                    myBitmap.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+                    // PNG is a lossless format, the compression factor (100) is ignored
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return myBitmap;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        protected void onPostExecute(Bitmap feed) {
+            imageView.setImageBitmap(image);
+        }
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,6 +119,10 @@ public class ViewRecipeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_view_recipe, container, false);
+        imageView = view.findViewById(R.id.recipeImage);
+        title = view.findViewById(R.id.recipeTitle);
+        title.setText(ViewRecipe.title);
+        new getImage().execute(ViewRecipe.imageUrl);
         recipe_text = (TextView)view.findViewById(R.id.recipe_text);
         recipe_text.setText(ViewRecipe.instructions);
         // Inflate the layout for this fragment

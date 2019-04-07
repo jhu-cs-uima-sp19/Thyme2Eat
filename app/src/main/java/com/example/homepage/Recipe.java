@@ -9,12 +9,20 @@ import java.util.ArrayList;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Recipe {
 
-    public Recipe (String date, String time, String instruct, ArrayList<Ingredient> ingreds) {
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public Recipe (String title, String date, String time, String instruct, ArrayList<Ingredient> ingreds, String image) {
+        this.title = title;
         this.date = date;
         this.time = time;
         this.instructions = instruct;
         this.extendedIngredients = ingreds;
+        this.image = image;
         //Log.w("test", date + time + instruct + ingreds.toString());
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public Recipe() {
+
     }
 
     public String getDate() {
