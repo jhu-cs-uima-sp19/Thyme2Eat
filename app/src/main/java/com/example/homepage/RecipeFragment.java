@@ -2,27 +2,28 @@ package com.example.homepage;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.homepage.dummy.DummyContent;
 import com.example.homepage.dummy.DummyContent.DummyItem;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-import java.util.List;
+import java.util.ArrayList;
 
-/**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
- * interface.
- */
-public class RecipeScheduleFragment extends Fragment {
 
+public class RecipeFragment extends Fragment {
+/*
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
@@ -33,13 +34,13 @@ public class RecipeScheduleFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public RecipeScheduleFragment() {
+    public RecipeFragment() {
     }
-
+    /*
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static RecipeScheduleFragment newInstance(int columnCount) {
-        RecipeScheduleFragment fragment = new RecipeScheduleFragment();
+    public static RecipeFragment newInstance(int columnCount) {
+        RecipeFragment fragment = new RecipeFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -54,12 +55,19 @@ public class RecipeScheduleFragment extends Fragment {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
     }
+    */
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_recipeschedule_list, container, false);
 
+        Log.w("myApp", "atRecFrag");
+        View view = inflater.inflate(R.layout.fragment_recipeschedule_list, container, false);
+        RecyclerView rcView = (RecyclerView) view.findViewById(R.id.planList);
+        rcView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rcView.setAdapter(new RecipesRecyclerViewAdapter());
+        return view;
+        /*
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
@@ -69,12 +77,13 @@ public class RecipeScheduleFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyRecipeScheduleRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            recyclerView.setAdapter(new RecipesRecyclerViewAdapter());
         }
         return view;
+        */
     }
 
-
+/*
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -91,7 +100,7 @@ public class RecipeScheduleFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
-
+    */
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -102,8 +111,10 @@ public class RecipeScheduleFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
+    /*
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
         void onListFragmentInteraction(DummyItem item);
     }
+    */
 }
