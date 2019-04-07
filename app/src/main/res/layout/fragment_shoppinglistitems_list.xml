@@ -10,8 +10,15 @@
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
     tools:context=".ShoppingListItemsFragment"
-    tools:listitem="@layout/fragment_shoppinglistitems"
+    tools:listitem="@layout/fragment_shoppinglistitems">
 
+    <Button
+        android:id="@+id/btnBgSelector"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="@drawable/ic_add_circle_outline_black_24dp"
+        android:padding="8dp"
+        android:text="Colored Selector" />
 
-
-    />
+</android.support.v7.widget.RecyclerView>
