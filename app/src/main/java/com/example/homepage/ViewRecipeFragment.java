@@ -27,11 +27,7 @@ public class ViewRecipeFragment extends Fragment {
     private String mParam2;
     private View view;
     private TextView recipe_text;
-    private String recipe;
-
-    private DatabaseReference mDatabase;
-    private DataSnapshot dataSnapshot;
-
+    private String recipe = "";
 
     public ViewRecipeFragment() {
         // Required empty public constructor
@@ -78,10 +74,8 @@ public class ViewRecipeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_view_recipe, container, false);
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        mDatabase.child("plan").child("2019;03;21").child("chicken parmesan").child("instructions").addValueEventListener(postListener);
         recipe_text = (TextView)view.findViewById(R.id.recipe_text);
-        recipe_text.setText(recipe);
+        recipe_text.setText(ViewRecipe.instructions);
         // Inflate the layout for this fragment
         return view;
     }

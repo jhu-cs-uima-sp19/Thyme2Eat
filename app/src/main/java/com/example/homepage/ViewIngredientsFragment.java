@@ -28,6 +28,7 @@ public class ViewIngredientsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private String ingredients_string = "";
     private HashMap<String, String> ingredients;
     private TextView ingredients_text;
     private View view;
@@ -83,15 +84,13 @@ public class ViewIngredientsFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_view_ingredients, container, false);
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        mDatabase.child("plan").child("2019;03;21").child("chicken parmesan").child("ingredients").addValueEventListener(postListener);
-        String i = "";
         ingredients_text = (TextView)view.findViewById(R.id.ingredients_text);
-        if (ingredients != null) {
-            for (String key : ingredients.keySet()) {
-                i+=key + " " + ingredients.get(key) + "\n";
+        if (ingredients_string == "") {
+            for (Ingredient i : ViewRecipe.ingredients) {
+                ingredients_string += i.toString();
             }
         }
-        ingredients_text.setText(i);
+        ingredients_text.setText(ingredients_string);
         return view;
     }
 

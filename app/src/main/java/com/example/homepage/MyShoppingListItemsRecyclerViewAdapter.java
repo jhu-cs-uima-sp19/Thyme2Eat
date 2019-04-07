@@ -1,6 +1,7 @@
 package com.example.homepage;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,16 +19,16 @@ import java.util.List;
  */
 public class MyShoppingListItemsRecyclerViewAdapter extends RecyclerView.Adapter<MyShoppingListItemsRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
-    private final OnListFragmentInteractionListener mListener;
+//    private final List<DummyItem> mValues;
+//    private final OnListFragmentInteractionListener mListener;
 
-    public MyShoppingListItemsRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
-        mValues = items;
-        mListener = listener;
+    public MyShoppingListItemsRecyclerViewAdapter() {
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Log.w("myApp", "atList");
+
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_shoppinglistitems, parent, false);
         return new ViewHolder(view);
@@ -35,29 +36,35 @@ public class MyShoppingListItemsRecyclerViewAdapter extends RecyclerView.Adapter
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        Log.w("myApp", "atBindView");
+        ((ViewHolder) holder).bindView(position);
 
-        holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
-                }
-            }
-        });
+
+//        holder.mItem = mValues.get(position);
+//        holder.mIdView.setText(mValues.get(position).id);
+//        holder.mContentView.setText(mValues.get(position).content);
+//
+//        holder.mView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (null != mListener) {
+//                    // Notify the active callbacks interface (the activity, if the
+//                    // fragment is attached to one) that an item has been selected.
+//                    mListener.onListFragmentInteraction(holder.mItem);
+//                }
+//            }
+//        });
     }
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        Log.w("here", "" + MainActivity.stringShopList.size());
+        return MainActivity.stringShopList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
+        //public final TextView itemDesc;
         public final TextView mIdView;
         public final TextView mContentView;
         public DummyItem mItem;
@@ -65,8 +72,14 @@ public class MyShoppingListItemsRecyclerViewAdapter extends RecyclerView.Adapter
         public ViewHolder(View view) {
             super(view);
             mView = view;
+            //itemDesc = (TextView) view.findViewById(R.id.PUTSOMETHINGHERE);
             mIdView = (TextView) view.findViewById(R.id.item_number);
             mContentView = (TextView) view.findViewById(R.id.content);
+        }
+
+        public void bindView(int position) {
+            //.setText(MainActivity.mealList.get(position).getDate());
+            //.setText(MainActivity.mealList.get(position).getTime());
         }
 
         @Override
