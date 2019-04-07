@@ -14,7 +14,7 @@ public class Recipe {
         this.time = time;
         this.instructions = instruct;
         this.extendedIngredients = ingreds;
-        Log.w("test", date + time + instruct + ingreds.toString());
+        //Log.w("test", date + time + instruct + ingreds.toString());
     }
 
     public String getDate() {
@@ -25,7 +25,9 @@ public class Recipe {
         return this.time;
     }
 
-
+    public String dayOfWeek;
+    public String day;
+    public String month;
     //Date of recipe in plan
     public String date;
     //Time for recipe in plan
