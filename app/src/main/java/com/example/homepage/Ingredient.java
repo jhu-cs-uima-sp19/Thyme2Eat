@@ -5,6 +5,16 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Ingredient {
 
+    public Ingredient(String name, double amount, String unit) {
+        this.name = name;
+        this.amount = amount;
+        this.unit = unit;
+    }
+
+    public String toString() {
+       return "Name: " + this.name + " Amount: " + this.amount + " Unit: " + this.unit + "\n";
+    }
+
     //ingredient id (may be useful for something but for now not used)
     public int id;
 
