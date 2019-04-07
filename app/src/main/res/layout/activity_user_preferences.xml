@@ -19,10 +19,10 @@
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
-        android:layout_height="24dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="196dp"
-        android:text="Other Exclusions (seperate each entry with comma)"
+        android:layout_height="20dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="192dp"
+        android:text="Other EXCLUSIONS (seperate each entry with comma)"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -32,7 +32,7 @@
         android:layout_height="24dp"
         android:layout_marginStart="40dp"
         android:layout_marginTop="300dp"
-        android:text="Other Exclusions (seperate each entry with comma)"
+        android:text="Other INCLUSIONS (seperate each entry with comma)"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -67,28 +67,28 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/editExclusions"
         android:layout_width="366dp"
         android:layout_height="53dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="56dp"
         android:ems="10"
-        android:hint="Example: chicken, peppers, onions,..."
+        android:hint="Example: chicken,peppers,onions,..."
         android:inputType="textPersonName|text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/allergies_spinner" />
 
     <EditText
-        android:id="@+id/editText3"
+        android:id="@+id/editInclusions"
         android:layout_width="366dp"
         android:layout_height="53dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="44dp"
         android:ems="10"
-        android:hint="Example: chicken, peppers, onions,..."
+        android:hint="Example: chicken,peppers,onions,..."
         android:inputType="textPersonName"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText2" />
+        app:layout_constraintTop_toBottomOf="@+id/editExclusions" />
 
     <Button
         android:id="@+id/button"
@@ -98,10 +98,10 @@
         android:layout_marginTop="15dp"
         android:text="Confirm"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText4" />
+        app:layout_constraintTop_toBottomOf="@+id/editDependents" />
 
     <EditText
-        android:id="@+id/editText4"
+        android:id="@+id/editDependents"
         android:layout_width="67dp"
         android:layout_height="43dp"
         android:layout_marginStart="172dp"
@@ -109,6 +109,6 @@
         android:ems="10"
         android:inputType="numberSigned"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText3" />
+        app:layout_constraintTop_toBottomOf="@+id/editInclusions" />
 
 </android.support.constraint.ConstraintLayout>

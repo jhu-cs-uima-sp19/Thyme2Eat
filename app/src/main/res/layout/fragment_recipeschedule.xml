@@ -21,8 +21,8 @@
 
             <CheckBox
                 android:id="@+id/checkbox_made"
-                android:layout_width="26dp"
-                android:layout_height="52dp"
+                android:layout_width="wrap_content"
+                android:layout_height="46dp"
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="50dp"
