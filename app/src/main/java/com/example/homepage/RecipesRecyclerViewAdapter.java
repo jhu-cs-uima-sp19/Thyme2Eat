@@ -1,8 +1,13 @@
 package com.example.homepage;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -24,6 +29,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 
 
@@ -61,6 +71,7 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
             }
         });
         */
+
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_recipeschedule, parent, false);
         return new ViewHolder(view);
@@ -108,16 +119,16 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
         public final View mView;
         public final TextView dateView;
         public final TextView timeView;
-        public final ImageView image;
-
+        public final ImageView imageView;
+        public Bitmap image;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
             dateView = (TextView) view.findViewById(R.id.dateText);
             timeView = (TextView) view.findViewById(R.id.timeText);
-            image = (ImageView) view.findViewById(R.id.image);
-            image.setOnClickListener(new View.OnClickListener() {
+            imageView = (ImageView) view.findViewById(R.id.image);
+            imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mView.getContext(), ViewRecipe.class);
@@ -125,7 +136,7 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                     mView.getContext().startActivity(intent);
                 }
             });
-            image.setOnLongClickListener(new View.OnLongClickListener() {
+            imageView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
                     PopupMenu popupMenu = new PopupMenu(mView.getContext(), v);
@@ -195,4 +206,5 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
         }
 
     }
+
 }

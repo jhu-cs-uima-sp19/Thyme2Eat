@@ -1,5 +1,7 @@
 package com.example.homepage;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -13,17 +15,15 @@ import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.util.HashMap;
-
+import java.net.URL;
 
 public class ViewRecipeFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -63,38 +63,6 @@ public class ViewRecipeFragment extends Fragment {
         return fragment;
     }
 
-    class getImage extends AsyncTask<String, Bitmap, Bitmap> {
-
-        private Exception exception;
-
-        protected Bitmap doInBackground(String... urls) {
-            try {
-                java.net.URL url = new java.net.URL(urls[0]);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setDoInput(true);
-                connection.connect();
-                InputStream input = connection.getInputStream();
-                Bitmap myBitmap = BitmapFactory.decodeStream(input);
-                image = myBitmap;
-                File file = new File("C:/Users/jawhi/AndroidStudioProjects/Thyme2Eat", "test.png");
-                try (FileOutputStream out = new FileOutputStream(file)) {
-                    myBitmap.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
-                    // PNG is a lossless format, the compression factor (100) is ignored
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return myBitmap;
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-
-        protected void onPostExecute(Bitmap feed) {
-            imageView.setImageBitmap(image);
-        }
-    }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -122,7 +90,12 @@ public class ViewRecipeFragment extends Fragment {
         imageView = view.findViewById(R.id.recipeImage);
         title = view.findViewById(R.id.recipeTitle);
         title.setText(ViewRecipe.title);
-        new getImage().execute(ViewRecipe.imageUrl);
+        File file = new File(getContext().getCacheDir(), ViewRecipe.imageUrl.substring(ViewRecipe.imageUrl.lastIndexOf('/') + 1));
+        if (file.exists()) {
+            Bitmap bitmap = BitmapFactory.decodeFile(file.toString());
+            imageView.setImageBitmap(bitmap);
+            System.out.println(getContext().getCacheDir());
+        }
         recipe_text = (TextView)view.findViewById(R.id.recipe_text);
         recipe_text.setText(ViewRecipe.instructions);
         // Inflate the layout for this fragment

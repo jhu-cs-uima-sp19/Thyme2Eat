@@ -1,5 +1,6 @@
 package com.example.homepage;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -52,6 +53,8 @@ public class Recipe {
 
     //image URL of the recipe
     public String image;
+
+    public Bitmap bitmap;
 
     //recipe instructions
     public String instructions;

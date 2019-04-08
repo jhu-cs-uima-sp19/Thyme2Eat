@@ -146,6 +146,7 @@ public class UserPreferences extends AppCompatActivity {
                 }
                 editor.commit();
                 Toast.makeText(UserPreferences.this, "Preferences Saved!", Toast.LENGTH_SHORT).show();
+
             }
         });
     }
