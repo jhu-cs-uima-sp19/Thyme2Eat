@@ -55,10 +55,7 @@ public class Ingredient {
             amount = new Fraction(Double.valueOf(this.amount)).toString();
         else
             amount = String.valueOf(Math.round(Double.valueOf(this.amount)));
-        if (this.unit == "")
-            return "\u2022 " + amount + " " + this.name + "\n\n";
-        else
-            return "\u2022 " + amount + " " +  this.unit + " of " + this.name + "\n\n";
+        return "\u2022 " + amount + " " + this.unit + " " + this.name + "\n\n";
     }
 
     //ingredient id (may be useful for something but for now not used)
