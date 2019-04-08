@@ -31,7 +31,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -65,6 +68,16 @@ public class MainActivity extends AppCompatActivity
                 ArrayList<Ingredient> ingreds;
                 for (DataSnapshot dates : dataSnapshot.getChildren()) {
                     date = dates.getKey();
+                    date = date.replace(";","/");
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyy/MM/dd");
+                    Date convertedDate = new Date();
+                    try {
+                        convertedDate = dateFormat.parse(date);
+                    } catch (ParseException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    date = convertedDate.toString().replace("00:00:00 GMT ", "");
                     for (DataSnapshot meal : dates.getChildren()) {
                         title = meal.getKey();
                         time = "0:00-23:59pm";
@@ -87,7 +100,7 @@ public class MainActivity extends AppCompatActivity
                         }
                         if (meal.child("image").exists())
                             image = meal.child("image").getValue().toString();
-                        Recipe r = new Recipe(title,date, time, instruct, ingreds, image);
+                        Recipe r = new Recipe(title, date, time, instruct, ingreds, image);
                         mealList.add(r);
                         break;
                     }
