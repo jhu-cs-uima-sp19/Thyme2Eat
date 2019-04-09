@@ -199,6 +199,14 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
         public void bindView(int position) {
             dateView.setText(MainActivity.mealList.get(position).getDate());
             timeView.setText(MainActivity.mealList.get(position).getTime());
+            String cache = "/data/user/0/com.example.homepage/cache";
+            Recipe recipe = MainActivity.mealList.get(getAdapterPosition());
+            File file = new File(cache,
+                    recipe.image.substring((recipe.image.lastIndexOf('/') + 1)));
+            if (file.exists()) {
+                Bitmap bitmap = BitmapFactory.decodeFile(file.toString());
+                imageView.setImageBitmap(bitmap);
+            }
         }
 
         public void onClick(View view) {

@@ -78,6 +78,7 @@ public class MealPlan extends Fragment {
         return view;
     }
 
+
     @Override
     public void onDetach() {
         super.onDetach();

@@ -1,7 +1,5 @@
 package com.example.homepage;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -18,12 +16,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.URL;
 
 public class ViewRecipeFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -94,7 +90,9 @@ public class ViewRecipeFragment extends Fragment {
         if (file.exists()) {
             Bitmap bitmap = BitmapFactory.decodeFile(file.toString());
             imageView.setImageBitmap(bitmap);
-            System.out.println(getContext().getCacheDir());
+
+        } else {
+            new getImage().execute(ViewRecipe.imageUrl);
         }
         recipe_text = (TextView)view.findViewById(R.id.recipe_text);
         recipe_text.setText(ViewRecipe.instructions);
@@ -105,5 +103,40 @@ public class ViewRecipeFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    public class getImage extends AsyncTask<String, Bitmap, Bitmap> {
+
+        private Exception exception;
+        private Bitmap myBitmap;
+
+        protected Bitmap doInBackground(String... urls) {
+            try {
+                java.net.URL url = new java.net.URL(urls[0]);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+                myBitmap = BitmapFactory.decodeStream(input);
+                String filename = urls[0].substring(urls[0].lastIndexOf('/')+1);
+                File file = new File(getContext().getCacheDir(), filename);
+                FileOutputStream outputStream = new FileOutputStream(file);
+                try {
+                    myBitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+                    outputStream.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return myBitmap;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            imageView.setImageBitmap(myBitmap);
+        }
     }
 }

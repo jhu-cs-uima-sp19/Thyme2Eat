@@ -1,32 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.homepage">
-    <uses-permission android:name="android.permission.INTERNET" />
+package="com.example.homepage">
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+<uses-permission android:name="android.permission.READ_CALENDAR"/>
+<uses-permission android:name="android.permission.WRITE_CALENDAR"/>
 
-    <application
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+<application
+    android:allowBackup="true"
+    android:icon="@mipmap/ic_launcher"
+    android:label="My Meal Plan"
+    android:roundIcon="@mipmap/ic_launcher_round"
+    android:supportsRtl="true"
+    android:theme="@style/AppTheme">
+    <activity
+        android:name=".ViewRecipe"
+        android:label="@string/title_activity_view_recipe"
+        android:parentActivityName=".MainActivity"
+        android:theme="@style/AppTheme"
+        android:screenOrientation="portrait"/>
+    <activity
+        android:name=".MainActivity"
         android:label="My Meal Plan"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".UserPreferences"
-            android:parentActivityName=".MainActivity"></activity>
-        <activity
-            android:name=".ViewRecipe"
-            android:label="@string/title_activity_view_recipe"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".MainActivity"
-            android:label="My Meal Plan"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        android:theme="@style/AppTheme.NoActionBar"
+        android:screenOrientation="portrait">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-    </application>
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+    </activity>
+</application>
 
 </manifest>

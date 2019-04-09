@@ -62,4 +62,9 @@ public class ViewRecipe extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, viewIngredients).commit();
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
+
 }

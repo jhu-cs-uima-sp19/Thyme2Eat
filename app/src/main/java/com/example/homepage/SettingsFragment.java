@@ -2,9 +2,11 @@ package com.example.homepage;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -13,8 +15,17 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class UserPreferences extends AppCompatActivity {
 
+public class SettingsFragment extends Fragment {
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
+    private View view;
     Button confirm;
     EditText exclude;
     EditText include;
@@ -23,18 +34,51 @@ public class UserPreferences extends AppCompatActivity {
     SharedPreferences.Editor editor;
 
 
+    public SettingsFragment() {
+        // Required empty public constructor
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment SettingsFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static SettingsFragment newInstance(String param1, String param2) {
+        SettingsFragment fragment = new SettingsFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_preferences);
-        myPreferences = getSharedPreferences("oreferences", Context.MODE_PRIVATE);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        view = inflater.inflate(R.layout.fragment_settings, container, false);
+        myPreferences = getContext().getSharedPreferences("preferences", Context.MODE_PRIVATE);
         editor = myPreferences.edit();
-        exclude = findViewById(R.id.editExclusions);
-        include = findViewById(R.id.editInclusions);
-        dependents = findViewById(R.id.editDependents);
+        exclude = view.findViewById(R.id.editExclusions);
+        include = view.findViewById(R.id.editInclusions);
+        dependents = view.findViewById(R.id.editDependents);
 
 
-        Spinner cuisine_spinner = (Spinner) findViewById(R.id.cuisine_spinner);
+        Spinner cuisine_spinner = (Spinner) view.findViewById(R.id.cuisine_spinner);
         final String[] select_cuisine = {
                 "Select Cuisine(s)", "african", "chinese", "japanese", "korean", "vietnamese", "thai", "indian", "british", "irish", "french", "italian",
                 "mexican", "spanish", "middle eastern", "jewish", "american", "cajun", "southern", "greek", "german", "nordic",
@@ -47,7 +91,7 @@ public class UserPreferences extends AppCompatActivity {
             stateVO.setSelected(false);
             cuisine_listVOs.add(stateVO);
         }
-        PreferenceAdapter cuisine_adapter = new PreferenceAdapter(UserPreferences.this, 0,
+        PreferenceAdapter cuisine_adapter = new PreferenceAdapter(getContext(), 0,
                 cuisine_listVOs);
         cuisine_spinner.setAdapter(cuisine_adapter);
 
@@ -59,7 +103,7 @@ public class UserPreferences extends AppCompatActivity {
             }
         }
 
-        final Spinner diet_spinner = (Spinner) findViewById(R.id.diet_spinner);
+        final Spinner diet_spinner = (Spinner) view.findViewById(R.id.diet_spinner);
         final String[] diet = {"Select diet(s)", "pescetarian", "lacto vegetarian", "ovo vegetarian", "vegan", "paleo", "primal", "vegetarian"};
 
         final ArrayList<StateVO> diet_listVOs = new ArrayList<>();
@@ -69,7 +113,7 @@ public class UserPreferences extends AppCompatActivity {
             stateVO.setSelected(false);
             diet_listVOs.add(stateVO);
         }
-        PreferenceAdapter diet_adapter = new PreferenceAdapter(UserPreferences.this, 0,
+        PreferenceAdapter diet_adapter = new PreferenceAdapter(getContext(), 0,
                 diet_listVOs);
         diet_spinner.setAdapter(diet_adapter);
 
@@ -81,7 +125,7 @@ public class UserPreferences extends AppCompatActivity {
             }
         }
 
-        Spinner allergies_spinner = (Spinner) findViewById(R.id.allergies_spinner);
+        Spinner allergies_spinner = (Spinner) view.findViewById(R.id.allergies_spinner);
         final String[] allergies = {
                 "Select allergies(s)", "peanut", "soy", "egg", "tree nuts", "wheat", "fish", "shellfish"};
 
@@ -92,7 +136,7 @@ public class UserPreferences extends AppCompatActivity {
             stateVO.setSelected(false);
             allergies_listVOs.add(stateVO);
         }
-        PreferenceAdapter allergies_adapter = new PreferenceAdapter(UserPreferences.this, 0,
+        PreferenceAdapter allergies_adapter = new PreferenceAdapter(getContext(), 0,
                 allergies_listVOs);
         allergies_spinner.setAdapter(allergies_adapter);
 
@@ -116,7 +160,7 @@ public class UserPreferences extends AppCompatActivity {
             dependents.setText(String.valueOf(myPreferences.getInt("dependents", 0)), TextView.BufferType.EDITABLE);
         }
 
-        confirm = findViewById(R.id.button);
+        confirm = view.findViewById(R.id.button);
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -145,10 +189,17 @@ public class UserPreferences extends AppCompatActivity {
                     editor.putInt("dependents", x);
                 }
                 editor.commit();
-                Toast.makeText(UserPreferences.this, "Preferences Saved!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Preferences Saved!", Toast.LENGTH_SHORT).show();
 
             }
         });
+        // Inflate the layout for this fragment
+        return view;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
     }
 
 }

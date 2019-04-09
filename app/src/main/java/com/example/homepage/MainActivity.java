@@ -1,9 +1,5 @@
 package com.example.homepage;
 
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -19,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,11 +23,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -43,8 +35,9 @@ public class MainActivity extends AppCompatActivity
     public static ArrayList<Recipe> mealList;
     public static ArrayList<String> stringShopList;
     private RecipeFragment mealPlan;
-    private Fragment editMealPlan;
+    private Fragment settings;
     private FragmentTransaction transaction;
+    private LinearLayout buttonPanel;
     private Menu menu;
     private MenuItem edit;
     private Button addMeals;
@@ -125,6 +118,7 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         mealPlan = new RecipeFragment();
+        settings = new SettingsFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, mealPlan).commit();
         Log.w("myApp", "hello");
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -142,11 +136,21 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
+        Fragment currentFrag = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
+        } else if (currentFrag instanceof MealPlan){
+            finish();
+        } else if (currentFrag instanceof SettingsFragment) {
+            transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_container, mealPlan);
+            transaction.addToBackStack(null);
+            buttonPanel = findViewById(R.id.buttonPanel);
+            buttonPanel.setVisibility(View.VISIBLE);
+            addMeals.setVisibility(View.VISIBLE);
+            setTitle("Meal Plan");
+            transaction.commit();
         }
     }
 
@@ -174,7 +178,14 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-
+            transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_container, mealPlan);
+            transaction.addToBackStack(null);
+            buttonPanel = findViewById(R.id.buttonPanel);
+            buttonPanel.setVisibility(View.VISIBLE);
+            addMeals.setVisibility(View.VISIBLE);
+            setTitle("Meal Plan");
+            transaction.commit();
         } else if (id == R.id.nav_list) {
 
         } else if (id == R.id.nav_search) {
@@ -182,8 +193,14 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_favorite) {
 
         } else if (id == R.id.nav_settings) {
-            Intent intent = new Intent(this, UserPreferences.class);
-            startActivity(intent);
+            transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_container, settings);
+            transaction.addToBackStack(null);
+            buttonPanel = findViewById(R.id.buttonPanel);
+            buttonPanel.setVisibility(View.INVISIBLE);
+            addMeals.setVisibility(View.INVISIBLE);
+            setTitle("Settings");
+            transaction.commit();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -191,35 +208,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    public class getImage extends AsyncTask<String, Bitmap, Bitmap> {
 
-        private Exception exception;
-
-        protected Bitmap doInBackground(String... urls) {
-            try {
-                java.net.URL url = new java.net.URL(urls[0]);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setDoInput(true);
-                connection.connect();
-                InputStream input = connection.getInputStream();
-                Bitmap myBitmap = BitmapFactory.decodeStream(input);
-                String filename = urls[0].substring(urls[0].lastIndexOf('/')+1);
-                File file = new File(getCacheDir(), filename);
-                FileOutputStream outputStream = new FileOutputStream(file);
-                try {
-                    myBitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-                    outputStream.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return myBitmap;
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-
-    }
 
 
 }
