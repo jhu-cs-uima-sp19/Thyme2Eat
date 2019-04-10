@@ -164,21 +164,68 @@ public class SettingsFragment extends Fragment {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String cuisineUrl = "cuisine=";
                 for (StateVO s: cuisine_listVOs) {
                     editor.putBoolean(s.getTitle(), s.isSelected());
+                    if (s.isSelected()) {
+                        cuisineUrl += s.getTitle() + "%2C";
+                    }
                 }
+                cuisineUrl = cuisineUrl.replace(" ", "+");
+                if (cuisineUrl.lastIndexOf('%') != -1)
+                    cuisineUrl = cuisineUrl.substring(0, cuisineUrl.lastIndexOf('%'));
+                if (!cuisineUrl.equals("cuisine="))
+                    editor.putString("cuisineUrl", cuisineUrl);
+                else
+                    editor.putString("cuisineUrl", "");
+                String dietUrl = "&diet=";
                 for (StateVO s: diet_listVOs) {
                     editor.putBoolean(s.getTitle(), s.isSelected());
+                    if (s.isSelected()) {
+                        dietUrl += s.getTitle() + "%2C";
+                    }
                 }
+                dietUrl = dietUrl.replace(" ", "+");
+                if (dietUrl.lastIndexOf('%') != -1)
+                    dietUrl = dietUrl.substring(0, dietUrl.lastIndexOf('%'));
+                if (!dietUrl.equals("&diet="))
+                    editor.putString("dietUrl", dietUrl);
+                else
+                    editor.putString("dietUrl", "");
+                String intoleranceUrl = "&intolerances=";
                 for (StateVO s: allergies_listVOs) {
                     editor.putBoolean(s.getTitle(), s.isSelected());
+                    if (s.isSelected()) {
+                        intoleranceUrl += s.getTitle() + "%2C";
+                    }
                 }
+                intoleranceUrl = intoleranceUrl.replace(" ", "+");
+                if (intoleranceUrl.lastIndexOf('%') != -1)
+                    intoleranceUrl = intoleranceUrl.substring(0, intoleranceUrl.lastIndexOf('%'));
+                if (intoleranceUrl != "&intolerances=")
+                    editor.putString("intoleranceURL", intoleranceUrl);
+                else
+                    editor.putString("intoleranceURL", "");
+                String includeUrl = "&includeIngredients=" + include.getText().toString();
                 if (include.getText().toString() != "") {
                     editor.putString("include", include.getText().toString());
                 }
+                includeUrl = includeUrl.replace(", ", "C%2+");
+                includeUrl = includeUrl.replace(" ", "+");
+                if (!includeUrl.equals("&includeIngredients=" + include.getText().toString()))
+                    editor.putString("includeUrl", includeUrl);
+                else
+                    editor.putString("includeUrl","");
+                String excludeUrl = "&excludeIngredients=" + exclude.getText().toString();
                 if (exclude.getText().toString() != "") {
                     editor.putString("exclude", exclude.getText().toString());
                 }
+                excludeUrl = excludeUrl.replace(", ", "C%2+");
+                excludeUrl = excludeUrl.replace(" ", "+");
+                if (!excludeUrl.equals("&excludeIngredients=" + exclude.getText().toString()))
+                    editor.putString("excludeUrl", excludeUrl);
+                else
+                    editor.putString("excludeUrl", "");
                 if (dependents.getText().toString() != "") {
                     int x = 0;
                     try {

@@ -1,5 +1,7 @@
 package com.example.homepage;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -41,12 +43,16 @@ public class MainActivity extends AppCompatActivity
     private Menu menu;
     private MenuItem edit;
     private Button addMeals;
+    private SharedPreferences myPreferences;
+    private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if (mealList == null) {
             mealList = new ArrayList<Recipe>();
         }
+        myPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        editor = myPreferences.edit();
         mDatabase = FirebaseDatabase.getInstance().getReference().child("plan");
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
@@ -130,6 +136,11 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View v) {
                 //DO NOT UNCOMMENT THIS CODE HERE!!!!!
               //new Spoonacular().execute("searchRandom");
+
+                new Spoonacular().execute("search", myPreferences.getString("cuisineUrl", ""),
+                        myPreferences.getString("dietUrl", ""), myPreferences.getString("includeUrl", ""),
+                        myPreferences.getString("excludeUrl", ""), myPreferences.getString("intoleranceUrl", ""),
+                        "&type=main+course", "5");
             }
         });
     }
@@ -207,8 +218,5 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-
-
 
 }
