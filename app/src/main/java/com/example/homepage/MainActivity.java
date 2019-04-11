@@ -46,6 +46,20 @@ public class MainActivity extends AppCompatActivity
     private SharedPreferences myPreferences;
     private SharedPreferences.Editor editor;
 
+    public void getShopDatabase(DatabaseReference shopDatabase) {
+        shopDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        })
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if (mealList == null) {
@@ -53,8 +67,11 @@ public class MainActivity extends AppCompatActivity
         }
         myPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE);
         editor = myPreferences.edit();
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("plan");
-        mDatabase.addValueEventListener(new ValueEventListener() {
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference shopDatabase = mDatabase.child("shop");
+        getShopDatabase(shopDatabase);
+        DatabaseReference mealDatabase = mDatabase.child("plan");
+        mealDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 mealList = new ArrayList<Recipe>();
