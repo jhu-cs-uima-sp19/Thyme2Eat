@@ -16,7 +16,7 @@
         android:text="." />
 
     <TextView
-        android:id="@+id/content"
+        android:id="@+id/contentitem"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:layout_marginRight="40dp"

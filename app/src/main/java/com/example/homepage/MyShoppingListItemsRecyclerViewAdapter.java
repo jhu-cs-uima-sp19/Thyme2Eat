@@ -65,19 +65,20 @@ public class MyShoppingListItemsRecyclerViewAdapter extends RecyclerView.Adapter
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         //public final TextView itemDesc;
-        public final TextView mIdView;
+        //public final TextView mIdView;
         public final TextView mContentView;
-        public DummyItem mItem;
+        //public DummyItem mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
             //itemDesc = (TextView) view.findViewById(R.id.PUTSOMETHINGHERE);
-            mIdView = (TextView) view.findViewById(R.id.item_number);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            //mIdView = (TextView) view.findViewById(R.id.item_number);
+            mContentView = (TextView) view.findViewById(R.id.contentitem);
         }
 
         public void bindView(int position) {
+            mContentView.setText(MainActivity.stringShopList.get(position));
             //.setText(MainActivity.mealList.get(position).getDate());
             //.setText(MainActivity.mealList.get(position).getTime());
         }
