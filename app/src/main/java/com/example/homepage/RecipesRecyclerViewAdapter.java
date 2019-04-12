@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
@@ -19,17 +18,7 @@ import android.support.v7.widget.PopupMenu;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
-
 import java.io.File;
-import java.lang.reflect.Array;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 
 public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecyclerViewAdapter.ViewHolder> {
 
@@ -142,7 +131,7 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                                 alert.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                                     public void onClick (DialogInterface dialog, int which) {
                                         Recipe r = RecipeFragment.mealList.get(getAdapterPosition());
-                                        MainActivity.mDatabase.child(r.getDate()).setValue(null);
+                                        MainActivity.mDatabase.child("plan").child(r.getDate()).setValue(null);
                                         RecipeFragment.mealList.remove(getAdapterPosition());
                                         RecipesRecyclerViewAdapter.this.notifyItemRemoved(getAdapterPosition());
                                         dialog.cancel();
