@@ -178,7 +178,7 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
         }
 
         public void bindView(int position) {
-            dateView.setText(RecipeFragment.mealList.get(position).getDate());
+            dateView.setText(RecipeFragment.mealList.get(position).dateText);
             timeView.setText(RecipeFragment.mealList.get(position).getTime());
             String cache = "/data/user/0/com.example.homepage/cache";
             Recipe recipe = RecipeFragment.mealList.get(getAdapterPosition());
