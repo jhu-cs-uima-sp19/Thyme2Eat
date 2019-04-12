@@ -88,6 +88,7 @@ public class ViewRecipeFragment extends Fragment {
 
         }
         recipe_text = (TextView)view.findViewById(R.id.recipe_text);
+        ViewRecipe.instructions = ViewRecipe.instructions.replace(".", ".\n\n");
         recipe_text.setText(ViewRecipe.instructions);
         // Inflate the layout for this fragment
         return view;

@@ -131,7 +131,6 @@ public class RecipeFragment extends Fragment {
                         }
                         if (meal.child("image").exists())
                             image = meal.child("image").getValue().toString();
-                            new getImage().execute(image);
                         Recipe r = new Recipe(title, date, time, instruct, ingreds, image);
                         r.dateText = dateText;
                         mealList.add(r);
@@ -199,40 +198,4 @@ public class RecipeFragment extends Fragment {
         void onListFragmentInteraction(DummyItem item);
     }
     */
-    public class getImage extends AsyncTask<String, Bitmap, Bitmap> {
-
-        private Exception exception;
-        private Bitmap myBitmap;
-
-        protected Bitmap doInBackground(String... urls) {
-            try {
-                java.net.URL url = new java.net.URL(urls[0]);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setDoInput(true);
-                connection.connect();
-                InputStream input = connection.getInputStream();
-                myBitmap = BitmapFactory.decodeStream(input);
-                String filename = urls[0].substring(urls[0].lastIndexOf('/')+1);
-                File file = new File("/data/user/0/com.example.homepage/cache", filename);
-                FileOutputStream outputStream = new FileOutputStream(file);
-                try {
-                    myBitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-                    outputStream.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return myBitmap;
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            System.out.print("onpost");
-            rcAdapter.notifyDataSetChanged();
-        }
-    }
-
 }
