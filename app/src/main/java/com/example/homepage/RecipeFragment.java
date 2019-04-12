@@ -99,22 +99,22 @@ public class RecipeFragment extends Fragment {
                 ArrayList<Ingredient> ingreds;
                 for (DataSnapshot dates : dataSnapshot.getChildren()) {
                     date = dates.getKey();
-                    date = date.replace(";","/");
+                    String dateText = date.replace(";","/");
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyy/MM/dd");
                     Date convertedDate = new Date();
                     try {
-                        convertedDate = dateFormat.parse(date);
+                        convertedDate = dateFormat.parse(dateText);
                     } catch (ParseException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
-                    date = convertedDate.toString().replace("00:00:00 EDT ", "");
+                    dateText = convertedDate.toString().replace("00:00:00 EDT ", "");
                     for (DataSnapshot meal : dates.getChildren()) {
                         title = meal.getKey();
                         time = "0:00-23:59pm";
                         if (meal.child("time").exists())
                             time = meal.child("time").getValue().toString();
-                        Log.w("myApp", time + date);
+                        Log.w("myApp", time + dateText);
                         instruct = "Insert Instructions Here";
                         if (meal.child("instructions").exists())
                             instruct = meal.child("instructions").getValue().toString();
@@ -133,6 +133,7 @@ public class RecipeFragment extends Fragment {
                             image = meal.child("image").getValue().toString();
                             new getImage().execute(image);
                         Recipe r = new Recipe(title, date, time, instruct, ingreds, image);
+                        r.dateText = dateText;
                         mealList.add(r);
                         break;
                     }

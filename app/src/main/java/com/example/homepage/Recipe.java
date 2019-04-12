@@ -39,8 +39,11 @@ public class Recipe {
     public String month;
     //Date of recipe in plan
     public String date;
+    public String dateText;
     //Time for recipe in plan
     public String time;
+
+    public String timeText;
 
     //id needed to search recipe info
     public int id;
