@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
@@ -16,9 +17,21 @@ import android.widget.ImageView;
 import android.support.v7.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
 import java.io.File;
+import java.lang.reflect.Array;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecyclerViewAdapter.ViewHolder> {
+
+    private ArrayList<Recipe> mealList;
 
     public RecipesRecyclerViewAdapter() {
     }
@@ -83,8 +96,71 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
 
     @Override
     public int getItemCount() {
-        Log.w("here", "" + MainActivity.mealList.size());
-        return MainActivity.mealList.size();
+        if (mealList == null) {
+            mealList = new ArrayList<Recipe>();
+        }
+        //Log.w("here", "" + MainActivity.mealList.size());
+        DatabaseReference mealDatabase = MainActivity.mDatabase.child("plan");
+        mealDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                mealList = new ArrayList<Recipe>();
+                Log.w("data", "in snap");
+                String date;
+                String time;
+                String instruct;
+                String image = "";
+                String title = "";
+                ArrayList<Ingredient> ingreds;
+                for (DataSnapshot dates : dataSnapshot.getChildren()) {
+                    date = dates.getKey();
+                    date = date.replace(";","/");
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyy/MM/dd");
+                    Date convertedDate = new Date();
+                    try {
+                        convertedDate = dateFormat.parse(date);
+                    } catch (ParseException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    date = convertedDate.toString().replace("00:00:00 GMT ", "");
+                    for (DataSnapshot meal : dates.getChildren()) {
+                        title = meal.getKey();
+                        time = "0:00-23:59pm";
+                        if (meal.child("time").exists())
+                            time = meal.child("time").getValue().toString();
+                        Log.w("myApp", time + date);
+                        instruct = "Insert Instructions Here";
+                        if (meal.child("instructions").exists())
+                            instruct = meal.child("instructions").getValue().toString();
+                        ingreds = new ArrayList<>();
+                        if (meal.child("ingredients").exists()) {
+                            for (DataSnapshot ingred : meal.child("ingredients").getChildren()) {
+                                if (ingred.child("amount").exists() && ingred.child("unit").exists()) {
+                                    Ingredient i = new Ingredient(ingred.getKey(),
+                                            Double.parseDouble(ingred.child("amount").getValue().toString()),
+                                            ingred.child("unit").getValue().toString());
+                                    ingreds.add(i);
+                                }
+                            }
+                        }
+                        if (meal.child("image").exists())
+                            image = meal.child("image").getValue().toString();
+                        Recipe r = new Recipe(title, date, time, instruct, ingreds, image);
+                        mealList.add(r);
+                        break;
+                    }
+                }
+                RecipesRecyclerViewAdapter.this.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        return mealList.size();
         /*
         if (mealList != null) {
             Log.w("myApp", "atItemCount");
@@ -178,10 +254,10 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
         }
 
         public void bindView(int position) {
-            dateView.setText(MainActivity.mealList.get(position).getDate());
-            timeView.setText(MainActivity.mealList.get(position).getTime());
+            dateView.setText(mealList.get(position).getDate());
+            timeView.setText(mealList.get(position).getTime());
             String cache = "/data/user/0/com.example.homepage/cache";
-            Recipe recipe = MainActivity.mealList.get(getAdapterPosition());
+            Recipe recipe = mealList.get(getAdapterPosition());
             File file = new File(cache,
                     recipe.image.substring((recipe.image.lastIndexOf('/') + 1)));
             if (file.exists()) {
