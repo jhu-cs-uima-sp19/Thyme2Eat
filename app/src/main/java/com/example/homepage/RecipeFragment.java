@@ -1,6 +1,9 @@
 package com.example.homepage;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -19,6 +22,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,6 +36,7 @@ import java.util.Date;
 public class RecipeFragment extends Fragment {
 
     public static ArrayList<Recipe> mealList;
+    final RecipesRecyclerViewAdapter rcAdapter = new RecipesRecyclerViewAdapter();
 /*
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -70,7 +79,6 @@ public class RecipeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_recipeschedule_list, container, false);
         RecyclerView rcView = (RecyclerView) view.findViewById(R.id.planList);
         rcView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        final RecipesRecyclerViewAdapter rcAdapter = new RecipesRecyclerViewAdapter();
         rcView.setAdapter(rcAdapter);
 
         if (mealList == null) {
@@ -100,7 +108,7 @@ public class RecipeFragment extends Fragment {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
-                    date = convertedDate.toString().replace("00:00:00 GMT ", "");
+                    date = convertedDate.toString().replace("00:00:00 EDT ", "");
                     for (DataSnapshot meal : dates.getChildren()) {
                         title = meal.getKey();
                         time = "0:00-23:59pm";
@@ -123,6 +131,7 @@ public class RecipeFragment extends Fragment {
                         }
                         if (meal.child("image").exists())
                             image = meal.child("image").getValue().toString();
+                            new getImage().execute(image);
                         Recipe r = new Recipe(title, date, time, instruct, ingreds, image);
                         mealList.add(r);
                         break;
@@ -189,4 +198,40 @@ public class RecipeFragment extends Fragment {
         void onListFragmentInteraction(DummyItem item);
     }
     */
+    public class getImage extends AsyncTask<String, Bitmap, Bitmap> {
+
+        private Exception exception;
+        private Bitmap myBitmap;
+
+        protected Bitmap doInBackground(String... urls) {
+            try {
+                java.net.URL url = new java.net.URL(urls[0]);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+                myBitmap = BitmapFactory.decodeStream(input);
+                String filename = urls[0].substring(urls[0].lastIndexOf('/')+1);
+                File file = new File("/data/user/0/com.example.homepage/cache", filename);
+                FileOutputStream outputStream = new FileOutputStream(file);
+                try {
+                    myBitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+                    outputStream.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return myBitmap;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            System.out.print("onpost");
+            rcAdapter.notifyDataSetChanged();
+        }
+    }
+
 }
