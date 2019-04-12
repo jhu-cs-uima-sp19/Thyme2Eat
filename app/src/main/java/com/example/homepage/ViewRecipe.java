@@ -48,10 +48,10 @@ public class ViewRecipe extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_recipe);
         int index = getIntent().getIntExtra("index", 0);
-        instructions = MainActivity.mealList.get(index).instructions;
-        ingredients = MainActivity.mealList.get(index).extendedIngredients;
-        imageUrl = MainActivity.mealList.get(index).image;
-        title = MainActivity.mealList.get(index).title;
+        instructions = RecipesRecyclerViewAdapter.mealList.get(index).instructions;
+        ingredients = RecipesRecyclerViewAdapter.mealList.get(index).extendedIngredients;
+        imageUrl = RecipesRecyclerViewAdapter.mealList.get(index).image;
+        title = RecipesRecyclerViewAdapter.mealList.get(index).title;
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);

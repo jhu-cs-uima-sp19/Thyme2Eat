@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public static DatabaseReference mDatabase;
-    public static ArrayList<Recipe> mealList;
+    //public static ArrayList<Recipe> mealList;
     public static ArrayList<String> stringShopList;
     private RecipeFragment mealPlan;
     private Fragment settings;
@@ -62,9 +62,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (mealList == null) {
-            mealList = new ArrayList<Recipe>();
-        }
+//        if (mealList == null) {
+//            mealList = new ArrayList<Recipe>();
+//        }
         myPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE);
         editor = myPreferences.edit();
         mDatabase = FirebaseDatabase.getInstance().getReference();

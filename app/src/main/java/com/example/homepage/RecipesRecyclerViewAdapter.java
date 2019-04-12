@@ -31,7 +31,7 @@ import java.util.Date;
 
 public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecyclerViewAdapter.ViewHolder> {
 
-    private ArrayList<Recipe> mealList;
+    public static ArrayList<Recipe> mealList;
 
     public RecipesRecyclerViewAdapter() {
     }
@@ -204,9 +204,9 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                                 alert.setMessage("Are you sure you want to delete this recipe from your meal plan?");
                                 alert.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                                     public void onClick (DialogInterface dialog, int which) {
-                                        Recipe r = MainActivity.mealList.get(getAdapterPosition());
+                                        Recipe r = mealList.get(getAdapterPosition());
                                         MainActivity.mDatabase.child(r.getDate()).setValue(null);
-                                        MainActivity.mealList.remove(getAdapterPosition());
+                                        mealList.remove(getAdapterPosition());
                                         RecipesRecyclerViewAdapter.this.notifyItemRemoved(getAdapterPosition());
                                         dialog.cancel();
                                     }
