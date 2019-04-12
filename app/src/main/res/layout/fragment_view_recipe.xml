@@ -7,10 +7,10 @@
     tools:context=".ViewRecipeFragment">
 
     <ScrollView
-        android:layout_width="419dp"
-        android:layout_height="600dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -18,40 +18,38 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/recipeTitle"
-                android:layout_width="413dp"
-                android:layout_height="55dp"
-                android:layout_marginTop="65dp"
-                android:paddingTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:autoSizeTextType="uniform"
                 android:text="TextView"
-                android:textAlignment="center"
                 android:textColor="@android:color/black"
                 android:textSize="24sp"
-                android:autoSizeTextType="uniform"
-                android:padding="10dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/recipeImage"
                 android:layout_width="match_parent"
-                android:layout_height="268dp"
+                android:layout_height="300dp"
+                android:layout_gravity="left"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/recipe_text"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:layout_marginBottom="10dp"
+                android:scrollHorizontally="false"
                 android:text="Phasellus eleifend pellentesque aliquam netus aptent facilisis per ut accumsan dui Volutpat curae magna nam metus faucibus sapien aliquet faucibus cursus potenti Sagittis porttitor morbi nullam varius nostra vehicula potenti proin malesuada primis auctor Elementum bibendum litora porttitor pellentesque phasellus porttitor consectetur turpis Suspendisse rutrum amet cursus vitae nibh imperdiet eros cubilia Hac tempus sodales eleifend dictum dui felis sed Posuere fusce donec convallis morbi pretium sit duis eros nec torquent arcu Fames nullam ullamcorper arcu placerat rutrum arcu tristique euismod duis varius porta netusPhasellus eleifend pellentesque aliquam netus aptent facilisis per ut accumsan dui Volutpat curae magna nam metus faucibus sapien aliquet faucibus cursus potenti Sagittis porttitor morbi nullam varius nostra vehicula potenti proin malesuada primis auctor Elementum bibendum litora porttitor pellentesque phasellus porttitor consectetur turpis Suspendisse rutrum amet cursus vitae nibh imperdiet eros cubilia Hac tempus sodales eleifend dictum dui felis sed Posuere fusce donec convallis morbi pretium sit duis eros nec torquent arcu Fames nullam ullamcorper arcu placerat rutrum arcu tristique euismod duis varius porta netus"
-                android:textSize="18sp" />
+                android:textSize="48px" />
         </LinearLayout>
     </ScrollView>
 

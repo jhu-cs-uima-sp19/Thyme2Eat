@@ -1,7 +1,8 @@
 package com.example.homepage;
 
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -9,7 +10,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
 import com.example.homepage.dummy.DummyContent.DummyItem;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 /**
  * A fragment representing a list of Items.
@@ -23,6 +33,8 @@ public class ShoppingListItemsFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
+    public static ArrayList<String> stringShopList;
+    final MyShoppingListItemsRecyclerViewAdapter rcshopAdapter = new MyShoppingListItemsRecyclerViewAdapter();
     private OnListFragmentInteractionListener mListener;
 
     /**
@@ -51,6 +63,33 @@ public class ShoppingListItemsFragment extends Fragment {
         }
     }
 
+    public void getShopDatabase(DatabaseReference shopDatabase) {
+        shopDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.w("data", "in snap");
+                String name;
+                String num;
+                String theunit;
+                String wholeitem;
+
+                for (DataSnapshot items : dataSnapshot.getChildren()) {
+                    name = items.getKey();
+                    num = items.child("amount").getValue().toString();
+                    theunit = items.child("unit").getValue().toString();
+                    wholeitem = name + ": " + num + " " + theunit;
+                    stringShopList.add(wholeitem);
+                }
+                rcshopAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -59,6 +98,14 @@ public class ShoppingListItemsFragment extends Fragment {
         RecyclerView shoprec = (RecyclerView) shopview.findViewById(R.id.shoppingListID);
         shoprec.setLayoutManager(new LinearLayoutManager(getActivity()));
         shoprec.setAdapter(new MyShoppingListItemsRecyclerViewAdapter());
+
+        if (stringShopList == null) {
+            stringShopList = new ArrayList<>();
+        }
+
+        DatabaseReference shopDatabase = MainActivity.mDatabase.child("shop");
+        getShopDatabase(shopDatabase);
+
         return shopview;
     }
 
