@@ -165,6 +165,27 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                                 MainActivity.mealList.remove(getAdapterPosition());
                                 RecipesRecyclerViewAdapter.this.notifyItemRemoved(getAdapterPosition());
                                 */
+                            } else if (item.getTitle().toString().equals("Edit Time")) {
+                                AlertDialog.Builder alert = new AlertDialog.Builder(mView.getContext());
+                                LinearLayout linLay= new LinearLayout(mView.getContext());
+                                linLay.setOrientation(LinearLayout.VERTICAL);
+                                final EditText dateEdit = new EditText(mView.getContext());
+                                final EditText timeEdit = new EditText(mView.getContext());
+                                linLay.addView(dateEdit);
+                                linLay.addView(timeEdit);
+                                alert.setView(linLay);
+                                alert.setMessage("Are you sure you want to delete this recipe from your meal plan?");
+                                alert.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                                    public void onClick (DialogInterface dialog, int which) {
+                                        dialog.cancel();
+                                    }
+                                });
+                                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                    public void onClick (DialogInterface dialog, int which) {
+                                        dialog.cancel();
+                                    }
+                                });
+                                alert.show();
                             }
                             return true;
                         }
