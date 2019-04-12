@@ -1,6 +1,13 @@
 package com.example.homepage;
 
+import android.os.AsyncTask;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -12,7 +19,56 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class Spoonacular {
+public class Spoonacular extends AsyncTask <String, String, String> {
+    public static DatabaseReference mDatabase;
+
+    @Override
+    protected String doInBackground(String... args) {
+        Recipe[] recipes = null;
+        if (args[0].equals("searchRandom")) {
+            try {
+                recipes = searchRandom(1);
+            } catch (IOException | JSONException e) {
+                e.printStackTrace();
+                return "Failed";
+            }
+            mDatabase = FirebaseDatabase.getInstance().getReference().child("plan");
+            mDatabase.child("2019;03;24").child(recipes[0].title).child("image").setValue(recipes[0].image);
+            for (int i = 0; i < recipes[0].extendedIngredients.size(); i++) {
+                Ingredient ingredient = recipes[0].extendedIngredients.get(i);
+                mDatabase.child("2019;03;24").child(recipes[0].title).child("ingredients").child(ingredient.name).child("amount").setValue(ingredient.amount);
+                mDatabase.child("2019;03;24").child(recipes[0].title).child("ingredients").child(ingredient.name).child("unit").setValue(ingredient.unit);
+            }
+            mDatabase.child("2019;03;24").child(recipes[0].title).child("instructions").setValue(recipes[0].instructions);
+            mDatabase.child("2019;03;24").child(recipes[0].title).child("time").setValue("2:00-3:00pm");
+        }
+        if (args[0].equals("search")) {
+            try {
+                recipes = searchRecipes(args[1], args[2], args[3], args[4], args[5], args[6], args[7]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            for (int d = 0; d < recipes.length; d++) {
+                String date = "2019;04;0" + (d+1);
+                mDatabase = FirebaseDatabase.getInstance().getReference().child("plan");
+                mDatabase.child(date).child(recipes[d].title).child("image").setValue(recipes[d].image);
+                for (int i = 0; i < recipes[d].extendedIngredients.size(); i++) {
+                    Ingredient ingredient = recipes[d].extendedIngredients.get(i);
+                    mDatabase.child(date).child(recipes[d].title).child("ingredients").child(ingredient.name).child("amount").setValue(ingredient.amount);
+                    mDatabase.child(date).child(recipes[d].title).child("ingredients").child(ingredient.name).child("unit").setValue(ingredient.unit);
+                }
+                mDatabase.child(date).child(recipes[d].title).child("instructions").setValue(recipes[d].instructions);
+                mDatabase.child(date).child(recipes[d].title).child("time").setValue("2:00-3:00pm");
+            }
+
+        }
+        return "Success";
+    }
+
+    @Override
+    protected void onPostExecute(String bitmaps) {
+
+    }
 
     /* This method allows you to get search results in bulk;
     *  used to convert a search that yields
@@ -67,14 +123,24 @@ public class Spoonacular {
     }
 
     /*This method searches recipes based on a query, but we can make this one more complex if need be*/
-    public static Recipe[] searchRecipes(String query, int number) throws IOException {
+    public static Recipe[] searchRecipes(String cuisine, String diet, String includeIngredients,
+                                         String excludeIngredients, String intolerances,
+                                         String type, String number) throws IOException {
+
+        System.out.println("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/searchComplex?" +
+                cuisine + diet + includeIngredients + excludeIngredients + intolerances + type +
+                "&ranking=2&fillIngredients=true&instructionsRequired=true&addRecipeInformation=true&limitLicense=false&offset=0&number=" + number);
+
 
         //Searches recipes with a given query and number of results to return
         StringBuffer json = new StringBuffer();
         try{
-            URL url = new URL("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/search?number=" + number +"&query=" + query);
+            URL url = new URL("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/searchComplex?" +
+                    cuisine + diet + includeIngredients + excludeIngredients + intolerances + type +
+                    "&ranking=2&fillIngredients=true&instructionsRequired=true&addRecipeInformation=true&limitLicense=false&offset=0&number=" + number);
             HttpURLConnection connection = (HttpURLConnection)url.openConnection();
             connection.setRequestProperty("X-RapidAPI-Key", "ebbeaa7cbemsh020d1b6ca0a5850p11572bjsnf2dead442a16");
+            connection.setRequestProperty("X-RapidAPI-Host", "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com");
             connection.setRequestMethod("GET");
             connection.setDoInput(true);
             connection.connect();
@@ -94,6 +160,7 @@ public class Spoonacular {
 
         //Write results to an external file
         writeToExternalFile(json, "search.txt");
+        System.out.println(json.toString());
 
         ObjectMapper mapper = new ObjectMapper();
         Search search = mapper.readValue(json.toString(), Search.class);
@@ -107,6 +174,7 @@ public class Spoonacular {
                 ids += search.results[i].id;
             }
         }
+
 
         return searchBulk(ids);
     }
@@ -204,6 +272,42 @@ public class Spoonacular {
         }
 
         return searchBulk(ids);
+    }
+
+    public static Recipe[] searchRandom(int number) throws IOException, JSONException {
+        StringBuffer json = new StringBuffer();
+        try{
+            URL url = new URL("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/random?number="
+                    + number);
+
+            HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+            connection.setRequestProperty("X-RapidAPI-Host", "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com");
+            connection.setRequestProperty("X-RapidAPI-Key", "ebbeaa7cbemsh020d1b6ca0a5850p11572bjsnf2dead442a16");
+            connection.setRequestMethod("GET");
+            connection.setDoInput(true);
+            connection.connect();
+
+            InputStream inputStream = connection.getInputStream();
+
+            BufferedReader rd = new BufferedReader(new InputStreamReader(inputStream));
+            String line = "";
+            while ((line = rd.readLine()) != null) {
+                json.append(line);
+            }
+        }
+        catch (IOException e) {
+            // Writing exception to log
+            e.printStackTrace();
+        }
+
+        writeToExternalFile(json, "random.txt");
+        JSONObject jsonObject = new JSONObject(json.toString());
+        String r = jsonObject.get("recipes").toString();
+
+        ObjectMapper mapper = new ObjectMapper();
+        Recipe[] recipes = mapper.readValue(r, Recipe[].class);
+
+        return recipes;
     }
 
     /*Used for API testing*/

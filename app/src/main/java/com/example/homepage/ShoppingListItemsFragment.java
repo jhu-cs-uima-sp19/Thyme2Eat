@@ -1,19 +1,15 @@
 package com.example.homepage;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.homepage.dummy.DummyContent;
 import com.example.homepage.dummy.DummyContent.DummyItem;
-
-import java.util.List;
 
 /**
  * A fragment representing a list of Items.
@@ -58,24 +54,16 @@ public class ShoppingListItemsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_shoppinglistitems_list, container, false);
-
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            recyclerView.setAdapter(new MyShoppingListItemsRecyclerViewAdapter(DummyContent.ITEMS, mListener));
-        }
-        return view;
+        Log.w("myApp", "atShopFrag");
+        View shopview = inflater.inflate(R.layout.fragment_shoppinglistitems_list, container, false);
+        RecyclerView shoprec = (RecyclerView) shopview.findViewById(R.id.shoppingListID);
+        shoprec.setLayoutManager(new LinearLayoutManager(getActivity()));
+        shoprec.setAdapter(new MyShoppingListItemsRecyclerViewAdapter());
+        return shopview;
     }
 
 
-    @Override
+    /*@Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnListFragmentInteractionListener) {
@@ -90,7 +78,7 @@ public class ShoppingListItemsFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
+    }*/
 
     /**
      * This interface must be implemented by activities that contain this

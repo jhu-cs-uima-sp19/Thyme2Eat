@@ -1,20 +1,25 @@
 package com.example.homepage;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.HashMap;
-
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 
 public class ViewRecipeFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -27,11 +32,10 @@ public class ViewRecipeFragment extends Fragment {
     private String mParam2;
     private View view;
     private TextView recipe_text;
-    private String recipe;
-
-    private DatabaseReference mDatabase;
-    private DataSnapshot dataSnapshot;
-
+    private String recipe = "";
+    private Bitmap image;
+    private ImageView imageView;
+    private TextView title;
 
     public ViewRecipeFragment() {
         // Required empty public constructor
@@ -54,6 +58,7 @@ public class ViewRecipeFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,10 +83,19 @@ public class ViewRecipeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_view_recipe, container, false);
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        mDatabase.child("plan").child("2019;03;21").child("chicken parmesan").child("instructions").addValueEventListener(postListener);
+        imageView = view.findViewById(R.id.recipeImage);
+        title = view.findViewById(R.id.recipeTitle);
+        title.setText(ViewRecipe.title);
+        File file = new File(getContext().getCacheDir(), ViewRecipe.imageUrl.substring(ViewRecipe.imageUrl.lastIndexOf('/') + 1));
+        if (file.exists()) {
+            Bitmap bitmap = BitmapFactory.decodeFile(file.toString());
+            imageView.setImageBitmap(bitmap);
+
+        } else {
+            new getImage().execute(ViewRecipe.imageUrl);
+        }
         recipe_text = (TextView)view.findViewById(R.id.recipe_text);
-        recipe_text.setText(recipe);
+        recipe_text.setText(ViewRecipe.instructions);
         // Inflate the layout for this fragment
         return view;
     }
@@ -89,5 +103,40 @@ public class ViewRecipeFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    public class getImage extends AsyncTask<String, Bitmap, Bitmap> {
+
+        private Exception exception;
+        private Bitmap myBitmap;
+
+        protected Bitmap doInBackground(String... urls) {
+            try {
+                java.net.URL url = new java.net.URL(urls[0]);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+                myBitmap = BitmapFactory.decodeStream(input);
+                String filename = urls[0].substring(urls[0].lastIndexOf('/')+1);
+                File file = new File(getContext().getCacheDir(), filename);
+                FileOutputStream outputStream = new FileOutputStream(file);
+                try {
+                    myBitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+                    outputStream.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return myBitmap;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            imageView.setImageBitmap(myBitmap);
+        }
     }
 }
