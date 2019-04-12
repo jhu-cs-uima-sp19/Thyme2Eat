@@ -79,4 +79,6 @@ public class Recipe {
 
     //determine popularity of a dish
     public int likes;
+
+    public boolean withPrev;
 }

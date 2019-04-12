@@ -109,6 +109,7 @@ public class RecipeFragment extends Fragment {
                         e.printStackTrace();
                     }
                     dateText = convertedDate.toString().replace("00:00:00 EDT ", "");
+                    Boolean prev = false;
                     for (DataSnapshot meal : dates.getChildren()) {
                         title = meal.getKey();
                         time = "0:00-23:59pm";
@@ -133,8 +134,9 @@ public class RecipeFragment extends Fragment {
                             image = meal.child("image").getValue().toString();
                         Recipe r = new Recipe(title, date, time, instruct, ingreds, image);
                         r.dateText = dateText;
+                        r.withPrev = prev;
+                        prev = true;
                         mealList.add(r);
-                        break;
                     }
                 }
                 rcAdapter.notifyDataSetChanged();
