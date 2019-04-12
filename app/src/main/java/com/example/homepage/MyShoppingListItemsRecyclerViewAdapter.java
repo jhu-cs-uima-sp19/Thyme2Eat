@@ -58,8 +58,8 @@ public class MyShoppingListItemsRecyclerViewAdapter extends RecyclerView.Adapter
 
     @Override
     public int getItemCount() {
-        Log.w("here", "" + MainActivity.stringShopList.size());
-        return MainActivity.stringShopList.size();
+        Log.w("here", "" + ShoppingListItemsFragment.stringShopList.size());
+        return ShoppingListItemsFragment.stringShopList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -78,7 +78,7 @@ public class MyShoppingListItemsRecyclerViewAdapter extends RecyclerView.Adapter
         }
 
         public void bindView(int position) {
-            mContentView.setText(MainActivity.stringShopList.get(position));
+            mContentView.setText(ShoppingListItemsFragment.stringShopList.get(position));
             //.setText(MainActivity.mealList.get(position).getDate());
             //.setText(MainActivity.mealList.get(position).getTime());
         }

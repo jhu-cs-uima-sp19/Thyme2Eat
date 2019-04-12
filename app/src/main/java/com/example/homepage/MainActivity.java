@@ -32,9 +32,10 @@ public class MainActivity extends AppCompatActivity
 
     public static DatabaseReference mDatabase;
     //public static ArrayList<Recipe> mealList;
-    public static ArrayList<String> stringShopList;
+    //public static ArrayList<String> stringShopList;
     private RecipeFragment mealPlan;
     private Fragment settings;
+    private Fragment shoppingList;
     private FragmentTransaction transaction;
     private LinearLayout buttonPanel;
     private Menu menu;
@@ -43,19 +44,19 @@ public class MainActivity extends AppCompatActivity
     private SharedPreferences myPreferences;
     private SharedPreferences.Editor editor;
 
-    public void getShopDatabase(DatabaseReference shopDatabase) {
-        shopDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
+//    public void getShopDatabase(DatabaseReference shopDatabase) {
+//        shopDatabase.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,8 +66,8 @@ public class MainActivity extends AppCompatActivity
         myPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE);
         editor = myPreferences.edit();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference shopDatabase = mDatabase.child("shop");
-        getShopDatabase(shopDatabase);
+//        DatabaseReference shopDatabase = mDatabase.child("shop");
+//        getShopDatabase(shopDatabase);
 //        DatabaseReference mealDatabase = mDatabase.child("plan");
 //        mealDatabase.addValueEventListener(new ValueEventListener() {
 //            @Override
@@ -139,6 +140,7 @@ public class MainActivity extends AppCompatActivity
 
         mealPlan = new RecipeFragment();
         settings = new SettingsFragment();
+        shoppingList = new ShoppingListItemsFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, mealPlan).commit();
         Log.w("myApp", "hello");
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -212,6 +214,14 @@ public class MainActivity extends AppCompatActivity
             setTitle("Meal Plan");
             transaction.commit();
         } else if (id == R.id.nav_list) {
+            transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_container, shoppingList);
+            transaction.addToBackStack(null);
+            buttonPanel = findViewById(R.id.buttonPanel);
+            buttonPanel.setVisibility(View.INVISIBLE);
+            addMeals.setVisibility(View.INVISIBLE);
+            setTitle("Shopping List");
+            transaction.commit();
 
         } else if (id == R.id.nav_search) {
 
