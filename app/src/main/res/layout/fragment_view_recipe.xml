@@ -31,15 +31,15 @@
                 android:textAlignment="center"
                 android:textColor="@android:color/black"
                 android:textSize="24sp"
+                android:autoSizeTextType="uniform"
+                android:padding="10dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/recipeImage"
-                android:layout_width="357dp"
-                android:layout_height="219dp"
-                android:layout_marginStart="28dp"
-                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="268dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

@@ -25,16 +25,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public static DatabaseReference mDatabase;
-    public static ArrayList<Recipe> mealList;
+    //public static ArrayList<Recipe> mealList;
     public static ArrayList<String> stringShopList;
     private RecipeFragment mealPlan;
     private Fragment settings;
@@ -62,72 +59,72 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (mealList == null) {
-            mealList = new ArrayList<Recipe>();
-        }
+//        if (mealList == null) {
+//            mealList = new ArrayList<Recipe>();
+//        }
         myPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE);
         editor = myPreferences.edit();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         DatabaseReference shopDatabase = mDatabase.child("shop");
         getShopDatabase(shopDatabase);
-        DatabaseReference mealDatabase = mDatabase.child("plan");
-        mealDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                mealList = new ArrayList<Recipe>();
-                Log.w("data", "in snap");
-                String date;
-                String time;
-                String instruct;
-                String image = "";
-                String title = "";
-                ArrayList<Ingredient> ingreds;
-                for (DataSnapshot dates : dataSnapshot.getChildren()) {
-                    date = dates.getKey();
-                    date = date.replace(";","/");
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyy/MM/dd");
-                    Date convertedDate = new Date();
-                    try {
-                        convertedDate = dateFormat.parse(date);
-                    } catch (ParseException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                    date = convertedDate.toString().replace("00:00:00 GMT ", "");
-                    for (DataSnapshot meal : dates.getChildren()) {
-                        title = meal.getKey();
-                        time = "0:00-23:59pm";
-                        if (meal.child("time").exists())
-                            time = meal.child("time").getValue().toString();
-                        Log.w("myApp", time + date);
-                        instruct = "Insert Instructions Here";
-                        if (meal.child("instructions").exists())
-                            instruct = meal.child("instructions").getValue().toString();
-                        ingreds = new ArrayList<>();
-                        if (meal.child("ingredients").exists()) {
-                            for (DataSnapshot ingred : meal.child("ingredients").getChildren()) {
-                                if (ingred.child("amount").exists() && ingred.child("unit").exists()) {
-                                    Ingredient i = new Ingredient(ingred.getKey(),
-                                            Double.parseDouble(ingred.child("amount").getValue().toString()),
-                                            ingred.child("unit").getValue().toString());
-                                    ingreds.add(i);
-                                }
-                            }
-                        }
-                        if (meal.child("image").exists())
-                            image = meal.child("image").getValue().toString();
-                        Recipe r = new Recipe(title, date, time, instruct, ingreds, image);
-                        mealList.add(r);
-                        break;
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+//        DatabaseReference mealDatabase = mDatabase.child("plan");
+//        mealDatabase.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                mealList = new ArrayList<Recipe>();
+//                Log.w("data", "in snap");
+//                String date;
+//                String time;
+//                String instruct;
+//                String image = "";
+//                String title = "";
+//                ArrayList<Ingredient> ingreds;
+//                for (DataSnapshot dates : dataSnapshot.getChildren()) {
+//                    date = dates.getKey();
+//                    date = date.replace(";","/");
+//                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyy/MM/dd");
+//                    Date convertedDate = new Date();
+//                    try {
+//                        convertedDate = dateFormat.parse(date);
+//                    } catch (ParseException e) {
+//                        // TODO Auto-generated catch block
+//                        e.printStackTrace();
+//                    }
+//                    date = convertedDate.toString().replace("00:00:00 GMT ", "");
+//                    for (DataSnapshot meal : dates.getChildren()) {
+//                        title = meal.getKey();
+//                        time = "0:00-23:59pm";
+//                        if (meal.child("time").exists())
+//                            time = meal.child("time").getValue().toString();
+//                        Log.w("myApp", time + date);
+//                        instruct = "Insert Instructions Here";
+//                        if (meal.child("instructions").exists())
+//                            instruct = meal.child("instructions").getValue().toString();
+//                        ingreds = new ArrayList<>();
+//                        if (meal.child("ingredients").exists()) {
+//                            for (DataSnapshot ingred : meal.child("ingredients").getChildren()) {
+//                                if (ingred.child("amount").exists() && ingred.child("unit").exists()) {
+//                                    Ingredient i = new Ingredient(ingred.getKey(),
+//                                            Double.parseDouble(ingred.child("amount").getValue().toString()),
+//                                            ingred.child("unit").getValue().toString());
+//                                    ingreds.add(i);
+//                                }
+//                            }
+//                        }
+//                        if (meal.child("image").exists())
+//                            image = meal.child("image").getValue().toString();
+//                        Recipe r = new Recipe(title, date, time, instruct, ingreds, image);
+//                        mealList.add(r);
+//                        break;
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);

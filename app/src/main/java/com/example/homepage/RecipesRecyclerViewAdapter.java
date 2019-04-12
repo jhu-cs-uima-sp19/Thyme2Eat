@@ -12,13 +12,16 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.support.v7.widget.PopupMenu;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.File;
 
 public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecyclerViewAdapter.ViewHolder> {
+
 
     public RecipesRecyclerViewAdapter() {
     }
@@ -83,8 +86,7 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
 
     @Override
     public int getItemCount() {
-        Log.w("here", "" + MainActivity.mealList.size());
-        return MainActivity.mealList.size();
+        return RecipeFragment.mealList.size();
         /*
         if (mealList != null) {
             Log.w("myApp", "atItemCount");
@@ -128,9 +130,9 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                                 alert.setMessage("Are you sure you want to delete this recipe from your meal plan?");
                                 alert.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                                     public void onClick (DialogInterface dialog, int which) {
-                                        Recipe r = MainActivity.mealList.get(getAdapterPosition());
-                                        MainActivity.mDatabase.child(r.getDate()).setValue(null);
-                                        MainActivity.mealList.remove(getAdapterPosition());
+                                        Recipe r = RecipeFragment.mealList.get(getAdapterPosition());
+                                        MainActivity.mDatabase.child("plan").child(r.getDate()).setValue(null);
+                                        RecipeFragment.mealList.remove(getAdapterPosition());
                                         RecipesRecyclerViewAdapter.this.notifyItemRemoved(getAdapterPosition());
                                         dialog.cancel();
                                     }
@@ -163,6 +165,27 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                                 MainActivity.mealList.remove(getAdapterPosition());
                                 RecipesRecyclerViewAdapter.this.notifyItemRemoved(getAdapterPosition());
                                 */
+                            } else if (item.getTitle().toString().equals("Edit Time")) {
+                                AlertDialog.Builder alert = new AlertDialog.Builder(mView.getContext());
+                                LinearLayout linLay= new LinearLayout(mView.getContext());
+                                linLay.setOrientation(LinearLayout.VERTICAL);
+                                final EditText dateEdit = new EditText(mView.getContext());
+                                final EditText timeEdit = new EditText(mView.getContext());
+                                linLay.addView(dateEdit);
+                                linLay.addView(timeEdit);
+                                alert.setView(linLay);
+                                alert.setMessage("Are you sure you want to delete this recipe from your meal plan?");
+                                alert.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                                    public void onClick (DialogInterface dialog, int which) {
+                                        dialog.cancel();
+                                    }
+                                });
+                                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                    public void onClick (DialogInterface dialog, int which) {
+                                        dialog.cancel();
+                                    }
+                                });
+                                alert.show();
                             }
                             return true;
                         }
@@ -178,10 +201,15 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
         }
 
         public void bindView(int position) {
-            dateView.setText(MainActivity.mealList.get(position).getDate());
-            timeView.setText(MainActivity.mealList.get(position).getTime());
+            if (RecipeFragment.mealList.get(getAdapterPosition()).withPrev) {
+                dateView.setVisibility(View.GONE);
+            } else {
+                dateView.setVisibility(View.VISIBLE);
+                dateView.setText(RecipeFragment.mealList.get(getAdapterPosition()).dateText);
+            }
+            timeView.setText(RecipeFragment.mealList.get(position).getTime());
             String cache = "/data/user/0/com.example.homepage/cache";
-            Recipe recipe = MainActivity.mealList.get(getAdapterPosition());
+            Recipe recipe = RecipeFragment.mealList.get(getAdapterPosition());
             File file = new File(cache,
                     recipe.image.substring((recipe.image.lastIndexOf('/') + 1)));
             if (file.exists()) {

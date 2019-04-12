@@ -1,5 +1,7 @@
 package com.example.homepage;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,6 +13,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -50,8 +53,30 @@ public class Spoonacular extends AsyncTask <String, String, String> {
             }
             for (int d = 0; d < recipes.length; d++) {
                 String date = "2019;04;0" + (d+1);
+                recipes[d].title = recipes[d].title.replace("[", "(");
+                recipes[d].title = recipes[d].title.replace("]", ")");
                 mDatabase = FirebaseDatabase.getInstance().getReference().child("plan");
                 mDatabase.child(date).child(recipes[d].title).child("image").setValue(recipes[d].image);
+                Bitmap myBitmap;
+                try {
+                    java.net.URL url = new java.net.URL(recipes[d].image);
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    connection.setDoInput(true);
+                    connection.connect();
+                    InputStream input = connection.getInputStream();
+                    myBitmap = BitmapFactory.decodeStream(input);
+                    String filename = url.toString().substring(url.toString().lastIndexOf('/')+1);
+                    File file = new File("/data/user/0/com.example.homepage/cache", filename);
+                    FileOutputStream outputStream = new FileOutputStream(file);
+                    try {
+                        myBitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+                        outputStream.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 for (int i = 0; i < recipes[d].extendedIngredients.size(); i++) {
                     Ingredient ingredient = recipes[d].extendedIngredients.get(i);
                     mDatabase.child(date).child(recipes[d].title).child("ingredients").child(ingredient.name).child("amount").setValue(ingredient.amount);
