@@ -29,33 +29,6 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Log.w("myApp", "atList");
-        /*
-        mealList = new ArrayList<Meal>();
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("plan");
-        mDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String date;
-                String time;
-                for (DataSnapshot dates : dataSnapshot.getChildren()) {
-                    date = dates.getKey();
-                    for (DataSnapshot meal : dates.getChildren()) {
-                        time = meal.child("time").getValue().toString();
-                        Log.w("myApp", time + date);
-                        Meal m = new Meal(date, time);
-                        mealList.add(m);
-                        break;
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-        */
-
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_recipeschedule, parent, false);
         return new ViewHolder(view);
@@ -221,7 +194,5 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
         public void onClick(View view) {
 
         }
-
     }
-
 }
