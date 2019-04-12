@@ -31,7 +31,6 @@ import java.util.Date;
 
 public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecyclerViewAdapter.ViewHolder> {
 
-    public static ArrayList<Recipe> mealList;
 
     public RecipesRecyclerViewAdapter() {
     }
@@ -96,71 +95,7 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
 
     @Override
     public int getItemCount() {
-        if (mealList == null) {
-            mealList = new ArrayList<Recipe>();
-        }
-        //Log.w("here", "" + MainActivity.mealList.size());
-        DatabaseReference mealDatabase = MainActivity.mDatabase.child("plan");
-        mealDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                mealList = new ArrayList<Recipe>();
-                Log.w("data", "in snap");
-                String date;
-                String time;
-                String instruct;
-                String image = "";
-                String title = "";
-                ArrayList<Ingredient> ingreds;
-                for (DataSnapshot dates : dataSnapshot.getChildren()) {
-                    date = dates.getKey();
-                    date = date.replace(";","/");
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyy/MM/dd");
-                    Date convertedDate = new Date();
-                    try {
-                        convertedDate = dateFormat.parse(date);
-                    } catch (ParseException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                    date = convertedDate.toString().replace("00:00:00 GMT ", "");
-                    for (DataSnapshot meal : dates.getChildren()) {
-                        title = meal.getKey();
-                        time = "0:00-23:59pm";
-                        if (meal.child("time").exists())
-                            time = meal.child("time").getValue().toString();
-                        Log.w("myApp", time + date);
-                        instruct = "Insert Instructions Here";
-                        if (meal.child("instructions").exists())
-                            instruct = meal.child("instructions").getValue().toString();
-                        ingreds = new ArrayList<>();
-                        if (meal.child("ingredients").exists()) {
-                            for (DataSnapshot ingred : meal.child("ingredients").getChildren()) {
-                                if (ingred.child("amount").exists() && ingred.child("unit").exists()) {
-                                    Ingredient i = new Ingredient(ingred.getKey(),
-                                            Double.parseDouble(ingred.child("amount").getValue().toString()),
-                                            ingred.child("unit").getValue().toString());
-                                    ingreds.add(i);
-                                }
-                            }
-                        }
-                        if (meal.child("image").exists())
-                            image = meal.child("image").getValue().toString();
-                        Recipe r = new Recipe(title, date, time, instruct, ingreds, image);
-                        mealList.add(r);
-                        break;
-                    }
-                }
-                RecipesRecyclerViewAdapter.this.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-        return mealList.size();
+        return RecipeFragment.mealList.size();
         /*
         if (mealList != null) {
             Log.w("myApp", "atItemCount");
@@ -204,9 +139,9 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                                 alert.setMessage("Are you sure you want to delete this recipe from your meal plan?");
                                 alert.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                                     public void onClick (DialogInterface dialog, int which) {
-                                        Recipe r = mealList.get(getAdapterPosition());
+                                        Recipe r = RecipeFragment.mealList.get(getAdapterPosition());
                                         MainActivity.mDatabase.child(r.getDate()).setValue(null);
-                                        mealList.remove(getAdapterPosition());
+                                        RecipeFragment.mealList.remove(getAdapterPosition());
                                         RecipesRecyclerViewAdapter.this.notifyItemRemoved(getAdapterPosition());
                                         dialog.cancel();
                                     }
@@ -254,10 +189,10 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
         }
 
         public void bindView(int position) {
-            dateView.setText(mealList.get(position).getDate());
-            timeView.setText(mealList.get(position).getTime());
+            dateView.setText(RecipeFragment.mealList.get(position).getDate());
+            timeView.setText(RecipeFragment.mealList.get(position).getTime());
             String cache = "/data/user/0/com.example.homepage/cache";
-            Recipe recipe = mealList.get(getAdapterPosition());
+            Recipe recipe = RecipeFragment.mealList.get(getAdapterPosition());
             File file = new File(cache,
                     recipe.image.substring((recipe.image.lastIndexOf('/') + 1)));
             if (file.exists()) {
