@@ -109,7 +109,7 @@ public class ShoppingListItemsFragment extends Fragment {
         DatabaseReference shopDatabase = MainActivity.mDatabase.child("shop");
         getShopDatabase(shopDatabase);
 
-        add = (Button) getView().findViewById(R.id.addShopItemButton);
+        add = (Button) shopview.findViewById(R.id.addShopItemButton);
 
         // make method for adding
 
