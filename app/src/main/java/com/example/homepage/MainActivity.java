@@ -24,6 +24,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import android.content.Intent;
 
 import java.util.ArrayList;
 
@@ -95,6 +96,8 @@ public class MainActivity extends AppCompatActivity
                         myPreferences.getString("dietUrl", ""), myPreferences.getString("includeUrl", ""),
                         myPreferences.getString("excludeUrl", ""), myPreferences.getString("intoleranceUrl", ""),
                         "&type=main+course", "5");
+                Intent myIntent = new Intent(MainActivity.this, CreateMealPlan.class);
+                startActivity(myIntent);
             }
         });
     }
