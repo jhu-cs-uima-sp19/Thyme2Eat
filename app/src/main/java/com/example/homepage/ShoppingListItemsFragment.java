@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -36,6 +37,7 @@ public class ShoppingListItemsFragment extends Fragment {
     public static ArrayList<String> stringShopList;
     final MyShoppingListItemsRecyclerViewAdapter rcshopAdapter = new MyShoppingListItemsRecyclerViewAdapter();
     private OnListFragmentInteractionListener mListener;
+    private Button add;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -61,6 +63,7 @@ public class ShoppingListItemsFragment extends Fragment {
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
+
     }
 
     public void getShopDatabase(DatabaseReference shopDatabase) {
@@ -105,6 +108,21 @@ public class ShoppingListItemsFragment extends Fragment {
 
         DatabaseReference shopDatabase = MainActivity.mDatabase.child("shop");
         getShopDatabase(shopDatabase);
+
+        add = (Button) getView().findViewById(R.id.addShopItemButton);
+
+        // make method for adding
+
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String str = "";
+                // OPEN DIALOG BOX TO ADD THE ITEM
+                // MAKE DATABASE EDITS
+                stringShopList.add(str);
+
+            }
+        });
 
         return shopview;
     }

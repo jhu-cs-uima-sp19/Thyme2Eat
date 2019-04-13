@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity
         myPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE);
         editor = myPreferences.edit();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference shopDatabase = mDatabase.child("shop");
+        //DatabaseReference shopDatabase = mDatabase.child("shop");
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
