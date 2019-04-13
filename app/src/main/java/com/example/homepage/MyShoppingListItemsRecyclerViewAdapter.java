@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.homepage.ShoppingListItemsFragment.OnListFragmentInteractionListener;
+//import com.example.homepage.ShoppingListItemsFragment.OnListFragmentInteractionListener;
 import com.example.homepage.dummy.DummyContent.DummyItem;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -66,7 +66,7 @@ public class MyShoppingListItemsRecyclerViewAdapter extends RecyclerView.Adapter
         Log.w("myApp", "atList");
 
         View shopview = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_shoppinglistitems_list, parent, false);
+                .inflate(R.layout.fragment_shoppinglistitems, parent, false);
 //
 //        Log.w("myApp", "atShopFrag");
 //        //View shopview = inflater.inflate(R.layout.fragment_shoppinglistitems_list, container, false);
@@ -126,6 +126,9 @@ public class MyShoppingListItemsRecyclerViewAdapter extends RecyclerView.Adapter
             //itemDesc = (TextView) view.findViewById(R.id.PUTSOMETHINGHERE);
             //mIdView = (TextView) view.findViewById(R.id.item_number);
             mContentView = (TextView) view.findViewById(R.id.contentitem);
+            if (mContentView == null) {
+                Log.w("empty", "content is null");
+            }
         }
 
         public void bindView(int position) {

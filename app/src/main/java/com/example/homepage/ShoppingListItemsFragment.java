@@ -101,7 +101,7 @@ public class ShoppingListItemsFragment extends Fragment {
         View shopview = inflater.inflate(R.layout.fragment_shoppinglistitems_list, container, false);
         RecyclerView shoprec = (RecyclerView) shopview.findViewById(R.id.shoppingListID);
         shoprec.setLayoutManager(new LinearLayoutManager(getActivity()));
-        shoprec.setAdapter(new MyShoppingListItemsRecyclerViewAdapter());
+        shoprec.setAdapter(rcshopAdapter);
 
         DatabaseReference shopDatabase = MainActivity.mDatabase.child("shop");
         getShopDatabase(shopDatabase);
