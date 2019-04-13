@@ -57,6 +57,7 @@ public class RecipeFragment extends Fragment {
                 ArrayList<Ingredient> ingreds;
                 for (DataSnapshot dates : dataSnapshot.getChildren()) {
                     date = dates.getKey();
+                    /*
                     String dateText = date.replace(";","/");
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyy/MM/dd");
                     Date convertedDate = new Date();
@@ -67,6 +68,8 @@ public class RecipeFragment extends Fragment {
                         e.printStackTrace();
                     }
                     dateText = convertedDate.toString().replace("00:00:00 EDT ", "");
+                    */
+                    String dateText = Recipe.makeDateText(date);
                     Boolean prev = false;
                     for (DataSnapshot meal : dates.getChildren()) {
                         title = meal.getKey();
