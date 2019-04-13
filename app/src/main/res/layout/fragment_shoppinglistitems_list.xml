@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/shopListLayout"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
@@ -12,30 +13,45 @@
         android:layout_height="wrap_content"
         android:text="On this week's shopping list:"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.142"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.182" />
 
     <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/shoppingListID"
         android:name="com.example.homepage.ShoppingListItemsFragment"
-        android:layout_width="393dp"
-        android:layout_height="555dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="380dp"
+        android:layout_marginTop="56dp"
+        android:layout_marginBottom="8dp"
         app:layoutManager="LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/addShopItemButton"
+        app:layout_constraintTop_toBottomOf="@+id/thisWeeksList"
+        app:layout_constraintVertical_bias="0.0"
         tools:context=".ShoppingListItemsFragment"
-        tools:listitem="@layout/fragment_shoppinglistitems"/>
+        tools:layout_editor_absoluteX="0dp"
+        tools:listitem="@layout/fragment_shoppinglistitems" />
 
     <Button
         android:id="@+id/addShopItemButton"
-        android:layout_width="wrap_content"
-        android:layout_height="70dp"
-        android:layout_margin="8dp"
-        android:layout_marginRight="10dp"
+        android:layout_width="59dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="52dp"
         android:background="@drawable/ic_add_circle_outline_black_24dp"
+        android:backgroundTint="#E15509"
+        android:clickable="true"
         android:padding="8dp"
-        android:text="Add Item" />
-</LinearLayout>
+        android:textColorHighlight="#E15509"
+        android:textColorHint="#E15509"
+        android:textColorLink="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.925"
+        app:layout_constraintStart_toStartOf="parent" />
+</android.support.constraint.ConstraintLayout>
