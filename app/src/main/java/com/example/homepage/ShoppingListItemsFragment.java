@@ -64,6 +64,10 @@ public class ShoppingListItemsFragment extends Fragment {
     }
 
     public void getShopDatabase(DatabaseReference shopDatabase) {
+        if (stringShopList == null) {
+            stringShopList = new ArrayList<>();
+        }
+
         shopDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -98,10 +102,6 @@ public class ShoppingListItemsFragment extends Fragment {
         RecyclerView shoprec = (RecyclerView) shopview.findViewById(R.id.shoppingListID);
         shoprec.setLayoutManager(new LinearLayoutManager(getActivity()));
         shoprec.setAdapter(new MyShoppingListItemsRecyclerViewAdapter());
-
-        if (stringShopList == null) {
-            stringShopList = new ArrayList<>();
-        }
 
         DatabaseReference shopDatabase = MainActivity.mDatabase.child("shop");
         getShopDatabase(shopDatabase);

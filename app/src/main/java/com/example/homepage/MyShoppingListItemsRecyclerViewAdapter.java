@@ -1,5 +1,7 @@
 package com.example.homepage;
 
+import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,7 +11,12 @@ import android.widget.TextView;
 
 import com.example.homepage.ShoppingListItemsFragment.OnListFragmentInteractionListener;
 import com.example.homepage.dummy.DummyContent.DummyItem;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,17 +28,61 @@ public class MyShoppingListItemsRecyclerViewAdapter extends RecyclerView.Adapter
 
 //    private final List<DummyItem> mValues;
 //    private final OnListFragmentInteractionListener mListener;
+    //final MyShoppingListItemsRecyclerViewAdapter rcshopAdapter = new MyShoppingListItemsRecyclerViewAdapter();
+
 
     public MyShoppingListItemsRecyclerViewAdapter() {
     }
+
+//    public void getShopDatabase(DatabaseReference shopDatabase) {
+//        shopDatabase.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                Log.w("data", "in snap");
+//                String name;
+//                String num;
+//                String theunit;
+//                String wholeitem;
+//
+//                for (DataSnapshot items : dataSnapshot.getChildren()) {
+//                    name = items.getKey();
+//                    num = items.child("amount").getValue().toString();
+//                    theunit = items.child("unit").getValue().toString();
+//                    wholeitem = name + ": " + num + " " + theunit;
+//                    stringShopList.add(wholeitem);
+//                }
+//                rcshopAdapter.notifyDataSetChanged();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Log.w("myApp", "atList");
 
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_shoppinglistitems, parent, false);
-        return new ViewHolder(view);
+        View shopview = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.fragment_shoppinglistitems_list, parent, false);
+//
+//        Log.w("myApp", "atShopFrag");
+//        //View shopview = inflater.inflate(R.layout.fragment_shoppinglistitems_list, container, false);
+//        RecyclerView shoprec = (RecyclerView) shopview.findViewById(R.id.shoppingListID);
+//        //shoprec.setLayoutManager(new LinearLayoutManager(getActivity()));
+//        shoprec.setAdapter(new MyShoppingListItemsRecyclerViewAdapter());
+//
+//        if (stringShopList == null) {
+//            stringShopList = new ArrayList<>();
+//        }
+//
+//        DatabaseReference shopDatabase = MainActivity.mDatabase.child("shop");
+//        getShopDatabase(shopDatabase);
+//
+//
+        return new ViewHolder(shopview);
     }
 
     @Override
