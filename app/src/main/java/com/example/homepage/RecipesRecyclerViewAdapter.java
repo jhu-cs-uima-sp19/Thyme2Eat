@@ -141,7 +141,7 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                                             public void onDateSet(DatePicker view, int year,
                                                                   int month, int day) {
                                                 //Month is 0-indexed.
-                                                day++;
+                                                month++;
                                                 Log.w("Month", "" + month);
                                                 NumberFormat f = new DecimalFormat("00");
                                                 Recipe r = RecipeFragment.mealList.get(getAdapterPosition());
