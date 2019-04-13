@@ -1,6 +1,8 @@
 package com.example.homepage;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -12,13 +14,21 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.support.v7.widget.PopupMenu;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import java.io.File;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecyclerViewAdapter.ViewHolder> {
 
@@ -116,40 +126,53 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                                     }
                                 });
                                 alert.show();
-                                /*
-                                new AlertDialog.Builder(mView.getContext())
-                                        .setMessage(
-                                                "Are you sure you want to delete this recipe from your meal plan?")
-                                        .setPositiveButton(
-                                                "OK",
-                                                new DialogInterface.OnClickListener() {
-                                                    public void onClick (DialogInterface dialog, int which) {
-                                                        Recipe r = MainActivity.mealList.get(getAdapterPosition());
-                                                        MainActivity.mDatabase.child(r.getDate()).setValue(null);
-                                                        MainActivity.mealList.remove(getAdapterPosition());
-                                                        RecipesRecyclerViewAdapter.this.notifyItemRemoved(getAdapterPosition());
-                                                        dialog.cancel();
-                                                    }
-                                                }).show();
-                                                */
-                                /*
-                                Recipe r = MainActivity.mealList.get(getAdapterPosition());
-                                MainActivity.mDatabase.child(r.getDate()).setValue(null);
-                                MainActivity.mealList.remove(getAdapterPosition());
-                                RecipesRecyclerViewAdapter.this.notifyItemRemoved(getAdapterPosition());
-                                */
+
+                            } else if (item.getTitle().toString().equals("Edit Date")) {
+                                final Calendar c = Calendar.getInstance();
+                                int year = c.get(Calendar.YEAR);
+                                int month = c.get(Calendar.MONTH);
+                                int day = c.get(Calendar.DAY_OF_MONTH);
+
+
+                                DatePickerDialog datePickerDialog = new DatePickerDialog(mView.getContext(),
+                                        new DatePickerDialog.OnDateSetListener() {
+
+                                            @Override
+                                            public void onDateSet(DatePicker view, int year,
+                                                                  int month, int day) {
+                                                //Month is 0-indexed.
+                                                day++;
+                                                Log.w("Month", "" + month);
+                                                NumberFormat f = new DecimalFormat("00");
+                                                Recipe r = RecipeFragment.mealList.get(getAdapterPosition());
+                                                String oldDate = r.date;
+                                                r.date = year + ";" +
+                                                        String.valueOf(f.format(month)) + ";" + String.valueOf(f.format(day));
+                                                r.dateText = Recipe.makeDateText(r.date);
+                                                r.moveRecipeInFirebase(MainActivity.mDatabase.child("plan"), oldDate);
+                                                Collections.sort(RecipeFragment.mealList, new CustomComparator());
+                                                RecipesRecyclerViewAdapter.this.notifyDataSetChanged();
+                                            }
+                                        }, year, month, day);
+                                datePickerDialog.show();
                             } else if (item.getTitle().toString().equals("Edit Time")) {
+                                final Recipe r = RecipeFragment.mealList.get(getAdapterPosition());
                                 AlertDialog.Builder alert = new AlertDialog.Builder(mView.getContext());
-                                LinearLayout linLay= new LinearLayout(mView.getContext());
-                                linLay.setOrientation(LinearLayout.VERTICAL);
-                                final EditText dateEdit = new EditText(mView.getContext());
-                                final EditText timeEdit = new EditText(mView.getContext());
-                                linLay.addView(dateEdit);
-                                linLay.addView(timeEdit);
-                                alert.setView(linLay);
-                                alert.setMessage("Are you sure you want to delete this recipe from your meal plan?");
+                                alert.setTitle("Change the time for this meal");
+                                final EditText input = new EditText(mView.getContext());
+                                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                                        LinearLayout.LayoutParams.MATCH_PARENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT);
+                                input.setLayoutParams(lp);
+                                alert.setView(input);
+                                input.setText(r.time);
+                                input.setGravity(Gravity.CENTER_HORIZONTAL);
+
                                 alert.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                                     public void onClick (DialogInterface dialog, int which) {
+                                        r.time = input.getText().toString();
+                                        MainActivity.mDatabase.child("plan").child(r.getDate()).child(r.title).child("time").setValue(r.time);
+                                        RecipesRecyclerViewAdapter.this.notifyDataSetChanged();
                                         dialog.cancel();
                                     }
                                 });
@@ -159,6 +182,53 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                                     }
                                 });
                                 alert.show();
+
+                                // DON'T DELETE. WILL USE FOR 2ND SPRINT
+//                                Recipe r = RecipeFragment.mealList.get(getAdapterPosition());
+//                                AlertDialog.Builder alert = new AlertDialog.Builder(mView.getContext());
+//                                LinearLayout vertical= new LinearLayout(mView.getContext());
+//                                vertical.setOrientation(LinearLayout.VERTICAL);
+//                                LinearLayout fromLayout = new LinearLayout(mView.getContext());
+//                                fromLayout.setOrientation(LinearLayout.HORIZONTAL);
+//                                LinearLayout toLayout = new LinearLayout(mView.getContext());
+//                                toLayout.setOrientation(LinearLayout.HORIZONTAL);
+//                                final TextView from = new TextView(mView.getContext());
+//                                final Button fromButton = new Button(mView.getContext());
+//                                from.setText("From: " +r.time.substring(0, r.time.indexOf('-')) + " " + r.time.substring(r.time.length() - 2));
+//                                fromLayout.addView(from);
+//                                fromLayout.addView(fromButton);
+//                                final Button toButton = new Button(mView.getContext());
+//                                final TextView to = new TextView(mView.getContext());
+//                                fromLayout.addView(to);
+//                                fromLayout.addView(toButton);
+//                                vertical.addView(fromLayout);
+//                                vertical.addView(toLayout);
+//                                alert.setView(vertical);
+//                                alert.show();
+
+//                                final Calendar c = Calendar.getInstance();
+//                                int hour = c.get(Calendar.HOUR_OF_DAY);
+//                                int min = c.get(Calendar.MINUTE);
+//
+//                                // Launch Time Picker Dialog
+//                                TimePickerDialog timePickerDialog = new TimePickerDialog(mView.getContext(),
+//                                        new TimePickerDialog.OnTimeSetListener() {
+//
+//                                            @Override
+//                                            public void onTimeSet(TimePicker view, int hour,
+//                                                                  int min) {
+//                                                String amPm = amOrpm(hour);
+//                                                if (amPm.equals("pm")) {
+//                                                    hour = hour - 12;
+//                                                }
+//                                                /*
+//                                                RecipeFragment.mealList.get(getAdapterPosition()).date = ;
+//                                                Collections.sort(RecipeFragment.mealList, new CustomComparator());
+//                                                RecipesRecyclerViewAdapter.this.notifyDataSetChanged();
+//                                                */
+//                                            }
+//                                        }, hour, min, false);
+//                                timePickerDialog.show();
                             }
                             return true;
                         }
@@ -193,6 +263,21 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
 
         public void onClick(View view) {
 
+        }
+    }
+
+    public class CustomComparator implements Comparator<Recipe> {
+        @Override
+        public int compare(Recipe r1, Recipe r2) {
+            return r1.getDate().compareTo(r2.getDate());
+        }
+    }
+
+    public String amOrpm (int hour) {
+        if (hour < 12) {
+            return "am";
+        } else {
+            return "pm";
         }
     }
 }

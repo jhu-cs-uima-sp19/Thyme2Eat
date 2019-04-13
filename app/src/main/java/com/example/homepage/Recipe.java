@@ -1,11 +1,21 @@
 package com.example.homepage;
 
 import android.graphics.Bitmap;
+import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Recipe {
@@ -24,6 +34,23 @@ public class Recipe {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public Recipe() {
 
+    }
+
+    public void moveRecipeInFirebase(DatabaseReference dataBase, final String oldDate) {
+        final DatabaseReference db = dataBase;
+        db.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot ds) {
+                DatabaseReference planDate = db.child(Recipe.this.date);
+                planDate.child(Recipe.this.title).setValue(ds.child(oldDate).child(Recipe.this.title).getValue());
+                db.child(oldDate).child(Recipe.this.title).setValue(null);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public String getDate() {
@@ -81,4 +108,18 @@ public class Recipe {
     public int likes;
 
     public boolean withPrev;
+
+    public static String makeDateText(String date) {
+        String dateText = date.replace(";","/");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyy/MM/dd");
+        Date convertedDate = new Date();
+        try {
+            convertedDate = dateFormat.parse(dateText);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        dateText = convertedDate.toString().replace("00:00:00 EDT ", "");
+        return dateText;
+    }
 }
