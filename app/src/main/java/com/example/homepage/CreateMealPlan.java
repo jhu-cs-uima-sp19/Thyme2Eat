@@ -1,10 +1,7 @@
 package com.example.homepage;
-//package com.example.compactcalendartrial;
-
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.graphics.Color;
@@ -13,7 +10,6 @@ import com.github.sundeepk.compactcalendarview.domain.Event;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;

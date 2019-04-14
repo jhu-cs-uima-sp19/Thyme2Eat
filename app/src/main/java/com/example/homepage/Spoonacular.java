@@ -64,6 +64,7 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                 recipes[d].title = recipes[d].title.replace("[", "(");
                 recipes[d].title = recipes[d].title.replace("]", ")");
                 mDatabase = FirebaseDatabase.getInstance().getReference().child("plan");
+                DatabaseReference shopDatabase = FirebaseDatabase.getInstance().getReference().child("shop");
                 mDatabase.child(date).child(recipes[d].title).child("image").setValue(recipes[d].image);
                 Bitmap myBitmap;
                 try {
@@ -89,9 +90,12 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                     Ingredient ingredient = recipes[d].extendedIngredients.get(i);
                     mDatabase.child(date).child(recipes[d].title).child("ingredients").child(ingredient.name).child("amount").setValue(ingredient.amount);
                     mDatabase.child(date).child(recipes[d].title).child("ingredients").child(ingredient.name).child("unit").setValue(ingredient.unit);
+                    shopDatabase.child(ingredient.name).child("amount").setValue(ingredient.amount);
+                    shopDatabase.child(ingredient.name).child("unit").setValue(ingredient.unitShort);
                 }
                 mDatabase.child(date).child(recipes[d].title).child("instructions").setValue(recipes[d].instructions);
                 mDatabase.child(date).child(recipes[d].title).child("time").setValue("2:00-3:00pm");
+
             }
 
         }
