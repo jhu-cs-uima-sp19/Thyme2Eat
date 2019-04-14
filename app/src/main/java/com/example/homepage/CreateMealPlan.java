@@ -38,6 +38,7 @@ public class CreateMealPlan extends AppCompatActivity{
     private SharedPreferences myPreferences;
     private SharedPreferences.Editor editor;
     private ArrayList<Date> selectedDates = new ArrayList<>();
+    List<Date> datesPicked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,7 @@ public class CreateMealPlan extends AppCompatActivity{
         String currentDate = DateFormat.getDateInstance().format(calendarDate.getTime());
         String currDate = currentDate.substring(4,6);
         cDate = Integer.parseInt(currDate);
+        datesPicked = new ArrayList<>();
 
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,12 +83,15 @@ public class CreateMealPlan extends AppCompatActivity{
                 String selectedDateStr = dateClicked.toString().substring(8, 10);
                 int selectedDate = Integer.parseInt(selectedDateStr);
                 long epoch = dateClicked.getTime();
-                if (cDate <= selectedDate) {
-                    Log.d(TAG, convertDate(dateClicked));
-                    selectedDates.add(dateClicked);
-                    Event ev = new Event(Color.BLACK, epoch, "Meal");
+                Event ev = new Event(Color.BLACK, epoch, "Meal");
+                if (cDate <= selectedDate && !datesPicked.contains(dateClicked)) {
+                    datesPicked.add(dateClicked);
                     calendar.addEvent(ev);
-                } else {
+                }else if (cDate <= selectedDate && datesPicked.contains(dateClicked)){
+                    datesPicked.remove(dateClicked);
+                    calendar.removeEvent(ev);
+                }
+                else {
                     Log.d(TAG, "error: past date");
                 }
             }
