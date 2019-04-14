@@ -74,6 +74,7 @@ public class ShoppingListItemsFragment extends Fragment {
         shopDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                stringShopList = new ArrayList<>();
                 Log.w("data", "in snap");
                 String name;
                 String num;

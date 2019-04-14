@@ -119,7 +119,8 @@ public class Recipe {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        dateText = convertedDate.toString().replace("00:00:00 EDT ", "");
+        //dateText = convertedDate.toString().replace("00:00:00 EDT ", "");
+        dateText = convertedDate.toString().substring(0, 11);
         return dateText;
     }
 }
