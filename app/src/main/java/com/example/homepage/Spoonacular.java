@@ -91,7 +91,7 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                     mDatabase.child(date).child(recipes[d].title).child("ingredients").child(ingredient.name).child("amount").setValue(ingredient.amount);
                     mDatabase.child(date).child(recipes[d].title).child("ingredients").child(ingredient.name).child("unit").setValue(ingredient.unit);
                     shopDatabase.child(ingredient.name).child("amount").setValue(ingredient.amount);
-                    shopDatabase.child(ingredient.name).child("unit").setValue(ingredient.unitShort);
+                    shopDatabase.child(ingredient.name).child("unit").setValue(ingredient.unit);
                 }
                 mDatabase.child(date).child(recipes[d].title).child("instructions").setValue(recipes[d].instructions);
                 mDatabase.child(date).child(recipes[d].title).child("time").setValue("2:00-3:00pm");
