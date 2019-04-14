@@ -59,8 +59,8 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                 dates.add(datesString.substring(0,10));
                 datesString = datesString.substring(10);
             }
-            for (int d = 0; d < recipes.length; d++) {
-                String date = "2019;04;0" + (d+1);
+            for (int d = 0; d < dates.size(); d++) {
+                String date = dates.get(d);
                 recipes[d].title = recipes[d].title.replace("[", "(");
                 recipes[d].title = recipes[d].title.replace("]", ")");
                 mDatabase = FirebaseDatabase.getInstance().getReference().child("plan");

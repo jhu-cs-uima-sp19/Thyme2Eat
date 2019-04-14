@@ -56,23 +56,22 @@ public class CreateMealPlan extends AppCompatActivity{
         String currDate = currentDate.substring(4,6);
         cDate = Integer.parseInt(currDate);
         datesPicked = new ArrayList<>();
+        myPreferences = getSharedPreferences("preferences", MODE_PRIVATE);
+        editor = myPreferences.edit();
         final Date todayDate = new Date();
 
 
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*new Spoonacular().execute("search", myPreferences.getString("cuisineUrl", ""),
-                        myPreferences.getString("dietUrl", ""), myPreferences.getString("includeUrl", ""),
-                        myPreferences.getString("excludeUrl", ""), myPreferences.getString("intoleranceUrl", ""),
-                        "&type=main+course", String.valueOf(selectedDates.size()), selectedDates.toString());*/
                 String dates =  "";
                 for (Date d: selectedDates) {
                     dates+=convertDate(d);
                 }
-                System.out.println(dates.substring(0,10));
-                dates = dates.substring(10);
-                System.out.print(dates);
+                new Spoonacular().execute("search", myPreferences.getString("cuisineUrl", ""),
+                        myPreferences.getString("dietUrl", ""), myPreferences.getString("includeUrl", ""),
+                        myPreferences.getString("excludeUrl", ""), myPreferences.getString("intoleranceUrl", ""),
+                        "&type=main+course", String.valueOf(selectedDates.size()), dates);
                 Intent myIntent = new Intent(CreateMealPlan.this, MainActivity.class);
                 startActivity(myIntent);
             }
@@ -85,7 +84,7 @@ public class CreateMealPlan extends AppCompatActivity{
                 long epoch = dateClicked.getTime();
                 Event ev = new Event(Color.BLACK, epoch, "Meal");
                 if (!todayDate.after(dateClicked) && !datesPicked.contains(dateClicked)) {
-                    datesPicked.add(dateClicked);
+                    selectedDates.add(dateClicked);
                     calendar.addEvent(ev);
                     //Log.d(TAG, todayDate + " " + dateClicked);
                 }else if (!todayDate.after(dateClicked) && datesPicked.contains(dateClicked)){
