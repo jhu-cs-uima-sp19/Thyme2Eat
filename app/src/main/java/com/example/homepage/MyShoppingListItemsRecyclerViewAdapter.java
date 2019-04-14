@@ -1,13 +1,19 @@
 package com.example.homepage;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 //import com.example.homepage.ShoppingListItemsFragment.OnListFragmentInteractionListener;
@@ -120,7 +126,9 @@ public class MyShoppingListItemsRecyclerViewAdapter extends RecyclerView.Adapter
         //public final TextView mIdView;
         public final TextView mContentView;
         //public DummyItem mItem;
+        public final Button add;
         public final Button deleteButton;
+        public final CheckBox check;
 
         public ViewHolder(View view) {
             super(view);
@@ -128,6 +136,54 @@ public class MyShoppingListItemsRecyclerViewAdapter extends RecyclerView.Adapter
             //itemDesc = (TextView) view.findViewById(R.id.PUTSOMETHINGHERE);
             //mIdView = (TextView) view.findViewById(R.id.item_number);
             mContentView = (TextView) view.findViewById(R.id.contentitem);
+
+            add = (Button) view.findViewById(R.id.addShopItemButton);
+            add.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(mView.getContext());
+                    dialog.setTitle("Add your shopping list item:");
+
+                    final String str = ShoppingListItemsFragment.stringShopList.get(getAdapterPosition());
+                    final EditText nameinput = new EditText(mView.getContext());
+                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.MATCH_PARENT);
+                    nameinput.setLayoutParams(lp);
+                    dialog.setView(nameinput);
+                    //nameinput.setText(r.time);
+                    nameinput.setGravity(Gravity.CENTER_HORIZONTAL);
+
+                    dialog.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                        public void onClick (DialogInterface dialog, int which) {
+                            //r.time = nameinput.getText().toString();
+                            //MainActivity.mDatabase.child("plan").child(r.getDate()).child(r.title).child("time").setValue(r.time);
+                            MyShoppingListItemsRecyclerViewAdapter.this.notifyDataSetChanged();
+                            dialog.cancel();
+                        }
+                    });
+                    dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick (DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    dialog.show();
+
+                }
+            });
+
+            check = (CheckBox) view.findViewById(R.id.checkbox_made);
+            check.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String deleteKey = ShoppingListItemsFragment.stringShopList.get(getAdapterPosition());
+                    deleteKey = deleteKey.substring(0, deleteKey.indexOf(':'));
+                    MainActivity.mDatabase.child("shop").child(deleteKey).setValue(null);
+                    ShoppingListItemsFragment.stringShopList.remove(getAdapterPosition());
+                    MyShoppingListItemsRecyclerViewAdapter.this.notifyItemRemoved(getAdapterPosition());
+                }
+            });
+
             deleteButton = (Button) view.findViewById(R.id.deleteitem);
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
