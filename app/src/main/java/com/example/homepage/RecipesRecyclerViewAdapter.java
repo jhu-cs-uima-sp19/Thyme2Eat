@@ -2,6 +2,7 @@ package com.example.homepage;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -156,6 +157,68 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                                         }, year, month, day);
                                 datePickerDialog.show();
                             } else if (item.getTitle().toString().equals("Edit Time")) {
+                                final NumberFormat f = new DecimalFormat("00");
+                                final Calendar c = Calendar.getInstance();
+                                final int hour = c.get(Calendar.HOUR_OF_DAY);
+                                final int min = c.get(Calendar.MINUTE);
+                                final Recipe r = RecipeFragment.mealList.get(getAdapterPosition());
+                                Dialog dialog = new Dialog(mView.getContext());
+                                dialog.setContentView(R.layout.edit_time);
+                                final TextView fromText = (TextView) dialog.findViewById(R.id.fromText);
+                                Log.w("Index", "" + r.time.substring(0, r.time.indexOf('-')));
+                                fromText.setText("From: " + r.time.substring(0, r.time.indexOf('-')));
+                                final TextView toText = (TextView) dialog.findViewById(R.id.toText);
+                                toText.setText("To: " + r.time.substring(r.time.indexOf('-') + 1));
+                                Button fromButton = (Button) dialog.findViewById(R.id.fromButton);
+                                Button toButton = (Button) dialog.findViewById(R.id.toButton);
+                                fromButton.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        TimePickerDialog timePickerDialog = new TimePickerDialog(mView.getContext(),
+                                        new TimePickerDialog.OnTimeSetListener() {
+
+                                            @Override
+                                            public void onTimeSet(TimePicker view, int hour,
+                                                                  int min) {
+                                                String amPm = amOrpm(hour);
+                                                if (amPm.equals("pm")) {
+                                                    hour = hour - 12;
+                                                }
+
+                                                r.time = hour + ":" + f.format(min) + r.time.substring(r.time.indexOf('-'));
+                                                MainActivity.mDatabase.child("plan").child(r.date).child(r.title).child("time").setValue(r.time);
+                                                fromText.setText("From: " + r.time.substring(0, r.time.indexOf('-')));
+                                                RecipesRecyclerViewAdapter.this.notifyDataSetChanged();
+                                            }
+                                        }, hour, min, false);
+                                timePickerDialog.show();
+                                    }
+                                });
+                                toButton.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        TimePickerDialog timePickerDialog = new TimePickerDialog(mView.getContext(),
+                                                new TimePickerDialog.OnTimeSetListener() {
+
+                                                    @Override
+                                                    public void onTimeSet(TimePicker view, int hour,
+                                                                          int min) {
+                                                        String amPm = amOrpm(hour);
+                                                        if (amPm.equals("pm")) {
+                                                            hour = hour - 12;
+                                                        }
+
+                                                        r.time = r.time.substring(0, r.time.indexOf('-') + 1) + hour + ":" + f.format(min) + amPm;
+                                                        MainActivity.mDatabase.child("plan").child(r.date).child(r.title).child("time").setValue(r.time);
+                                                        toText.setText("To: " + r.time.substring(r.time.indexOf('-') + 1));
+                                                        RecipesRecyclerViewAdapter.this.notifyDataSetChanged();
+                                                    }
+                                                }, hour, min, false);
+                                        timePickerDialog.show();
+                                    }
+                                });
+                                dialog.show();
+                                /*
                                 final Recipe r = RecipeFragment.mealList.get(getAdapterPosition());
                                 AlertDialog.Builder alert = new AlertDialog.Builder(mView.getContext());
                                 alert.setTitle("Change the time for this meal");
@@ -182,6 +245,7 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                                     }
                                 });
                                 alert.show();
+                                */
 
                                 // DON'T DELETE. WILL USE FOR 2ND SPRINT
 //                                Recipe r = RecipeFragment.mealList.get(getAdapterPosition());
@@ -274,7 +338,7 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
     }
 
     public String amOrpm (int hour) {
-        if (hour < 12) {
+        if (hour <= 12) {
             return "am";
         } else {
             return "pm";
