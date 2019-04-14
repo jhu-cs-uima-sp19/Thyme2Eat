@@ -132,7 +132,8 @@ public class MyShoppingListItemsRecyclerViewAdapter extends RecyclerView.Adapter
         }
 
         public void bindView(int position) {
-            mContentView.setText(ShoppingListItemsFragment.stringShopList.get(position));
+            String item = ShoppingListItemsFragment.stringShopList.get(position);
+            mContentView.setText(item.substring(0, 1).toUpperCase() + item.substring(1));
             //.setText(MainActivity.mealList.get(position).getDate());
             //.setText(MainActivity.mealList.get(position).getTime());
         }

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
     android:background="@drawable/shoppingitem_background"
     android:orientation="horizontal">
 
@@ -13,26 +14,30 @@
         android:layout_height="46dp"
         android:layout_alignParentLeft="true"
         android:layout_margin="10dp"
+        android:buttonTint="@color/white"
         android:text="." />
 
     <TextView
         android:id="@+id/contentitem"
-        android:layout_width="145dp"
-        android:layout_height="44dp"
-        android:layout_marginStart="84dp"
-        android:layout_marginEnd="83dp"
+        android:layout_width="263dp"
+        android:layout_height="43dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="10dp"
         android:layout_marginRight="40dp"
         android:layout_toStartOf="@+id/deleteitem"
         android:layout_toEndOf="@+id/checkbox_made"
         android:gravity="center"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textColor="@color/common_google_signin_btn_text_dark_default"
+        android:textSize="18sp" />
 
     <Button
         android:id="@+id/deleteitem"
         android:layout_width="52dp"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_margin="10dp"
         android:layout_marginStart="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
@@ -41,6 +46,8 @@
         android:layout_marginBottom="10dp"
         android:background="@drawable/shoppingitem_background"
         android:clickable="true"
-        android:text="X" />
+        android:text="x"
+        android:textColor="@color/common_google_signin_btn_text_dark_default"
+        android:textSize="24sp" />
 
 </RelativeLayout>
