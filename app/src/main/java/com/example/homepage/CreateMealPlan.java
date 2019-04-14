@@ -3,6 +3,7 @@ package com.example.homepage;
 
 
 import android.content.Intent;
+import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.graphics.Color;
@@ -19,7 +20,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class CreateMealPlan extends AppCompatActivity {
+public class CreateMealPlan extends AppCompatActivity{
 
     private static final String TAG = "Calendar";
     CompactCalendarView calendar;
@@ -64,6 +65,8 @@ public class CreateMealPlan extends AppCompatActivity {
                     Log.d(TAG, dateClicked + "");
                     Event ev = new Event(Color.BLACK, epoch, "Meal");
                     calendar.addEvent(ev);
+
+
 
                 } else {
                     Log.d(TAG, "error: past date");

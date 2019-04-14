@@ -14,4 +14,10 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_activity_calendar_create_meal_plan">CalendarCreateMealPlan</string>
+    <string name="title_activity_create_meal_plan">CreateMealPlan</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+
+    <string name="action_example">Example action</string>
 </resources>
