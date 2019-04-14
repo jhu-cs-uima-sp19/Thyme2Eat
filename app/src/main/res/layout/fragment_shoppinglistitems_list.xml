@@ -50,7 +50,6 @@
         android:layout_marginBottom="32dp"
         android:background="@drawable/ic_add_circle_outline_black_24dp"
         android:backgroundTint="#E15509"
-        android:clickable="true"
         android:padding="8dp"
         android:textColorHighlight="#E15509"
         android:textColorHint="#E15509"
