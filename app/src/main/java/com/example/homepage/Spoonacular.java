@@ -53,7 +53,12 @@ public class Spoonacular extends AsyncTask <String, String, String> {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            ArrayList<String> dates = new ArrayList<>(Arrays.asList(args[8].split(",")));
+            String datesString = args[8];
+            ArrayList<String> dates = new ArrayList<>();
+            while (datesString.length() >0) {
+                dates.add(datesString.substring(0,10));
+                datesString = datesString.substring(10);
+            }
             for (int d = 0; d < recipes.length; d++) {
                 String date = "2019;04;0" + (d+1);
                 recipes[d].title = recipes[d].title.replace("[", "(");

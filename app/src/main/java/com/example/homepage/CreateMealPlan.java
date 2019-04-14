@@ -37,7 +37,7 @@ public class CreateMealPlan extends AppCompatActivity{
     TextView planTextView;
     private SharedPreferences myPreferences;
     private SharedPreferences.Editor editor;
-    private ArrayList<String> selectedDates = new ArrayList<>();
+    private ArrayList<Date> selectedDates = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +62,13 @@ public class CreateMealPlan extends AppCompatActivity{
                         myPreferences.getString("dietUrl", ""), myPreferences.getString("includeUrl", ""),
                         myPreferences.getString("excludeUrl", ""), myPreferences.getString("intoleranceUrl", ""),
                         "&type=main+course", String.valueOf(selectedDates.size()), selectedDates.toString());*/
-                List<String> dates = new ArrayList<String>(Arrays.asList(selectedDates.toString().split(",")));
+                String dates =  "";
+                for (Date d: selectedDates) {
+                    dates+=convertDate(d);
+                }
+                System.out.println(dates.substring(0,10));
+                dates = dates.substring(10);
+                System.out.print(dates);
                 Intent myIntent = new Intent(CreateMealPlan.this, MainActivity.class);
                 startActivity(myIntent);
             }
@@ -77,7 +83,7 @@ public class CreateMealPlan extends AppCompatActivity{
                 long epoch = dateClicked.getTime();
                 if (cDate <= selectedDate) {
                     Log.d(TAG, convertDate(dateClicked));
-                    selectedDates.add(dateClicked.toString());
+                    selectedDates.add(dateClicked);
                     Event ev = new Event(Color.BLACK, epoch, "Meal");
                     calendar.addEvent(ev);
                 } else {
@@ -111,51 +117,48 @@ public class CreateMealPlan extends AppCompatActivity{
     public String convertDate(Date dateClicked){
         String date = dateClicked.toString();
         String convertedDate = date.substring(24);
-        convertedDate += "/";
+        convertedDate += ";";
         String month = date.substring(4,7);
         switch(month){
             case "Jan":
-                convertedDate += "01/";
+                convertedDate += "01;";
                 break;
             case "Feb":
-                convertedDate += "02/";
+                convertedDate += "02;";
                 break;
             case "Mar":
-                convertedDate += "03/";
+                convertedDate += "03;";
                 break;
             case "Apr":
-                convertedDate += "04/";
+                convertedDate += "04;";
                 break;
             case "May":
-                convertedDate += "05/";
+                convertedDate += "05;";
                 break;
             case "Jun":
-                convertedDate += "06/";
+                convertedDate += "06;";
                 break;
             case "Jul":
-                convertedDate += "07/";
+                convertedDate += "07;";
                 break;
             case "Aug":
-                convertedDate += "08/";
+                convertedDate += "08;";
                 break;
             case "Sep":
-                convertedDate += "09/";
+                convertedDate += "09;";
                 break;
             case "Oct":
-                convertedDate += "10/";
+                convertedDate += "10;";
                 break;
             case "Nov":
-                convertedDate += "11/";
+                convertedDate += "11;";
                 break;
             case "Dec":
-                convertedDate += "12/";
+                convertedDate += "12;";
                 break;
-
         }
         convertedDate += date.substring(8,10);
-
         return convertedDate;
-
     }
 
 }
