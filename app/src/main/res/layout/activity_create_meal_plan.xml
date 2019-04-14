@@ -17,7 +17,7 @@
         android:layout_marginBottom="8dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        app:compactCalendarBackgroundColor="#ffe95451"
+        app:compactCalendarBackgroundColor="@color/colorPrimary"
         app:compactCalendarCurrentDayBackgroundColor="#B71C1C"
         app:compactCalendarCurrentSelectedDayBackgroundColor="#E57373"
         app:compactCalendarMultiEventIndicatorColor="#fff"
@@ -32,6 +32,7 @@
     <Button
         android:id="@+id/confirmBtn"
         android:layout_width="92dp"
+        android:background="@color/colorPrimary"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
