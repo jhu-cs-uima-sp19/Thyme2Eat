@@ -15,7 +15,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CreateMealPlan"></activity>
+        <activity
+            android:name=".CreateMealPlan"
+            android:label="@string/title_activity_create_meal_plan"></activity>
         <activity
             android:name=".ViewRecipe"
             android:label="@string/title_activity_view_recipe"
