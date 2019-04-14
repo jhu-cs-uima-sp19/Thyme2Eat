@@ -18,6 +18,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.provider.Settings.Secure;
+
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -63,7 +65,9 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         myPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE);
         editor = myPreferences.edit();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        String android_id = Secure.getString(getContentResolver(),
+                Secure.ANDROID_ID);
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(android_id);
         //DatabaseReference shopDatabase = mDatabase.child("shop");
 
         super.onCreate(savedInstanceState);

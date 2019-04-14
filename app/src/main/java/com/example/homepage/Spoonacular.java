@@ -23,6 +23,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import android.provider.Settings.Secure;
+
 
 public class Spoonacular extends AsyncTask <String, String, String> {
     public static DatabaseReference mDatabase;
@@ -37,7 +39,7 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                 e.printStackTrace();
                 return "Failed";
             }
-            mDatabase = FirebaseDatabase.getInstance().getReference().child("plan");
+            mDatabase = MainActivity.mDatabase.child("plan");
             mDatabase.child("2019;03;24").child(recipes[0].title).child("image").setValue(recipes[0].image);
             for (int i = 0; i < recipes[0].extendedIngredients.size(); i++) {
                 Ingredient ingredient = recipes[0].extendedIngredients.get(i);
@@ -63,8 +65,8 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                 String date = dates.get(d);
                 recipes[d].title = recipes[d].title.replace("[", "(");
                 recipes[d].title = recipes[d].title.replace("]", ")");
-                mDatabase = FirebaseDatabase.getInstance().getReference().child("plan");
-                DatabaseReference shopDatabase = FirebaseDatabase.getInstance().getReference().child("shop");
+                mDatabase = MainActivity.mDatabase.child("plan");
+                DatabaseReference shopDatabase = MainActivity.mDatabase.child("shop");
                 mDatabase.child(date).child(recipes[d].title).child("image").setValue(recipes[d].image);
                 Bitmap myBitmap;
                 try {
