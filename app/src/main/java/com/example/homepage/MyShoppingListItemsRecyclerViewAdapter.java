@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 //import com.example.homepage.ShoppingListItemsFragment.OnListFragmentInteractionListener;
@@ -119,6 +120,7 @@ public class MyShoppingListItemsRecyclerViewAdapter extends RecyclerView.Adapter
         //public final TextView mIdView;
         public final TextView mContentView;
         //public DummyItem mItem;
+        public final Button deleteButton;
 
         public ViewHolder(View view) {
             super(view);
@@ -126,6 +128,17 @@ public class MyShoppingListItemsRecyclerViewAdapter extends RecyclerView.Adapter
             //itemDesc = (TextView) view.findViewById(R.id.PUTSOMETHINGHERE);
             //mIdView = (TextView) view.findViewById(R.id.item_number);
             mContentView = (TextView) view.findViewById(R.id.contentitem);
+            deleteButton = (Button) view.findViewById(R.id.deleteitem);
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String deleteKey = ShoppingListItemsFragment.stringShopList.get(getAdapterPosition());
+                    deleteKey = deleteKey.substring(0, deleteKey.indexOf(':'));
+                    MainActivity.mDatabase.child("shop").child(deleteKey).setValue(null);
+                    ShoppingListItemsFragment.stringShopList.remove(getAdapterPosition());
+                    MyShoppingListItemsRecyclerViewAdapter.this.notifyItemRemoved(getAdapterPosition());
+                }
+            });
             if (mContentView == null) {
                 Log.w("empty", "content is null");
             }
