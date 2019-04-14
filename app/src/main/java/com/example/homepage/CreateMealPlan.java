@@ -2,6 +2,7 @@ package com.example.homepage;
 //package com.example.compactcalendartrial;
 
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.graphics.Color;
@@ -14,7 +15,9 @@ import java.util.Date;
 import java.util.Locale;
 import android.content.Context;
 import android.util.Log;
-
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 public class CreateMealPlan extends AppCompatActivity {
 
@@ -23,6 +26,8 @@ public class CreateMealPlan extends AppCompatActivity {
     private SimpleDateFormat dateFormatMonth = new SimpleDateFormat("MMM-yyyy",
             Locale.getDefault());
     int cDate;
+    Button confirmBtn;
+    TextView planTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +36,22 @@ public class CreateMealPlan extends AppCompatActivity {
 
         calendar = (CompactCalendarView) findViewById(R.id.compactcalendar_view);
         calendar.setUseThreeLetterAbbreviation(true);
+        confirmBtn = (Button) findViewById(R.id.confirmBtn);
+        confirmBtn.setText("Confirm");
+        planTextView = (TextView) findViewById(R.id.planTextView);
+        planTextView.setText("Tap the dates to plan for!");
         Calendar calendarDate = Calendar.getInstance();
         String currentDate = DateFormat.getDateInstance().format(calendarDate.getTime());
         String currDate = currentDate.substring(4,6);
         cDate = Integer.parseInt(currDate);
+
+        confirmBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(CreateMealPlan.this, MainActivity.class);
+                startActivity(myIntent);
+            }
+        });
 
         calendar.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
