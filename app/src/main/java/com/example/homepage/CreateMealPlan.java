@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.Locale;
 import android.content.Context;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -88,4 +89,13 @@ public class CreateMealPlan extends AppCompatActivity{
         getMenuInflater().inflate(R.menu.create_meal_plan, menu);
         return true;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem){
+        if(menuItem.getItemId() == R.id.back_button){
+            startActivity(new Intent(this, MainActivity.class));
+        }
+        return true;
+    }
+
 }
