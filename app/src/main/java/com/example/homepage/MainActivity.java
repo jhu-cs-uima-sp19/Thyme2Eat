@@ -89,13 +89,6 @@ public class MainActivity extends AppCompatActivity
         addMeals.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //DO NOT UNCOMMENT THIS CODE HERE!!!!!
-                //new Spoonacular().execute("searchRandom");
-
-                new Spoonacular().execute("search", myPreferences.getString("cuisineUrl", ""),
-                        myPreferences.getString("dietUrl", ""), myPreferences.getString("includeUrl", ""),
-                        myPreferences.getString("excludeUrl", ""), myPreferences.getString("intoleranceUrl", ""),
-                        "&type=main+course", "5");
                 Intent myIntent = new Intent(MainActivity.this, CreateMealPlan.class);
                 startActivity(myIntent);
             }
