@@ -127,27 +127,30 @@ public class ShoppingListItemsFragment extends Fragment {
                 dialog.setTitle("Add your shopping list item:");
 
                 final EditText nameinput = new EditText(shopview.getContext());
-                final EditText unitinput = new EditText(shopview.getContext());
-                final EditText numinput = new EditText(shopview.getContext());
+//                final EditText unitinput = new EditText(shopview.getContext());
+//                final EditText numinput = new EditText(shopview.getContext());
 
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.MATCH_PARENT);
                 nameinput.setLayoutParams(lp);
-                unitinput.setLayoutParams(lp);
-                numinput.setLayoutParams(lp);
+//                unitinput.setLayoutParams(lp);
+//                numinput.setLayoutParams(lp);
                 dialog.setView(nameinput);
+//                dialog.setView(unitinput);
+//                dialog.setView(numinput);
                 //nameinput.setText(r.time);
                 nameinput.setGravity(Gravity.CENTER_HORIZONTAL);
+
 
                 dialog.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     public void onClick (DialogInterface dialog, int which) {
                         String strname = nameinput.getText().toString();
-                        String strunit = unitinput.getText().toString();
-                        String strnum = unitinput.getText().toString();
+                        //String strunit = unitinput.getText().toString();
+                        //String strnum = unitinput.getText().toString();
                         MainActivity.mDatabase.child("shop").setValue(strname);
-                        MainActivity.mDatabase.child("shop").child(strname).child("unit").setValue(strunit);
-                        MainActivity.mDatabase.child("shop").child(strname).child("unit").setValue(strnum);
+                        //MainActivity.mDatabase.child("shop").child(strname).child("unit").setValue(strunit);
+                        //MainActivity.mDatabase.child("shop").child(strname).child("unit").setValue(strnum);
                         rcshopAdapter.notifyDataSetChanged();
                         dialog.cancel();
                     }
@@ -158,6 +161,8 @@ public class ShoppingListItemsFragment extends Fragment {
                     }
                 });
                 dialog.show();
+
+                // Second dialog box
 
             }
         });
