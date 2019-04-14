@@ -76,7 +76,7 @@ public class CreateMealPlan extends AppCompatActivity{
                 int selectedDate = Integer.parseInt(selectedDateStr);
                 long epoch = dateClicked.getTime();
                 if (cDate <= selectedDate) {
-                    Log.d(TAG, dateClicked + "");
+                    Log.d(TAG, convertDate(dateClicked));
                     selectedDates.add(dateClicked.toString());
                     Event ev = new Event(Color.BLACK, epoch, "Meal");
                     calendar.addEvent(ev);
@@ -106,6 +106,56 @@ public class CreateMealPlan extends AppCompatActivity{
             startActivity(new Intent(this, MainActivity.class));
         }
         return true;
+    }
+
+    public String convertDate(Date dateClicked){
+        String date = dateClicked.toString();
+        String convertedDate = date.substring(24);
+        convertedDate += "/";
+        String month = date.substring(4,7);
+        switch(month){
+            case "Jan":
+                convertedDate += "01/";
+                break;
+            case "Feb":
+                convertedDate += "02/";
+                break;
+            case "Mar":
+                convertedDate += "03/";
+                break;
+            case "Apr":
+                convertedDate += "04/";
+                break;
+            case "May":
+                convertedDate += "05/";
+                break;
+            case "Jun":
+                convertedDate += "06/";
+                break;
+            case "Jul":
+                convertedDate += "07/";
+                break;
+            case "Aug":
+                convertedDate += "08/";
+                break;
+            case "Sep":
+                convertedDate += "09/";
+                break;
+            case "Oct":
+                convertedDate += "10/";
+                break;
+            case "Nov":
+                convertedDate += "11/";
+                break;
+            case "Dec":
+                convertedDate += "12/";
+                break;
+
+        }
+        convertedDate += date.substring(8,10);
+
+        return convertedDate;
+
     }
 
 }
