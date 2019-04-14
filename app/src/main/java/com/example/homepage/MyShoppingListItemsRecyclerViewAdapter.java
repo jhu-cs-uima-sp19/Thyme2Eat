@@ -26,11 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
- */
+
 public class MyShoppingListItemsRecyclerViewAdapter extends RecyclerView.Adapter<MyShoppingListItemsRecyclerViewAdapter.ViewHolder> {
 
 //    private final List<DummyItem> mValues;
@@ -72,52 +68,52 @@ public class MyShoppingListItemsRecyclerViewAdapter extends RecyclerView.Adapter
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Log.w("myApp", "atList");
 
-        final Button add;
+        //final Button add;
         final View shopview = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_shoppinglistitems, parent, false);
 
-        add = (Button) shopview.findViewById(R.id.addShopItemButton);
-        add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder dialog = new AlertDialog.Builder(shopview.getContext());
-                dialog.setTitle("Add your shopping list item:");
-
-                final EditText nameinput = new EditText(shopview.getContext());
-                final EditText unitinput = new EditText(shopview.getContext());
-                final EditText numinput = new EditText(shopview.getContext());
-
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.MATCH_PARENT);
-                nameinput.setLayoutParams(lp);
-                unitinput.setLayoutParams(lp);
-                numinput.setLayoutParams(lp);
-                dialog.setView(nameinput);
-                //nameinput.setText(r.time);
-                nameinput.setGravity(Gravity.CENTER_HORIZONTAL);
-
-                dialog.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-                    public void onClick (DialogInterface dialog, int which) {
-                        String strname = nameinput.getText().toString();
-                        String strunit = unitinput.getText().toString();
-                        String strnum = unitinput.getText().toString();
-                        MainActivity.mDatabase.child("shop").setValue(strname);
-                        MainActivity.mDatabase.child("shop").child(strname).child("unit").setValue(strunit);
-                        MainActivity.mDatabase.child("shop").child(strname).child("unit").setValue(strnum);
-                        MyShoppingListItemsRecyclerViewAdapter.this.notifyDataSetChanged();
-                        dialog.cancel();
-                    }
-                });
-                dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick (DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-                dialog.show();
-
-            }
-        });
+//        add = (Button) parent.findViewById(R.id.addShopItemButton);
+//        add.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                AlertDialog.Builder dialog = new AlertDialog.Builder(shopview.getContext());
+//                dialog.setTitle("Add your shopping list item:");
+//
+//                final EditText nameinput = new EditText(shopview.getContext());
+//                final EditText unitinput = new EditText(shopview.getContext());
+//                final EditText numinput = new EditText(shopview.getContext());
+//
+//                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+//                        LinearLayout.LayoutParams.MATCH_PARENT,
+//                        LinearLayout.LayoutParams.MATCH_PARENT);
+//                nameinput.setLayoutParams(lp);
+//                unitinput.setLayoutParams(lp);
+//                numinput.setLayoutParams(lp);
+//                dialog.setView(nameinput);
+//                //nameinput.setText(r.time);
+//                nameinput.setGravity(Gravity.CENTER_HORIZONTAL);
+//
+//                dialog.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+//                    public void onClick (DialogInterface dialog, int which) {
+//                        String strname = nameinput.getText().toString();
+//                        String strunit = unitinput.getText().toString();
+//                        String strnum = unitinput.getText().toString();
+//                        MainActivity.mDatabase.child("shop").setValue(strname);
+//                        MainActivity.mDatabase.child("shop").child(strname).child("unit").setValue(strunit);
+//                        MainActivity.mDatabase.child("shop").child(strname).child("unit").setValue(strnum);
+//                        MyShoppingListItemsRecyclerViewAdapter.this.notifyDataSetChanged();
+//                        dialog.cancel();
+//                    }
+//                });
+//                dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                    public void onClick (DialogInterface dialog, int which) {
+//                        dialog.cancel();
+//                    }
+//                });
+//                dialog.show();
+//
+//            }
+//        });
 //        Log.w("myApp", "atShopFrag");
 //        //View shopview = inflater.inflate(R.layout.fragment_shoppinglistitems_list, container, false);
 //        RecyclerView shoprec = (RecyclerView) shopview.findViewById(R.id.shoppingListID);

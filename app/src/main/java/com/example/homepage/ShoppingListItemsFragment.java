@@ -1,15 +1,20 @@
 package com.example.homepage;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -102,7 +107,7 @@ public class ShoppingListItemsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.w("myApp", "atShopFrag");
-        View shopview = inflater.inflate(R.layout.fragment_shoppinglistitems_list, container, false);
+        final View shopview = inflater.inflate(R.layout.fragment_shoppinglistitems_list, container, false);
         RecyclerView shoprec = (RecyclerView) shopview.findViewById(R.id.shoppingListID);
         shoprec.setLayoutManager(new LinearLayoutManager(getActivity()));
         shoprec.setAdapter(rcshopAdapter);
@@ -111,7 +116,51 @@ public class ShoppingListItemsFragment extends Fragment {
         getShopDatabase(shopDatabase);
 
         add = (Button) shopview.findViewById(R.id.addShopItemButton);
+        if (add == null) {
+            Log.w("add is", "null");
+        }
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.w("in on click", "here");
+                AlertDialog.Builder dialog = new AlertDialog.Builder(shopview.getContext());
+                dialog.setTitle("Add your shopping list item:");
 
+                final EditText nameinput = new EditText(shopview.getContext());
+                final EditText unitinput = new EditText(shopview.getContext());
+                final EditText numinput = new EditText(shopview.getContext());
+
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT);
+                nameinput.setLayoutParams(lp);
+                unitinput.setLayoutParams(lp);
+                numinput.setLayoutParams(lp);
+                dialog.setView(nameinput);
+                //nameinput.setText(r.time);
+                nameinput.setGravity(Gravity.CENTER_HORIZONTAL);
+
+                dialog.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                    public void onClick (DialogInterface dialog, int which) {
+                        String strname = nameinput.getText().toString();
+                        String strunit = unitinput.getText().toString();
+                        String strnum = unitinput.getText().toString();
+                        MainActivity.mDatabase.child("shop").setValue(strname);
+                        MainActivity.mDatabase.child("shop").child(strname).child("unit").setValue(strunit);
+                        MainActivity.mDatabase.child("shop").child(strname).child("unit").setValue(strnum);
+                        rcshopAdapter.notifyDataSetChanged();
+                        dialog.cancel();
+                    }
+                });
+                dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick (DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                dialog.show();
+
+            }
+        });
         // make method for adding
 
         add.setOnClickListener(new View.OnClickListener() {
