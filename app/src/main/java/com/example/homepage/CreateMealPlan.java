@@ -56,6 +56,8 @@ public class CreateMealPlan extends AppCompatActivity{
         String currDate = currentDate.substring(4,6);
         cDate = Integer.parseInt(currDate);
         datesPicked = new ArrayList<>();
+        final Date todayDate = new Date();
+
 
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,14 +82,13 @@ public class CreateMealPlan extends AppCompatActivity{
             @Override
             public void onDayClick(Date dateClicked) {
                 Context context = getApplicationContext();
-                String selectedDateStr = dateClicked.toString().substring(8, 10);
-                int selectedDate = Integer.parseInt(selectedDateStr);
                 long epoch = dateClicked.getTime();
                 Event ev = new Event(Color.BLACK, epoch, "Meal");
-                if (cDate <= selectedDate && !datesPicked.contains(dateClicked)) {
+                if (!todayDate.after(dateClicked) && !datesPicked.contains(dateClicked)) {
                     datesPicked.add(dateClicked);
                     calendar.addEvent(ev);
-                }else if (cDate <= selectedDate && datesPicked.contains(dateClicked)){
+                    //Log.d(TAG, todayDate + " " + dateClicked);
+                }else if (!todayDate.after(dateClicked) && datesPicked.contains(dateClicked)){
                     datesPicked.remove(dateClicked);
                     calendar.removeEvent(ev);
                 }
