@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.view.Menu;
 
 public class CreateMealPlan extends AppCompatActivity{
 
@@ -80,5 +81,11 @@ public class CreateMealPlan extends AppCompatActivity{
         });
 
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.create_meal_plan, menu);
+        return true;
     }
 }
