@@ -21,6 +21,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Spoonacular extends AsyncTask <String, String, String> {
     public static DatabaseReference mDatabase;
@@ -51,6 +53,7 @@ public class Spoonacular extends AsyncTask <String, String, String> {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            ArrayList<String> dates = new ArrayList<>(Arrays.asList(args[8].split(",")));
             for (int d = 0; d < recipes.length; d++) {
                 String date = "2019;04;0" + (d+1);
                 recipes[d].title = recipes[d].title.replace("[", "(");
