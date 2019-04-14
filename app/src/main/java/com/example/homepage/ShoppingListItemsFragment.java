@@ -161,7 +161,7 @@ public class ShoppingListItemsFragment extends Fragment {
 
             }
         });
-        // make method for adding
+        //make method for adding
 
         add.setOnClickListener(new View.OnClickListener() {
             @Override

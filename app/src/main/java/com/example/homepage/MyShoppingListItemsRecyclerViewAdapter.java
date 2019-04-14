@@ -66,7 +66,7 @@ public class MyShoppingListItemsRecyclerViewAdapter extends RecyclerView.Adapter
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Log.w("myApp", "atList");
+        Log.w("myApp", "at holder add");
 
         //final Button add;
         final View shopview = LayoutInflater.from(parent.getContext())
