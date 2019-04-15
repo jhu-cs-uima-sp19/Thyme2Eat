@@ -9,7 +9,7 @@ Team K
 - Showing shopping list items needed for the planned meals, under the shopping list tab in the nav drawer.
 - Deleting shopping list items using the checkbox or the X button.
 
-#How to use Thyme2Eat
+# How to use Thyme2Eat
 Welcome, and thank you for trying out Thyme2Eat. 
 
 In order to get started, make your way to the SETTINGS, easily located using the navigation drawer on the top left corner of the screen. There, you can set the following preferences (cuisine, diet, allergies, foods to include, foods to exclude, as well as the number of dependents). Make sure you remember to press CONFIRM. These preferences will be used to determine the best recipies for you. If you are not sure about what preferences you want, you can skip this step. 
