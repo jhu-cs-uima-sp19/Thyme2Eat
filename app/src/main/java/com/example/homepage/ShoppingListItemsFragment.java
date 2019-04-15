@@ -80,13 +80,14 @@ public class ShoppingListItemsFragment extends Fragment {
                 Log.w("data", "in snap");
                 String name;
                 String num;
-                String theunit;
+                String theunit = "";
                 String wholeitem;
 
                 for (DataSnapshot items : dataSnapshot.getChildren()) {
                     name = items.getKey();
                     num = items.child("amount").getValue().toString();
-                    theunit = items.child("unit").getValue().toString();
+                    if (items.child("unit").exists())
+                        theunit = items.child("unit").getValue().toString();
                     wholeitem = name + ": " + num + " " + theunit;
                     stringShopList.add(wholeitem);
                 }

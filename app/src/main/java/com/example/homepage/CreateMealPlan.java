@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Locale;
 import android.content.Context;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -73,6 +74,10 @@ public class CreateMealPlan extends AppCompatActivity{
                         "&type=main+course", String.valueOf(selectedDates.size()), dates);
                 Intent myIntent = new Intent(CreateMealPlan.this, MainActivity.class);
                 startActivity(myIntent);
+                Toast toast = Toast.makeText(CreateMealPlan.this, "Please wait for the new meal plan to load!", Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.CENTER,0,-100);
+                toast.show();
+
             }
         });
 

@@ -237,7 +237,6 @@ public class SettingsFragment extends Fragment {
                 }
                 editor.commit();
                 Toast.makeText(getContext(), "Preferences Saved!", Toast.LENGTH_SHORT).show();
-
             }
         });
         // Inflate the layout for this fragment

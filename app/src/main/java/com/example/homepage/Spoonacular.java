@@ -106,7 +106,6 @@ public class Spoonacular extends AsyncTask <String, String, String> {
 
     @Override
     protected void onPostExecute(String bitmaps) {
-
     }
 
     /* This method allows you to get search results in bulk;
