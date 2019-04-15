@@ -8,6 +8,19 @@ Team K
 - Planning meals for days chosen in a calendar view, when the user hits "Add Meal" in the home page. Multiple meals per day can be chosen by clicking on a day multiple times.
 - Showing shopping list items needed for the planned meals, under the shopping list tab in the nav drawer.
 - Deleting shopping list items using the checkbox or the X button.
+-Seeing calendar view when you hit "Add Meals" button.
+-Click and unclick calendar dates to add and remove meal planning for that day.
+-Scroll through months on the calendar.
+-Confirm button on the calendar confirms days you want to plan and calls the API. It takes you to the main activity with potential meals for the days you wanted to plan.
+-X on calendar screen takes you back to the Main Activity without saving any changes.
+
+# Not Complete in the First Sprint:
+-We have not added data persistence for meals that have already been planned for certain days. This means that dates that you clicked on for meal planning before will not have a black dot the next time you open the calendar, but on the meal plan screen, those days will still have meals planned.
+-Right now, unclicking a calendar date means that you do not want to plan for that day. However, because there is no data persistence right now, if you open the calendar again, you can add another meal to the same day by clicking on it. In the next sprint, we will add data persistence and come up with a conclusive way to set number of meals per day(either through settings or the calendar).
+
+# What we plan to do in the Second Sprint:
+-Add data persistence for the calendar. This means figuring out whether number of meals per day will be added through the calendar or in settings.
+
 
 # How to use Thyme2Eat
 Welcome, and thank you for trying out Thyme2Eat. 
