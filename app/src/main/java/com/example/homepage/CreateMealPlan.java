@@ -90,7 +90,7 @@ public class CreateMealPlan extends AppCompatActivity{
                     calendar.removeEvent(ev);
                 }
                 else {
-                    //Toast.makeText(context, "Error: Past Date", 2).show();
+                    Toast.makeText(context, "Error: Past Date", Toast.LENGTH_SHORT).show();
                 }
             }
 
