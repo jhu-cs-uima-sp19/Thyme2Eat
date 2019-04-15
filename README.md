@@ -24,9 +24,13 @@ Team K
 
 # What we plan to do in the Second Sprint:
 - Add data persistence for the calendar. This means figuring out whether number of meals per day will be added through the calendar or in settings.
-- Add the dialog boxes for the other inputs for shopping list items. Link the added item to the database.
+- Add the dialog boxes for the other inputs for shopping list items. Link the added item to the database. Also we will improve the shopping list to combine like items, and delete items from the shipping list if the recipe is deleted. 
 -Add communication between calendar in main activity if a user changes the time or date and the calendar in the calednar activity.
-
+-A more robust search process with more preferences given by the user.
+-A more automated way of planning meal times (based on time to create meal, user preferences, and posible calendar integration)
+-Adding an activity for favorited meals that the user can add to their current meal plan
+-Some sort of recipe search engine so that users have even more freedom to add recipes to their meal plan.
+-Overall quality of life changes to the UI
 
 # How to use Thyme2Eat
 Welcome, and thank you for trying out Thyme2Eat. 
