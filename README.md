@@ -10,6 +10,7 @@ Team K
 - Deleting shopping list items using the checkbox or the X button.
 - Seeing calendar view when you hit "Add Meals" button.
 - Click and unclick calendar dates to add and remove meal planning for that day.
+-CHANGE: Instead of graying out past dates, an error message pops up when you try to click on a past date to add a meal.
 - Scroll through months on the calendar.
 - Confirm button on the calendar confirms days you want to plan and calls the API. It takes you to the main activity with potential meals for the days you wanted to plan.
 - X on calendar screen takes you back to the Main Activity without saving any changes.
