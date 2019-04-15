@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="You don't have any planned meals. Click on Add Meals to get started!"
+        android:text="You don't have any planned meals. Go to Settings to set your preferences, then click on Add Meals to get started!"
         android:textColor="@color/colorPrimary"
         android:textSize="18sp"
         android:visibility="gone" />
