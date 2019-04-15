@@ -9,6 +9,8 @@ import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -21,6 +23,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.view.Menu;
+import android.widget.Toast;
 
 public class CreateMealPlan extends AppCompatActivity{
 
@@ -34,7 +37,7 @@ public class CreateMealPlan extends AppCompatActivity{
     private SharedPreferences myPreferences;
     private SharedPreferences.Editor editor;
     private ArrayList<Date> selectedDates = new ArrayList<>();
-    List<Date> datesPicked;
+    TextView monthTV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,15 +50,15 @@ public class CreateMealPlan extends AppCompatActivity{
         confirmBtn.setText("Confirm");
         planTextView = (TextView) findViewById(R.id.planTextView);
         planTextView.setText("Tap the dates to plan for!");
-        Calendar calendarDate = Calendar.getInstance();
-        String currentDate = DateFormat.getDateInstance().format(calendarDate.getTime());
-        String currDate = currentDate.substring(4,6);
-        cDate = Integer.parseInt(currDate);
-        datesPicked = new ArrayList<>();
         myPreferences = getSharedPreferences("preferences", MODE_PRIVATE);
         editor = myPreferences.edit();
         final Date todayDate = new Date();
-
+        monthTV = (TextView) findViewById(R.id.monthTV);
+        Calendar c = Calendar.getInstance();
+        int y = c.get(Calendar.YEAR);
+        int m = c.get(Calendar.MONTH);
+        String month = convertMonth(m);
+        monthTV.setText(month + " " + y);
 
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,22 +82,22 @@ public class CreateMealPlan extends AppCompatActivity{
                 Context context = getApplicationContext();
                 long epoch = dateClicked.getTime();
                 Event ev = new Event(Color.BLACK, epoch, "Meal");
-                if (!todayDate.after(dateClicked) && !datesPicked.contains(dateClicked)) {
+                if (!todayDate.after(dateClicked) && !selectedDates.contains(dateClicked)) {
                     selectedDates.add(dateClicked);
                     calendar.addEvent(ev);
-                    //Log.d(TAG, todayDate + " " + dateClicked);
-                }else if (!todayDate.after(dateClicked) && datesPicked.contains(dateClicked)){
-                    datesPicked.remove(dateClicked);
+                }else if (!todayDate.after(dateClicked) && selectedDates.contains(dateClicked)){
+                    selectedDates.remove(dateClicked);
                     calendar.removeEvent(ev);
                 }
                 else {
-                    Log.d(TAG, "error: past date");
+                    Toast.makeText(context, "Error: Past Date", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onMonthScroll(Date firstDayOfNewMonth) {
-                Log.d(TAG, "nothing");
+                int m = firstDayOfNewMonth.getMonth();
+                monthTV.setText(convertMonth(m) + " " + (firstDayOfNewMonth.getYear() + 1900));
             }
         });
 
@@ -160,6 +163,51 @@ public class CreateMealPlan extends AppCompatActivity{
         }
         convertedDate += date.substring(8,10);
         return convertedDate;
+    }
+
+    public String convertMonth(int m){
+        m += 1;
+        String month = "";
+        switch(m){
+            case 1:
+                month = "January";
+                break;
+            case 2:
+                month = "February";
+                break;
+            case 3:
+                month = "March";
+                break;
+            case 4:
+                month = "April";
+                break;
+            case 5:
+                month = "May";
+                break;
+            case 6:
+                month = "June";
+                break;
+            case 7:
+                month = "July";
+                break;
+            case 8:
+                month = "August";
+                break;
+            case 9:
+                month = "September";
+                break;
+            case 10:
+                month = "October";
+                break;
+            case 11:
+                month = "November";
+                break;
+            case 12:
+                month = "December";
+                break;
+        }
+        return month;
+
     }
 
 }
