@@ -23,6 +23,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.view.Menu;
+import android.widget.Toast;
 
 public class CreateMealPlan extends AppCompatActivity{
 
@@ -36,7 +37,6 @@ public class CreateMealPlan extends AppCompatActivity{
     private SharedPreferences myPreferences;
     private SharedPreferences.Editor editor;
     private ArrayList<Date> selectedDates = new ArrayList<>();
-    List<Date> datesPicked;
     TextView monthTV;
 
     @Override
@@ -50,7 +50,6 @@ public class CreateMealPlan extends AppCompatActivity{
         confirmBtn.setText("Confirm");
         planTextView = (TextView) findViewById(R.id.planTextView);
         planTextView.setText("Tap the dates to plan for!");
-        datesPicked = new ArrayList<>();
         myPreferences = getSharedPreferences("preferences", MODE_PRIVATE);
         editor = myPreferences.edit();
         final Date todayDate = new Date();
@@ -60,7 +59,6 @@ public class CreateMealPlan extends AppCompatActivity{
         int m = c.get(Calendar.MONTH);
         String month = convertMonth(m);
         monthTV.setText(month + " " + y);
-        //monthTV.setTextColor(Color.RED);
 
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,16 +82,15 @@ public class CreateMealPlan extends AppCompatActivity{
                 Context context = getApplicationContext();
                 long epoch = dateClicked.getTime();
                 Event ev = new Event(Color.BLACK, epoch, "Meal");
-                if (!todayDate.after(dateClicked) && !datesPicked.contains(dateClicked)) {
+                if (!todayDate.after(dateClicked) && !selectedDates.contains(dateClicked)) {
                     selectedDates.add(dateClicked);
                     calendar.addEvent(ev);
-                    //Log.d(TAG, todayDate + " " + dateClicked);
-                }else if (!todayDate.after(dateClicked) && datesPicked.contains(dateClicked)){
-                    datesPicked.remove(dateClicked);
+                }else if (!todayDate.after(dateClicked) && selectedDates.contains(dateClicked)){
+                    selectedDates.remove(dateClicked);
                     calendar.removeEvent(ev);
                 }
                 else {
-                    Log.d(TAG, "error: past date");
+                    //Toast.makeText(context, "Error: Past Date", 2).show();
                 }
             }
 
@@ -101,7 +98,6 @@ public class CreateMealPlan extends AppCompatActivity{
             public void onMonthScroll(Date firstDayOfNewMonth) {
                 int m = firstDayOfNewMonth.getMonth();
                 monthTV.setText(convertMonth(m) + " " + (firstDayOfNewMonth.getYear() + 1900));
-                Log.d(TAG, convertMonth(m) + " " + (firstDayOfNewMonth.getYear() + 1900));
             }
         });
 
