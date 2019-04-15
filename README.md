@@ -24,6 +24,7 @@ Team K
 # What we plan to do in the Second Sprint:
 - Add data persistence for the calendar. This means figuring out whether number of meals per day will be added through the calendar or in settings.
 - Add the dialog boxes for the other inputs for shopping list items. Link the added item to the database.
+-Add communication between calendar in main activity if a user changes the time or date and the calendar in the calednar activity.
 
 
 # How to use Thyme2Eat
