@@ -99,7 +99,9 @@ public class CreateMealPlan extends AppCompatActivity{
 
             @Override
             public void onMonthScroll(Date firstDayOfNewMonth) {
-                Log.d(TAG, "nothing");
+                int m = firstDayOfNewMonth.getMonth();
+                monthTV.setText(convertMonth(m) + " " + (firstDayOfNewMonth.getYear() + 1900));
+                Log.d(TAG, convertMonth(m) + " " + (firstDayOfNewMonth.getYear() + 1900));
             }
         });
 
