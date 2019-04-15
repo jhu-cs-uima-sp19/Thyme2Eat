@@ -15,11 +15,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+
 
 import com.example.homepage.dummy.DummyContent.DummyItem;
 import com.google.firebase.database.DataSnapshot;
@@ -127,32 +124,80 @@ public class ShoppingListItemsFragment extends Fragment {
                 dialog.setTitle("Add your shopping list item:");
 
                 final EditText nameinput = new EditText(shopview.getContext());
-//                final EditText unitinput = new EditText(shopview.getContext());
-//                final EditText numinput = new EditText(shopview.getContext());
 
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.MATCH_PARENT);
                 nameinput.setLayoutParams(lp);
-//                unitinput.setLayoutParams(lp);
-//                numinput.setLayoutParams(lp);
                 dialog.setView(nameinput);
-//                dialog.setView(unitinput);
-//                dialog.setView(numinput);
-                //nameinput.setText(r.time);
                 nameinput.setGravity(Gravity.CENTER_HORIZONTAL);
 
 
                 dialog.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     public void onClick (DialogInterface dialog, int which) {
                         String strname = nameinput.getText().toString();
-                        //String strunit = unitinput.getText().toString();
-                        //String strnum = unitinput.getText().toString();
                         MainActivity.mDatabase.child("shop").setValue(strname);
-                        //MainActivity.mDatabase.child("shop").child(strname).child("unit").setValue(strunit);
-                        //MainActivity.mDatabase.child("shop").child(strname).child("unit").setValue(strnum);
                         rcshopAdapter.notifyDataSetChanged();
                         dialog.cancel();
+
+                        // TO BE USED FOR SECOND SPRINT!!
+
+//                        AlertDialog.Builder dialog2 = new AlertDialog.Builder(shopview.getContext());
+//
+//                        dialog2.setTitle("What unit?");
+//
+//                        final EditText unitinput = new EditText(shopview.getContext());
+//
+//                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+//                                LinearLayout.LayoutParams.MATCH_PARENT,
+//                                LinearLayout.LayoutParams.MATCH_PARENT);
+//                        unitinput.setLayoutParams(lp);
+//                        dialog2.setView(unitinput);
+//                        unitinput.setGravity(Gravity.CENTER_HORIZONTAL);
+//
+//
+//                        dialog2.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+//                            public void onClick (DialogInterface dialog2, int which) {
+//                                String strunit = unitinput.getText().toString();
+//                                MainActivity.mDatabase.child("shop").setValue(strunit);
+//                                rcshopAdapter.notifyDataSetChanged();
+//                                dialog2.cancel();
+//                                AlertDialog.Builder dialog3 = new AlertDialog.Builder(shopview.getContext());
+//                                dialog3.setTitle("How many?");
+//
+//                                final EditText numinput = new EditText(shopview.getContext());
+//
+//                                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+//                                        LinearLayout.LayoutParams.MATCH_PARENT,
+//                                        LinearLayout.LayoutParams.MATCH_PARENT);
+//                                numinput.setLayoutParams(lp);
+//                                dialog3.setView(unitinput);
+//                                numinput.setGravity(Gravity.CENTER_HORIZONTAL);
+//
+//
+//                                dialog3.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+//                                    public void onClick (DialogInterface dialog3, int which) {
+//                                        String strnum = numinput.getText().toString();
+//                                        MainActivity.mDatabase.child("shop").setValue(strnum);
+//                                        rcshopAdapter.notifyDataSetChanged();
+//                                        dialog3.cancel();
+//                                    }
+//                                });
+//                                dialog3.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                                    public void onClick (DialogInterface dialog3, int which) {
+//                                        dialog3.cancel();
+//                                    }
+//                                });
+//                                dialog3.show();
+//
+//                            }
+//                        });
+//                        dialog2.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                            public void onClick (DialogInterface dialog2, int which) {
+//                                dialog2.cancel();
+//                            }
+//                        });
+//                        dialog2.show();
                     }
                 });
                 dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -164,41 +209,17 @@ public class ShoppingListItemsFragment extends Fragment {
 
                 // Second dialog box
 
-            }
-        });
+
+
+                // Third dialog box
+
+                }
+            });
         //make method for adding
-
-       /*add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String str = "";
-                // OPEN DIALOG BOX TO ADD THE ITEM
-                // MAKE DATABASE EDITS
-                stringShopList.add(str);
-
-            }
-        });*/
 
         return shopview;
     }
 
-
-    /*@Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }*/
 
     /**
      * This interface must be implemented by activities that contain this
