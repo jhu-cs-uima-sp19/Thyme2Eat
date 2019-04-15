@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import android.provider.Settings.Secure;
+import android.widget.TextView;
 
 
 public class RecipeFragment extends Fragment {
@@ -37,6 +38,7 @@ public class RecipeFragment extends Fragment {
         Log.w("myApp", "atRecFrag");
         View view = inflater.inflate(R.layout.fragment_recipeschedule_list, container, false);
         RecyclerView rcView = (RecyclerView) view.findViewById(R.id.planList);
+        final TextView emptyView = (TextView)view.findViewById(R.id.empty_view);
         rcView.setLayoutManager(new LinearLayoutManager(getActivity()));
         rcView.setAdapter(rcAdapter);
 
@@ -102,6 +104,11 @@ public class RecipeFragment extends Fragment {
                     }
                 }
                 rcAdapter.notifyDataSetChanged();
+                if (mealList.isEmpty()) {
+                    emptyView.setVisibility(View.VISIBLE);
+                } else {
+                    emptyView.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -109,7 +116,13 @@ public class RecipeFragment extends Fragment {
 
             }
         });
-
+        /*
+        if (mealList.isEmpty()){
+            emptyView.setVisibility(View.VISIBLE);
+        } else {
+            emptyView.setVisibility(View.GONE);
+        }
+        */
         return view;
     }
 }
