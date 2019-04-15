@@ -208,15 +208,8 @@ public class ShoppingListItemsFragment extends Fragment {
                 });
                 dialog.show();
 
-                // Second dialog box
-
-
-
-                // Third dialog box
-
                 }
             });
-        //make method for adding
 
         return shopview;
     }

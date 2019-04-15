@@ -15,11 +15,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import android.provider.Settings.Secure;
 import android.widget.TextView;
 
 
@@ -60,18 +56,6 @@ public class RecipeFragment extends Fragment {
                 ArrayList<Ingredient> ingreds;
                 for (DataSnapshot dates : dataSnapshot.getChildren()) {
                     date = dates.getKey();
-                    /*
-                    String dateText = date.replace(";","/");
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyy/MM/dd");
-                    Date convertedDate = new Date();
-                    try {
-                        convertedDate = dateFormat.parse(dateText);
-                    } catch (ParseException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                    dateText = convertedDate.toString().replace("00:00:00 EDT ", "");
-                    */
                     String dateText = Recipe.makeDateText(date);
                     Boolean prev = false;
                     for (DataSnapshot meal : dates.getChildren()) {
@@ -116,13 +100,6 @@ public class RecipeFragment extends Fragment {
 
             }
         });
-        /*
-        if (mealList.isEmpty()){
-            emptyView.setVisibility(View.VISIBLE);
-        } else {
-            emptyView.setVisibility(View.GONE);
-        }
-        */
         return view;
     }
 }

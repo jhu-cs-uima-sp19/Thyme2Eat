@@ -28,7 +28,6 @@ public class Recipe {
         this.instructions = instruct;
         this.extendedIngredients = ingreds;
         this.image = image;
-        //Log.w("test", date + time + instruct + ingreds.toString());
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -119,7 +118,6 @@ public class Recipe {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        //dateText = convertedDate.toString().replace("00:00:00 EDT ", "");
         dateText = convertedDate.toString().substring(0, 11);
         return dateText;
     }

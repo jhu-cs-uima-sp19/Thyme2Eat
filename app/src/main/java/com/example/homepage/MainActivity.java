@@ -3,7 +3,6 @@ package com.example.homepage;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -20,12 +19,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.provider.Settings.Secure;
 
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import android.content.Intent;
 
 import java.util.ArrayList;
@@ -46,20 +41,6 @@ public class MainActivity extends AppCompatActivity
     private SharedPreferences myPreferences;
     private SharedPreferences.Editor editor;
     private LinearLayout linearLayout;
-
-//    public void getShopDatabase(DatabaseReference shopDatabase) {
-//        shopDatabase.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -49,37 +49,11 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
     public void onBindViewHolder(final ViewHolder holder, int position) {
         Log.w("myApp", "atBindView");
         ((ViewHolder) holder).bindView(position);
-
-        /*
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
-
-        holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
-                }
-            }
-        });
-        */
     }
 
     @Override
     public int getItemCount() {
         return RecipeFragment.mealList.size();
-        /*
-        if (mealList != null) {
-            Log.w("myApp", "atItemCount");
-            return mealList.size();
-        } else {
-            Log.w("myApp", "atItemCount Zero");
-            return 1;
-        }
-        */
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -218,35 +192,6 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                                     }
                                 });
                                 dialog.show();
-                                /*
-                                final Recipe r = RecipeFragment.mealList.get(getAdapterPosition());
-                                AlertDialog.Builder alert = new AlertDialog.Builder(mView.getContext());
-                                alert.setTitle("Change the time for this meal");
-                                final EditText input = new EditText(mView.getContext());
-                                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                                        LinearLayout.LayoutParams.MATCH_PARENT,
-                                        LinearLayout.LayoutParams.MATCH_PARENT);
-                                input.setLayoutParams(lp);
-                                alert.setView(input);
-                                input.setText(r.time);
-                                input.setGravity(Gravity.CENTER_HORIZONTAL);
-
-                                alert.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-                                    public void onClick (DialogInterface dialog, int which) {
-                                        r.time = input.getText().toString();
-                                        MainActivity.mDatabase.child("plan").child(r.getDate()).child(r.title).child("time").setValue(r.time);
-                                        RecipesRecyclerViewAdapter.this.notifyDataSetChanged();
-                                        dialog.cancel();
-                                    }
-                                });
-                                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                    public void onClick (DialogInterface dialog, int which) {
-                                        dialog.cancel();
-                                    }
-                                });
-                                alert.show();
-                                */
-
                                 // DON'T DELETE. WILL USE FOR 2ND SPRINT
 //                                Recipe r = RecipeFragment.mealList.get(getAdapterPosition());
 //                                AlertDialog.Builder alert = new AlertDialog.Builder(mView.getContext());

@@ -47,18 +47,13 @@ public class MyShoppingListItemsRecyclerViewAdapter extends RecyclerView.Adapter
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        //public final TextView itemDesc;
-        //public final TextView mIdView;
         public final TextView mContentView;
-        //public DummyItem mItem;
         public final Button deleteButton;
         public final CheckBox check;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            //itemDesc = (TextView) view.findViewById(R.id.PUTSOMETHINGHERE);
-            //mIdView = (TextView) view.findViewById(R.id.item_number);
             mContentView = (TextView) view.findViewById(R.id.contentitem);
 
             check = (CheckBox) view.findViewById(R.id.checkbox_made);
