@@ -13,13 +13,16 @@ Team K
 - Scroll through months on the calendar.
 - Confirm button on the calendar confirms days you want to plan and calls the API. It takes you to the main activity with potential meals for the days you wanted to plan.
 - X on calendar screen takes you back to the Main Activity without saving any changes.
+- Different databases for different users.
 
 # Not Complete in the First Sprint:
 - We have not added data persistence for meals that have already been planned for certain days. This means that dates that you clicked on for meal planning before will not have a black dot the next time you open the calendar, but on the meal plan screen, those days will still have meals planned.
-- Right now, unclicking a calendar date means that you do not want to plan for that day. However, because there is no data persistence right now, if you open the calendar again, you can add another meal to the same day by clicking on it. In the next sprint, we will add data persistence and come up with a conclusive way to set number of meals per day(either through settings or the calendar).
+- Right now, unclicking a calendar date means that you do not want to plan for that day. However, because there is no data persistence right now, if you open the calendar again, you can add another meal to the same day by clicking on it. In the next sprint, we will add data persistence and come up with a conclusive way to set number of meals per day (either through settings or the calendar).
+- The "Add" button for adding items to the shopping list does not function entirely properly because only one dialog box is present to take the name input.
 
 # What we plan to do in the Second Sprint:
 - Add data persistence for the calendar. This means figuring out whether number of meals per day will be added through the calendar or in settings.
+- Add the dialog boxes for the other inputs for shopping list items. Link the added item to the database.
 
 
 # How to use Thyme2Eat
