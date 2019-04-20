@@ -13,7 +13,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import android.content.Context;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -63,16 +62,10 @@ public class CreateMealPlan extends AppCompatActivity{
                 for (Date d: selectedDates) {
                     dates+=convertDate(d);
                 }
-                new Spoonacular().execute("search", myPreferences.getString("cuisineUrl", ""),
+                new Spoonacular(CreateMealPlan.this).execute("search", myPreferences.getString("cuisineUrl", ""),
                         myPreferences.getString("dietUrl", ""), myPreferences.getString("includeUrl", ""),
                         myPreferences.getString("excludeUrl", ""), myPreferences.getString("intoleranceUrl", ""),
-                        "&type=main+course", String.valueOf(selectedDates.size()), dates);
-                Intent myIntent = new Intent(CreateMealPlan.this, MainActivity.class);
-                startActivity(myIntent);
-                Toast toast = Toast.makeText(CreateMealPlan.this, "Please wait for the new meal plan to load!", Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.CENTER,0,-100);
-                toast.show();
-
+                        "&type=main+course", "50", dates);
             }
         });
 

@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity
         addMeals.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                
                 Intent myIntent = new Intent(MainActivity.this, CreateMealPlan.class);
                 startActivity(myIntent);
             }
@@ -86,7 +87,7 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else if (currentFrag instanceof MealPlan){
+        } else if (currentFrag instanceof RecipeFragment){
             finish();
         } else if (currentFrag instanceof SettingsFragment) {
             transaction = getSupportFragmentManager().beginTransaction();

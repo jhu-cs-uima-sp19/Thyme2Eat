@@ -1,8 +1,17 @@
 package com.example.homepage;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.firebase.database.DatabaseReference;
@@ -11,69 +20,87 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Random;
 
 
 public class Spoonacular extends AsyncTask <String, String, String> {
     public static DatabaseReference mDatabase;
+    private WeakReference<Context> contextRef;
+    private ProgressBar progressBar;
+    private Dialog dialog;
+
+    public Spoonacular(Context context) {
+        contextRef = new WeakReference<>(context);
+    }
+
+    @Override
+    protected void onPreExecute() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(contextRef.get());
+        LayoutInflater layoutInflater = LayoutInflater.from(contextRef.get());
+        View progressDialogBox = layoutInflater.inflate(R.layout.loading_dialog, null);
+        alertDialogBuilder.setView(progressDialogBox);
+        progressBar = progressDialogBox.findViewById(R.id.progressBar);
+        progressBar.setMax(100);
+        dialog = alertDialogBuilder.create();
+        dialog.show();
+    }
 
     @Override
     protected String doInBackground(String... args) {
         Recipe[] recipes = null;
-        if (args[0].equals("searchRandom")) {
-            try {
-                recipes = searchRandom(1);
-            } catch (IOException | JSONException e) {
-                e.printStackTrace();
-                return "Failed";
-            }
-            mDatabase = MainActivity.mDatabase.child("plan");
-            mDatabase.child("2019;03;24").child(recipes[0].title).child("image").setValue(recipes[0].image);
-            for (int i = 0; i < recipes[0].extendedIngredients.size(); i++) {
-                Ingredient ingredient = recipes[0].extendedIngredients.get(i);
-                mDatabase.child("2019;03;24").child(recipes[0].title).child("ingredients").child(ingredient.name).child("amount").setValue(ingredient.amount);
-                mDatabase.child("2019;03;24").child(recipes[0].title).child("ingredients").child(ingredient.name).child("unit").setValue(ingredient.unit);
-            }
-            mDatabase.child("2019;03;24").child(recipes[0].title).child("instructions").setValue(recipes[0].instructions);
-            mDatabase.child("2019;03;24").child(recipes[0].title).child("time").setValue("2:00-3:00pm");
-        }
         if (args[0].equals("search")) {
+
             try {
                 recipes = searchRecipes(args[1], args[2], args[3], args[4], args[5], args[6], args[7]);
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
             String datesString = args[8];
             ArrayList<String> dates = new ArrayList<>();
             while (datesString.length() >0) {
                 dates.add(datesString.substring(0,10));
                 datesString = datesString.substring(10);
             }
+
+            final ArrayList<String> recipeTitles = new ArrayList<>();
+            mDatabase = MainActivity.mDatabase.child("plan");
+
             for (int d = 0; d < dates.size(); d++) {
+                Recipe recipe = null;
+                while (true) {
+                    recipe = recipes[new Random().nextInt(recipes.length - 1)];
+                    recipe.title = recipe.title.replace("[", "(");
+                    recipe.title = recipe.title.replace("]", ")");
+                    recipe.title = recipe.title.replace(".", "");
+                    recipe.title = recipe.title.replace("#", "");
+                    recipe.title = recipe.title.replace("$", "");
+                    if (!recipeTitles.contains(recipe.title)) {
+                        recipeTitles.add(recipe.title);
+                        break;
+                    }
+                }
+
                 String date = dates.get(d);
-                recipes[d].title = recipes[d].title.replace("[", "(");
-                recipes[d].title = recipes[d].title.replace("]", ")");
-                mDatabase = MainActivity.mDatabase.child("plan");
-                DatabaseReference shopDatabase = MainActivity.mDatabase.child("shop");
-                mDatabase.child(date).child(recipes[d].title).child("image").setValue(recipes[d].image);
+                mDatabase.child(date).child(recipe.title).child("image").setValue(recipe.image);
                 Bitmap myBitmap;
                 try {
-                    java.net.URL url = new java.net.URL(recipes[d].image);
+                    java.net.URL url = new java.net.URL(recipe.image);
                     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                     connection.setDoInput(true);
                     connection.connect();
                     InputStream input = connection.getInputStream();
                     myBitmap = BitmapFactory.decodeStream(input);
-                    String filename = url.toString().substring(url.toString().lastIndexOf('/')+1);
+                    String filename = url.toString().substring(url.toString().lastIndexOf('/') + 1);
                     File file = new File("/data/user/0/com.example.homepage/cache", filename);
                     FileOutputStream outputStream = new FileOutputStream(file);
                     try {
@@ -85,24 +112,56 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                for (int i = 0; i < recipes[d].extendedIngredients.size(); i++) {
-                    Ingredient ingredient = recipes[d].extendedIngredients.get(i);
-                    mDatabase.child(date).child(recipes[d].title).child("ingredients").child(ingredient.name).child("amount").setValue(ingredient.amount);
-                    mDatabase.child(date).child(recipes[d].title).child("ingredients").child(ingredient.name).child("unit").setValue(ingredient.unit);
+
+                final ArrayList<Ingredient> ingredients = new ArrayList<>();
+                DatabaseReference shopDatabase = MainActivity.mDatabase.child("shop");
+                for (int i = 0; i < recipe.extendedIngredients.size(); i++) {
+                    Ingredient ingredient = recipe.extendedIngredients.get(i);
+                    boolean contains = false;
+                    for (Ingredient ing: ingredients) {
+                        if (ingredient.name.equals(ing.name)) {
+                            contains = true;
+                            if (ingredient.unit.equals(ing.unit)) {
+                                ing.amount += ingredient.amount;
+                            } else {
+                                try {
+                                    System.out.print("CONVERTED UNIT");
+                                    ingredient = convertUnit(ingredient, "oz");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                ing.amount += ingredient.amount;
+                            }
+                            break;
+                        }
+                    }
+                    if (!contains) {
+                        ingredients.add(ingredient);
+                    }
+                }
+                for (Ingredient ingredient: ingredients) {
+                    mDatabase.child(date).child(recipe.title).child("ingredients").child(ingredient.name).child("amount").setValue(ingredient.amount);
+                    mDatabase.child(date).child(recipe.title).child("ingredients").child(ingredient.name).child("unit").setValue(ingredient.unit);
                     shopDatabase.child(ingredient.name).child("amount").setValue(ingredient.amount);
                     shopDatabase.child(ingredient.name).child("unit").setValue(ingredient.unit);
                 }
-                mDatabase.child(date).child(recipes[d].title).child("instructions").setValue(recipes[d].instructions);
-                mDatabase.child(date).child(recipes[d].title).child("time").setValue("2:00-3:00pm");
-
+                mDatabase.child(date).child(recipe.title).child("instructions").setValue(recipe.instructions);
+                mDatabase.child(date).child(recipe.title).child("time").setValue("2:00-3:00pm");
+                progressBar.incrementProgressBy(100/dates.size());
             }
-
         }
         return "Success";
     }
 
     @Override
     protected void onPostExecute(String bitmaps) {
+        Context context = contextRef.get();
+        if (context != null ) {
+            Intent myIntent = new Intent(context, MainActivity.class);
+            myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            dialog.dismiss();
+            context.startActivity(myIntent);
+        }
     }
 
     /* This method allows you to get search results in bulk;
@@ -133,28 +192,11 @@ public class Spoonacular extends AsyncTask <String, String, String> {
             e.printStackTrace();
         }
 
-        //print results to external file
-        writeToExternalFile(json, "searchResults.txt");
 
         ObjectMapper mapper = new ObjectMapper();
         Recipe[] recipes = mapper.readValue(json.toString(), Recipe[].class);
 
         return recipes;
-    }
-
-    /*This method writes results to external files, this is good for testing and saving on API calls*/
-    private static void writeToExternalFile(StringBuffer json, String fileName ){
-        try {
-            FileOutputStream outputStream = new FileOutputStream(fileName);
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream, "UTF-16");
-            BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter);
-
-            bufferedWriter.write(json.toString());
-
-            bufferedWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     /*This method searches recipes based on a query, but we can make this one more complex if need be*/
@@ -192,10 +234,6 @@ public class Spoonacular extends AsyncTask <String, String, String> {
             // Writing exception to log
             e.printStackTrace();
         }
-
-        //Write results to an external file
-        writeToExternalFile(json, "search.txt");
-        System.out.println(json.toString());
 
         ObjectMapper mapper = new ObjectMapper();
         Search search = mapper.readValue(json.toString(), Search.class);
@@ -249,8 +287,6 @@ public class Spoonacular extends AsyncTask <String, String, String> {
             e.printStackTrace();
         }
 
-        //Write results to an external file
-        writeToExternalFile(json, "searchIngredients.txt");
 
         ObjectMapper mapper = new ObjectMapper();
         Recipe[] search = mapper.readValue(json.toString(), Recipe[].class);
@@ -265,6 +301,36 @@ public class Spoonacular extends AsyncTask <String, String, String> {
         }
 
         return searchBulk(ids);
+    }
+
+    public static Ingredient convertUnit (Ingredient ingredient, String target) throws JSONException {
+        StringBuffer json = new StringBuffer();
+        try{
+            URL url = new URL("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/convert?sourceUnit="
+                    + ingredient.unit + "&sourceAmount="+ ingredient.amount + "&ingredientName="+ ingredient.name +"&targetUnit=" + target);
+            HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+            connection.setRequestProperty("X-RapidAPI-Key", "ebbeaa7cbemsh020d1b6ca0a5850p11572bjsnf2dead442a16");
+            connection.setRequestProperty("X-RapidAPI-Host", "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com");
+            connection.setRequestMethod("GET");
+            connection.setDoInput(true);
+            connection.connect();
+
+            InputStream inputStream = connection.getInputStream();
+
+            BufferedReader rd = new BufferedReader(new InputStreamReader(inputStream));
+            String line = "";
+            while ((line = rd.readLine()) != null) {
+                json.append(line);
+            }
+        }
+        catch (IOException e) {
+            // Writing exception to log
+            e.printStackTrace();
+        }
+        JSONObject jsonObj = new JSONObject(json.toString());
+        ingredient.unit = target;
+        ingredient.amount = Double.valueOf(jsonObj.get("targetAmount").toString());
+        return ingredient;
     }
 
 
@@ -292,7 +358,6 @@ public class Spoonacular extends AsyncTask <String, String, String> {
             e.printStackTrace();
         }
 
-        writeToExternalFile(json, "similar.txt");
 
         ObjectMapper mapper = new ObjectMapper();
         Recipe[] search = mapper.readValue(json.toString(), Recipe[].class);
@@ -309,41 +374,6 @@ public class Spoonacular extends AsyncTask <String, String, String> {
         return searchBulk(ids);
     }
 
-    public static Recipe[] searchRandom(int number) throws IOException, JSONException {
-        StringBuffer json = new StringBuffer();
-        try{
-            URL url = new URL("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/random?number="
-                    + number);
-
-            HttpURLConnection connection = (HttpURLConnection)url.openConnection();
-            connection.setRequestProperty("X-RapidAPI-Host", "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com");
-            connection.setRequestProperty("X-RapidAPI-Key", "ebbeaa7cbemsh020d1b6ca0a5850p11572bjsnf2dead442a16");
-            connection.setRequestMethod("GET");
-            connection.setDoInput(true);
-            connection.connect();
-
-            InputStream inputStream = connection.getInputStream();
-
-            BufferedReader rd = new BufferedReader(new InputStreamReader(inputStream));
-            String line = "";
-            while ((line = rd.readLine()) != null) {
-                json.append(line);
-            }
-        }
-        catch (IOException e) {
-            // Writing exception to log
-            e.printStackTrace();
-        }
-
-        writeToExternalFile(json, "random.txt");
-        JSONObject jsonObject = new JSONObject(json.toString());
-        String r = jsonObject.get("recipes").toString();
-
-        ObjectMapper mapper = new ObjectMapper();
-        Recipe[] recipes = mapper.readValue(r, Recipe[].class);
-
-        return recipes;
-    }
 
     /*Used for API testing*/
     public static void main (String args[]) throws IOException {
