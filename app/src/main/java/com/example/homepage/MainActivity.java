@@ -38,8 +38,8 @@ public class MainActivity extends AppCompatActivity
     private Menu menu;
     private MenuItem edit;
     private Button addMeals;
-    private SharedPreferences myPreferences;
-    private SharedPreferences.Editor editor;
+    public static SharedPreferences myPreferences;
+    public static SharedPreferences.Editor editor;
     private LinearLayout linearLayout;
 
     @Override

@@ -4,14 +4,10 @@
 
     <item
         android:id="@+id/one"
-        android:title="Edit Date"/>
+        android:title="Edit Type"/>
 
     <item
         android:id="@+id/two"
         android:title="Edit Time"/>
-
-    <item
-        android:id="@+id/three"
-        android:title="Delete"/>
 
 </menu>

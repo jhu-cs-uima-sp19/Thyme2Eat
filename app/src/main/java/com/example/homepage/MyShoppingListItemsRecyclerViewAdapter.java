@@ -10,8 +10,6 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 
-
-
 public class MyShoppingListItemsRecyclerViewAdapter extends RecyclerView.Adapter<MyShoppingListItemsRecyclerViewAdapter.ViewHolder> {
 
 
@@ -27,8 +25,6 @@ public class MyShoppingListItemsRecyclerViewAdapter extends RecyclerView.Adapter
         //final Button add;
         final View shopview = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_shoppinglistitems, parent, false);
-
-//
         return new ViewHolder(shopview);
     }
 
