@@ -130,7 +130,7 @@ public class MyTimeSettingsFragmentRecyclerViewAdapter extends RecyclerView.Adap
 
         public void bindView(int position) {
             MealTime meal = TimeSettingsFragment.mealTimes.get(position);
-            mealInfo.setText(meal.mealType + " " + meal.startTime + "-" + meal.endTime);
+            mealInfo.setText("Meal " + position+ 1 + " " + meal.startTime + "-" + meal.endTime);
         }
 
     }

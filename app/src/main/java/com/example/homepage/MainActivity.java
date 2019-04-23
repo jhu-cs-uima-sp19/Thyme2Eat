@@ -22,6 +22,7 @@ import android.provider.Settings.Secure;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import android.content.Intent;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity
     public static SharedPreferences myPreferences;
     public static SharedPreferences.Editor editor;
     private LinearLayout linearLayout;
+    public static boolean wasFound = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,11 @@ public class MainActivity extends AppCompatActivity
                 Secure.ANDROID_ID);
         mDatabase = FirebaseDatabase.getInstance().getReference().child(android_id);
         //DatabaseReference shopDatabase = mDatabase.child("shop");
+
+        if (!wasFound) {
+            Toast.makeText(MainActivity.this, "No results found! Please change your preferences!", Toast.LENGTH_SHORT).show();
+            wasFound = true;
+        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);

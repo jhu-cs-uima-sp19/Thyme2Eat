@@ -210,22 +210,24 @@ public class SettingsFragment extends Fragment {
                 if (include.getText().toString() != "") {
                     editor.putString("include", include.getText().toString());
                 }
-                includeUrl = includeUrl.replace(", ", "C%2+");
+                includeUrl = includeUrl.replace(",", "%2C");
                 includeUrl = includeUrl.replace(" ", "+");
                 if (!includeUrl.equals("&includeIngredients=" + include.getText().toString()))
                     editor.putString("includeUrl", includeUrl);
                 else
                     editor.putString("includeUrl","");
+                System.out.println(includeUrl);
                 String excludeUrl = "&excludeIngredients=" + exclude.getText().toString();
                 if (exclude.getText().toString() != "") {
                     editor.putString("exclude", exclude.getText().toString());
                 }
-                excludeUrl = excludeUrl.replace(", ", "C%2+");
+                excludeUrl = excludeUrl.replace(",", "%2C");
                 excludeUrl = excludeUrl.replace(" ", "+");
                 if (!excludeUrl.equals("&excludeIngredients=" + exclude.getText().toString()))
                     editor.putString("excludeUrl", excludeUrl);
                 else
                     editor.putString("excludeUrl", "");
+                System.out.println(excludeUrl);
                 if (dependents.getText().toString() != "") {
                     int x = 0;
                     try {

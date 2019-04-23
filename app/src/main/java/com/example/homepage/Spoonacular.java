@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.firebase.database.DatabaseReference;
@@ -27,17 +28,22 @@ import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 
 public class Spoonacular extends AsyncTask <String, String, String> {
     public static DatabaseReference mDatabase;
     private WeakReference<Context> contextRef;
+    private Context context;
     private ProgressBar progressBar;
     private Dialog dialog;
+    private TextView message;
 
     public Spoonacular(Context context) {
         contextRef = new WeakReference<>(context);
+        this.context = context;
     }
 
     @Override
@@ -47,6 +53,8 @@ public class Spoonacular extends AsyncTask <String, String, String> {
         View progressDialogBox = layoutInflater.inflate(R.layout.loading_dialog, null);
         alertDialogBuilder.setView(progressDialogBox);
         progressBar = progressDialogBox.findViewById(R.id.progressBar);
+        message = progressDialogBox.findViewById(R.id.output);
+        message.setText("Finding recipes based on preferences..");
         progressBar.setMax(100);
         dialog = alertDialogBuilder.create();
         dialog.show();
@@ -54,14 +62,8 @@ public class Spoonacular extends AsyncTask <String, String, String> {
 
     @Override
     protected String doInBackground(String... args) {
-        Recipe[] recipes = null;
+        ArrayList<Recipe> recipes = null;
         if (args[0].equals("search")) {
-
-            try {
-                recipes = searchRecipes(args[1], args[2], args[3], args[4], args[5], args[6], args[7]);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
 
             String datesString = args[8];
             ArrayList<String> dates = new ArrayList<>();
@@ -70,13 +72,26 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                 datesString = datesString.substring(10);
             }
 
+            try {
+                recipes = searchRecipes(args[1], args[2], args[3], args[4], args[5], args[6], args[7]);
+                message.setText("Recipes found! Choosing best recipes...");
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+
+
             final ArrayList<String> recipeTitles = new ArrayList<>();
             mDatabase = MainActivity.mDatabase.child("plan");
 
+            for (int i = 0; i < RecipeFragment.mealList.size(); i++) {
+                recipeTitles.add(RecipeFragment.mealList.get(i).title);
+            }
+
             for (int d = 0; d < dates.size(); d++) {
-                Recipe recipe = null;
+                Recipe recipe;
                 while (true) {
-                    recipe = recipes[new Random().nextInt(recipes.length - 1)];
+                    recipe = recipes.get(new Random().nextInt(recipes.size() - 1));
                     recipe.title = recipe.title.replace("[", "(");
                     recipe.title = recipe.title.replace("]", ")");
                     recipe.title = recipe.title.replace(".", "");
@@ -85,6 +100,8 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                     if (!recipeTitles.contains(recipe.title)) {
                         recipeTitles.add(recipe.title);
                         break;
+                    } else {
+                        recipes.remove(recipe);
                     }
                 }
 
@@ -158,6 +175,9 @@ public class Spoonacular extends AsyncTask <String, String, String> {
             Intent myIntent = new Intent(context, MainActivity.class);
             myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             dialog.dismiss();
+            if (bitmaps == null) {
+                MainActivity.wasFound = false;
+            }
             context.startActivity(myIntent);
         }
     }
@@ -165,7 +185,7 @@ public class Spoonacular extends AsyncTask <String, String, String> {
     /* This method allows you to get search results in bulk;
     *  used to convert a search that yields
     *  multiple results into a list of Recipes*/
-    private static Recipe[] searchBulk(String ids) throws IOException {
+    private static ArrayList<Recipe> searchBulk(String ids) throws IOException {
 
         //request bulk recipe information
         StringBuffer json = new StringBuffer();
@@ -193,12 +213,12 @@ public class Spoonacular extends AsyncTask <String, String, String> {
 
         ObjectMapper mapper = new ObjectMapper();
         Recipe[] recipes = mapper.readValue(json.toString(), Recipe[].class);
-
-        return recipes;
+        ArrayList<Recipe> mcList = new ArrayList<>(Arrays.asList(recipes));
+        return mcList;
     }
 
     /*This method searches recipes based on a query, but we can make this one more complex if need be*/
-    public static Recipe[] searchRecipes(String cuisine, String diet, String includeIngredients,
+    public static ArrayList<Recipe> searchRecipes(String cuisine, String diet, String includeIngredients,
                                          String excludeIngredients, String intolerances,
                                          String type, String number) throws IOException {
 
@@ -245,13 +265,13 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                 ids += search.results[i].id;
             }
         }
-
+        System.out.println(json.toString());
 
         return searchBulk(ids);
     }
 
     /*this method searches by ingredients*/
-    public static Recipe[] searchByIngredients(String[] ingredients, int number, int ranking, boolean ignorePantry) throws IOException {
+    public static ArrayList<Recipe> searchByIngredients(String[] ingredients, int number, int ranking, boolean ignorePantry) throws IOException {
 
         String ingredientUrl = "";
         for (int i = 0; i < ingredients.length; i++) {
@@ -333,7 +353,7 @@ public class Spoonacular extends AsyncTask <String, String, String> {
 
 
     /*This method returns a list of similar recipes given an id; will be very useful when offering alternatives*/
-    public static Recipe[] getSimilarRecipes(int id) throws IOException {
+    public static ArrayList<Recipe> getSimilarRecipes(int id) throws IOException {
         StringBuffer json = new StringBuffer();
         try{
             URL url = new URL("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/"+ id +"/similar");
