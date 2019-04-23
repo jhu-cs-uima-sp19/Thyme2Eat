@@ -7,13 +7,18 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,6 +45,9 @@ public class Spoonacular extends AsyncTask <String, String, String> {
     private ProgressBar progressBar;
     private Dialog dialog;
     private TextView message;
+    private static ArrayList<Ingredient> ingredients;
+    private static ArrayList<Integer> recipeIds = new ArrayList<>();
+    private DatabaseReference shopDatabase = MainActivity.mDatabase.child("shop");
 
     public Spoonacular(Context context) {
         contextRef = new WeakReference<>(context);
@@ -54,10 +62,35 @@ public class Spoonacular extends AsyncTask <String, String, String> {
         alertDialogBuilder.setView(progressDialogBox);
         progressBar = progressDialogBox.findViewById(R.id.progressBar);
         message = progressDialogBox.findViewById(R.id.output);
-        message.setText("Finding recipes based on preferences..");
+        message.setText("Finding recipes based on preferences...");
         progressBar.setMax(100);
         dialog = alertDialogBuilder.create();
         dialog.show();
+        ingredients = new ArrayList<>();
+
+        shopDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot items : dataSnapshot.getChildren()) {
+                    Ingredient ingredient = new Ingredient();
+                    ingredient.name = items.getKey();
+                    if (items.child("amount").getValue() instanceof Long)
+                        ingredient.amount = (Long) items.child("amount").getValue();
+                    else {
+                        ingredient.amount = (Double) items.child("amount").getValue();
+                    }
+                    if (items.child("unit").exists())
+                        ingredient.unit = items.child("unit").getValue().toString();
+                    ingredients.add(ingredient);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
@@ -73,37 +106,28 @@ public class Spoonacular extends AsyncTask <String, String, String> {
             }
 
             try {
-                recipes = searchRecipes(args[1], args[2], args[3], args[4], args[5], args[6], args[7]);
+                recipes = searchRecipes(args[1], args[2], args[3], args[4], args[5], args[6], args[7], dates.size());
                 message.setText("Recipes found! Choosing best recipes...");
             } catch (IOException e) {
                 e.printStackTrace();
                 return null;
             }
 
-
-            final ArrayList<String> recipeTitles = new ArrayList<>();
             mDatabase = MainActivity.mDatabase.child("plan");
 
             for (int i = 0; i < RecipeFragment.mealList.size(); i++) {
-                recipeTitles.add(RecipeFragment.mealList.get(i).title);
+                recipeIds.add(RecipeFragment.mealList.get(i).id);
             }
 
             for (int d = 0; d < dates.size(); d++) {
                 Recipe recipe;
-                while (true) {
-                    recipe = recipes.get(new Random().nextInt(recipes.size() - 1));
-                    recipe.title = recipe.title.replace("[", "(");
-                    recipe.title = recipe.title.replace("]", ")");
-                    recipe.title = recipe.title.replace(".", "");
-                    recipe.title = recipe.title.replace("#", "");
-                    recipe.title = recipe.title.replace("$", "");
-                    if (!recipeTitles.contains(recipe.title)) {
-                        recipeTitles.add(recipe.title);
-                        break;
-                    } else {
-                        recipes.remove(recipe);
-                    }
-                }
+                recipe = recipes.get(d);
+
+                recipe.title = recipe.title.replace("[", "(");
+                recipe.title = recipe.title.replace("]", ")");
+                recipe.title = recipe.title.replace(".", "");
+                recipe.title = recipe.title.replace("#", "");
+                recipe.title = recipe.title.replace("$", "");
 
                 String date = dates.get(d);
                 mDatabase.child(date).child(recipe.title).child("image").setValue(recipe.image);
@@ -128,10 +152,9 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                     e.printStackTrace();
                 }
 
-                final ArrayList<Ingredient> ingredients = new ArrayList<>();
-                DatabaseReference shopDatabase = MainActivity.mDatabase.child("shop");
-                for (int i = 0; i < recipe.extendedIngredients.size(); i++) {
-                    Ingredient ingredient = recipe.extendedIngredients.get(i);
+                for (Ingredient ingredient: recipe.extendedIngredients) {
+                    mDatabase.child(date).child(recipe.title).child("ingredients").child(ingredient.name).child("amount").setValue(ingredient.amount);
+                    mDatabase.child(date).child(recipe.title).child("ingredients").child(ingredient.name).child("unit").setValue(ingredient.unit);
                     boolean contains = false;
                     for (Ingredient ing: ingredients) {
                         if (ingredient.name.equals(ing.name)) {
@@ -154,12 +177,12 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                         ingredients.add(ingredient);
                     }
                 }
+
                 for (Ingredient ingredient: ingredients) {
-                    mDatabase.child(date).child(recipe.title).child("ingredients").child(ingredient.name).child("amount").setValue(ingredient.amount);
-                    mDatabase.child(date).child(recipe.title).child("ingredients").child(ingredient.name).child("unit").setValue(ingredient.unit);
                     shopDatabase.child(ingredient.name).child("amount").setValue(ingredient.amount);
                     shopDatabase.child(ingredient.name).child("unit").setValue(ingredient.unit);
                 }
+
                 mDatabase.child(date).child(recipe.title).child("instructions").setValue(recipe.instructions);
                 mDatabase.child(date).child(recipe.title).child("time").setValue("2:00-3:00pm");
                 progressBar.incrementProgressBy(100/dates.size());
@@ -220,7 +243,7 @@ public class Spoonacular extends AsyncTask <String, String, String> {
     /*This method searches recipes based on a query, but we can make this one more complex if need be*/
     public static ArrayList<Recipe> searchRecipes(String cuisine, String diet, String includeIngredients,
                                          String excludeIngredients, String intolerances,
-                                         String type, String number) throws IOException {
+                                         String type, String number, int days) throws IOException {
 
         System.out.println("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/searchComplex?" +
                 cuisine + diet + includeIngredients + excludeIngredients + intolerances + type +
@@ -258,11 +281,18 @@ public class Spoonacular extends AsyncTask <String, String, String> {
 
         //Take all ids to be used to get recipe information
         String ids = "";
-        for (int i = 0; i < search.results.length; i++) {
-            if (i < search.results.length-1)
-                ids += search.results[i].id + "%2C";
-            else {
-                ids += search.results[i].id;
+        for (int i = 0; i < days; i++) {
+            while (true) {
+                int id = search.results[new Random().nextInt(search.results.length - 1)].id;
+                if (!recipeIds.contains(id)) {
+                    if (i < days - 1)
+                        ids += search.results[i].id + "%2C";
+                    else {
+                        ids += search.results[i].id;
+                    }
+                    recipeIds.add(id);
+                    break;
+                }
             }
         }
         System.out.println(json.toString());

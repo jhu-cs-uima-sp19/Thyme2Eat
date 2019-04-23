@@ -62,10 +62,14 @@ public class CreateMealPlan extends AppCompatActivity{
                 for (Date d: selectedDates) {
                     dates+=convertDate(d);
                 }
-                new Spoonacular(CreateMealPlan.this).execute("search", myPreferences.getString("cuisineUrl", ""),
-                        myPreferences.getString("dietUrl", ""), myPreferences.getString("includeUrl", ""),
-                        myPreferences.getString("excludeUrl", ""), myPreferences.getString("intoleranceUrl", ""),
-                        "&type=main+course", "50", dates);
+                if (selectedDates.size() == 0) {
+                    Toast.makeText(CreateMealPlan.this, "Please select at least one date!", Toast.LENGTH_SHORT).show();
+                } else {
+                    new Spoonacular(CreateMealPlan.this).execute("search", myPreferences.getString("cuisineUrl", ""),
+                            myPreferences.getString("dietUrl", ""), myPreferences.getString("includeUrl", ""),
+                            myPreferences.getString("excludeUrl", ""), myPreferences.getString("intoleranceUrl", ""),
+                            "&type=main+course", "50", dates);
+                }
             }
         });
 
