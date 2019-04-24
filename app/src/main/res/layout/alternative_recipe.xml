@@ -27,6 +27,18 @@
             android:layout_marginBottom="10dp"
             app:srcCompat="@drawable/food" />
 
+        <TextView
+            android:id="@+id/titleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="55dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/time_background"
+            android:text="Hello There"
+            android:textAppearance="?attr/textAppearanceListItem" />
+
     </RelativeLayout>
 </LinearLayout>
 

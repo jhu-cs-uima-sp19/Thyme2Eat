@@ -6,21 +6,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.homepage.dummy.DummyContent.DummyItem;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AlternateRecipeRcViewAdapter extends RecyclerView.Adapter<AlternateRecipeRcViewAdapter.ViewHolder> {
     private ArrayList<Recipe> alternatives;
+    private int selected;
+    private boolean onBind = true;
 
     public AlternateRecipeRcViewAdapter(ArrayList<Recipe> alts) {
+        selected = -1;
         alternatives = alts;
     }
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -30,7 +34,9 @@ public class AlternateRecipeRcViewAdapter extends RecyclerView.Adapter<Alternate
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
+        onBind = true;
         ((ViewHolder) holder).bindView(position);
+        onBind = false;
     }
 
     @Override
@@ -42,6 +48,7 @@ public class AlternateRecipeRcViewAdapter extends RecyclerView.Adapter<Alternate
         public final View mView;
         public final ImageView image;
         public final CheckBox checkbox;
+        public final TextView title;
         public DummyItem mItem;
 
         public ViewHolder(View view) {
@@ -49,16 +56,42 @@ public class AlternateRecipeRcViewAdapter extends RecyclerView.Adapter<Alternate
             mView = view;
             image = (ImageView) view.findViewById(R.id.altImage);
             checkbox = (CheckBox) view.findViewById(R.id.alternate_choose);
+            checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (!onBind) {
+                        if (isChecked) {
+                            selected = getAdapterPosition();
+                        } else {
+                            selected = -1;
+                        }
+                        AlternateRecipeRcViewAdapter.this.notifyDataSetChanged();
+                    }
+                }
+            });
             image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Log.w("alternate", "Clicking on " + alternatives.get(getAdapterPosition()).title);
                 }
             });
+            title = (TextView) view.findViewById(R.id.titleText);
         }
 
         public void bindView(int position) {
+            onBind = true;
+            if (position == selected) {
+                this.checkbox.setChecked(true);
+            } else {
+                this.checkbox.setChecked(false);
+            }
 
+            String name = alternatives.get(position).title;
+            //name = name.substring(10);
+            if (name.length() > 12) {
+                name = name.substring(0, 10) + "...";
+            }
+            title.setText(name);
         }
     }
 }
