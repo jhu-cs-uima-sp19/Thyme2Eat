@@ -52,7 +52,7 @@ public class MyShoppingListItemsRecyclerViewAdapter extends RecyclerView.Adapter
             mView = view;
             mContentView = (TextView) view.findViewById(R.id.contentitem);
 
-            check = (CheckBox) view.findViewById(R.id.checkbox_made);
+            check = (CheckBox) view.findViewById(R.id.choose_alternate);
             check.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

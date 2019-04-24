@@ -7,7 +7,7 @@
     android:orientation="horizontal">
 
     <CheckBox
-        android:id="@+id/checkbox_made"
+        android:id="@+id/choose_alternate"
         android:layout_width="wrap_content"
         android:layout_height="46dp"
         android:layout_alignParentLeft="true"

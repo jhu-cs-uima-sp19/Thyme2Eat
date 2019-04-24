@@ -20,7 +20,7 @@
             android:layout_width="match_parent">
 
             <Button
-                android:id="@+id/checkbox_made"
+                android:id="@+id/choose_alternate"
                 android:layout_width="38dp"
                 android:layout_height="41dp"
                 android:layout_alignParentLeft="true"

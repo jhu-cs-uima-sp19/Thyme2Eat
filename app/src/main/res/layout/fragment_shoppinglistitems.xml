@@ -9,7 +9,7 @@
 
 
     <CheckBox
-        android:id="@+id/checkbox_made"
+        android:id="@+id/choose_alternate"
         android:layout_width="wrap_content"
         android:layout_height="46dp"
         android:layout_alignParentLeft="true"
@@ -27,7 +27,7 @@
         android:layout_marginEnd="10dp"
         android:layout_marginRight="40dp"
         android:layout_toStartOf="@+id/deleteitem"
-        android:layout_toEndOf="@+id/checkbox_made"
+        android:layout_toEndOf="@+id/choose_alternate"
         android:gravity="center"
         android:textAppearance="?attr/textAppearanceListItem"
         android:textColor="@color/common_google_signin_btn_text_dark_default"

@@ -61,6 +61,7 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
         public final TextView dateView;
         public final TextView timeView;
         public final ImageView imageView;
+        public final Button alt;
         public Bitmap image;
 
         public ViewHolder(View view) {
@@ -69,6 +70,19 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
             dateView = (TextView) view.findViewById(R.id.dateText);
             timeView = (TextView) view.findViewById(R.id.timeText);
             imageView = (ImageView) view.findViewById(R.id.image);
+            alt = (Button) view.findViewById(R.id.choose_alternate);
+
+            alt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Recipe r = RecipeFragment.mealList.get(getAdapterPosition());
+                    Intent intent = new Intent(mView.getContext(), ChooseAlternative.class);
+                    intent.putExtra("date", r.date);
+                    intent.putExtra("name", r.title);
+                    mView.getContext().startActivity(intent);
+                }
+            });
+
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -192,52 +206,6 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                                     }
                                 });
                                 dialog.show();
-                                // DON'T DELETE. WILL USE FOR 2ND SPRINT
-//                                Recipe r = RecipeFragment.mealList.get(getAdapterPosition());
-//                                AlertDialog.Builder alert = new AlertDialog.Builder(mView.getContext());
-//                                LinearLayout vertical= new LinearLayout(mView.getContext());
-//                                vertical.setOrientation(LinearLayout.VERTICAL);
-//                                LinearLayout fromLayout = new LinearLayout(mView.getContext());
-//                                fromLayout.setOrientation(LinearLayout.HORIZONTAL);
-//                                LinearLayout toLayout = new LinearLayout(mView.getContext());
-//                                toLayout.setOrientation(LinearLayout.HORIZONTAL);
-//                                final TextView from = new TextView(mView.getContext());
-//                                final Button fromButton = new Button(mView.getContext());
-//                                from.setText("From: " +r.time.substring(0, r.time.indexOf('-')) + " " + r.time.substring(r.time.length() - 2));
-//                                fromLayout.addView(from);
-//                                fromLayout.addView(fromButton);
-//                                final Button toButton = new Button(mView.getContext());
-//                                final TextView to = new TextView(mView.getContext());
-//                                fromLayout.addView(to);
-//                                fromLayout.addView(toButton);
-//                                vertical.addView(fromLayout);
-//                                vertical.addView(toLayout);
-//                                alert.setView(vertical);
-//                                alert.show();
-
-//                                final Calendar c = Calendar.getInstance();
-//                                int hour = c.get(Calendar.HOUR_OF_DAY);
-//                                int min = c.get(Calendar.MINUTE);
-//
-//                                // Launch Time Picker Dialog
-//                                TimePickerDialog timePickerDialog = new TimePickerDialog(mView.getContext(),
-//                                        new TimePickerDialog.OnTimeSetListener() {
-//
-//                                            @Override
-//                                            public void onTimeSet(TimePicker view, int hour,
-//                                                                  int min) {
-//                                                String amPm = amOrpm(hour);
-//                                                if (amPm.equals("pm")) {
-//                                                    hour = hour - 12;
-//                                                }
-//                                                /*
-//                                                RecipeFragment.mealList.get(getAdapterPosition()).date = ;
-//                                                Collections.sort(RecipeFragment.mealList, new CustomComparator());
-//                                                RecipesRecyclerViewAdapter.this.notifyDataSetChanged();
-//                                                */
-//                                            }
-//                                        }, hour, min, false);
-//                                timePickerDialog.show();
                             }
                             return true;
                         }
