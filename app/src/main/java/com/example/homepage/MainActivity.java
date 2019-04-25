@@ -3,6 +3,8 @@ package com.example.homepage;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -32,7 +34,8 @@ public class MainActivity extends AppCompatActivity
     public static DatabaseReference mDatabase;
     public static ArrayList<String> stringShopList;
     private RecipeFragment mealPlan;
-    private Fragment settings;
+    private Fragment mealSettings;
+    private Fragment timeSettings;
     private Fragment shoppingList;
     private FragmentTransaction transaction;
     private LinearLayout buttonPanel;
@@ -43,6 +46,7 @@ public class MainActivity extends AppCompatActivity
     public static SharedPreferences.Editor editor;
     private LinearLayout linearLayout;
     public static boolean wasFound = true;
+    public BottomNavigationView navigation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +67,11 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        navigation = (BottomNavigationView) findViewById(R.id.settings_navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        navigation.setVisibility(View.INVISIBLE);
+
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -70,7 +79,8 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         mealPlan = new RecipeFragment();
-        settings = new SettingsFragment();
+        mealSettings = new SettingsFragment();
+        timeSettings = new TimeSettingsFragment();
         shoppingList = new ShoppingListItemsFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, mealPlan).commit();
         Log.w("myApp", "hello");
@@ -138,6 +148,7 @@ public class MainActivity extends AppCompatActivity
             buttonPanel = findViewById(R.id.buttonPanel);
             buttonPanel.setVisibility(View.VISIBLE);
             addMeals.setVisibility(View.VISIBLE);
+            navigation.setVisibility(View.INVISIBLE);
             setTitle("Meal Plan");
             transaction.commit();
         } else if (id == R.id.nav_list) {
@@ -148,6 +159,7 @@ public class MainActivity extends AppCompatActivity
             buttonPanel.setVisibility(View.INVISIBLE);
             addMeals.setVisibility(View.INVISIBLE);
             setTitle("Shopping List");
+            navigation.setVisibility(View.INVISIBLE);
             transaction.commit();
 
         } else if (id == R.id.nav_search) {
@@ -156,13 +168,14 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_settings) {
             transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.fragment_container, settings);
+            transaction.replace(R.id.fragment_container, mealSettings);
             transaction.addToBackStack(null);
             buttonPanel = findViewById(R.id.buttonPanel);
             buttonPanel.setVisibility(View.INVISIBLE);
             addMeals.setVisibility(View.INVISIBLE);
             linearLayout = findViewById(R.id.fragment_container);
             setTitle("Settings");
+            navigation.setVisibility(View.VISIBLE);
             transaction.commit();
         }
 
@@ -170,5 +183,28 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.meal_settings:
+                    transaction = getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.fragment_container, mealSettings);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                    return true;
+                case R.id.time_settings:
+                    transaction = getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.fragment_container, timeSettings);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                    return true;
+            }
+            return false;
+        }
+    };
 
 }

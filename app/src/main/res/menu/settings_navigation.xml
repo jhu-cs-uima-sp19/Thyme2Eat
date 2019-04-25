@@ -2,13 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_ingredients"
+        android:id="@+id/meal_settings"
         android:icon="@drawable/ic_home_black_24dp"
-        android:title="Ingredients" />
+        android:title="Meal Settings" />
 
     <item
-        android:id="@+id/navigation_recipe"
+        android:id="@+id/time_settings"
         android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="Recipe" />
+        android:title="Time Settings" />
 
 </menu>

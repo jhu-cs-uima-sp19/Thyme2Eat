@@ -12,9 +12,7 @@ import android.widget.TextView;
 
 import com.example.homepage.dummy.DummyContent.DummyItem;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 public class AlternateRecipeRcViewAdapter extends RecyclerView.Adapter<AlternateRecipeRcViewAdapter.ViewHolder> {
     private ArrayList<Recipe> alternatives;
