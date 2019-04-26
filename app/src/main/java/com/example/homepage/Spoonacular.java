@@ -158,7 +158,7 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                 }
                 mDatabase.child(root).child(recipe.title).child("image").setValue(recipe.image);
                 mDatabase.child(root).child(recipe.title).child("id").setValue(recipe.id);
-                mDatabase.child(root).child(recipe.title).child("time").setValue(recipe.readyInMinutes);
+                mDatabase.child(root).child(recipe.title).child("readyInMinutes").setValue(recipe.readyInMinutes);
                 Bitmap myBitmap;
                 try {
                     java.net.URL url = new java.net.URL(recipe.image);
@@ -323,16 +323,24 @@ public class Spoonacular extends AsyncTask <String, String, String> {
             while (true) {
                 int index = new Random().nextInt(search.results.size() - 1);
                 long id = search.results.get(index).id;
-                if (recipeIds.contains(id) == true) {
+                boolean contains = false;
+                for (int j = 0; j < recipeIds.size(); j++) {
+                    if (recipeIds.get(j) == id) {
+                        contains = true;
+                        break;
+                    }
+                }
+                if (!contains) {
                     if (i < days - 1)
-                        ids += search.results.get(i).id + "%2C";
+                        ids += id+ "%2C";
                     else {
-                        ids += search.results.get(i).id;
+                        ids += id;
                     }
                     search.results.remove(index);
                     recipeIds.add(id);
                     break;
                 }
+                search.results.remove(search.results.get(index));
             }
         }
         System.out.println(ids);
