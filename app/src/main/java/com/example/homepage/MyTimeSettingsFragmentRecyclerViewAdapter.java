@@ -109,7 +109,7 @@ public class MyTimeSettingsFragmentRecyclerViewAdapter extends RecyclerView.Adap
                                                         MainActivity.editor.putString("Meal " + r.mealNumber + " end", r.endTime);
                                                         MainActivity.editor.commit();
                                                         toText.setText("To: " + r.endTime + amPm);
-                                                        mealInfo.setText(r.mealType + " " + r.startTime + "-" + r.endTime);
+                                                        mealInfo.setText("Meal " + (r.mealNumber + 1) + "\n " + r.startTime + "-" + r.endTime);
                                                     }
                                                 }, hour, min, false);
                                         timePickerDialog.show();
@@ -130,7 +130,7 @@ public class MyTimeSettingsFragmentRecyclerViewAdapter extends RecyclerView.Adap
 
         public void bindView(int position) {
             MealTime meal = TimeSettingsFragment.mealTimes.get(position);
-            mealInfo.setText("Meal " + position+ 1 + " " + meal.startTime + "-" + meal.endTime);
+            mealInfo.setText("Meal " + (position + 1) + "\n " + meal.startTime + "-" + meal.endTime);
         }
 
     }

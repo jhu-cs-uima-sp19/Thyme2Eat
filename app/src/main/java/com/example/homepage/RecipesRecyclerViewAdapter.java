@@ -79,7 +79,9 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                     Intent intent = new Intent(mView.getContext(), ChooseAlternative.class);
                     intent.putExtra("date", r.date);
                     intent.putExtra("name", r.title);
-                    mView.getContext().startActivity(intent);
+                    System.out.println(r.title);
+                    System.out.println(r.date);
+                    new Spoonacular(mView.getContext()).execute("getSimilar", String.valueOf(r.id), r.title, r.date);
                 }
             });
 

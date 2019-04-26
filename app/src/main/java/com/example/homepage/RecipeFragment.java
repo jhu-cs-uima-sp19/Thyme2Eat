@@ -83,6 +83,7 @@ public class RecipeFragment extends Fragment {
                         Recipe r = new Recipe(title, date, time, instruct, ingreds, image);
                         r.dateText = dateText;
                         r.withPrev = prev;
+                        r.id = (long)meal.child("id").getValue();
                         prev = true;
                         mealList.add(r);
                     }

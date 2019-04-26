@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -46,8 +45,12 @@ public class Spoonacular extends AsyncTask <String, String, String> {
     private Dialog dialog;
     private TextView message;
     private static ArrayList<Ingredient> ingredients;
-    private static ArrayList<Integer> recipeIds = new ArrayList<>();
+    private static ArrayList<Long> recipeIds = new ArrayList<>();
     private DatabaseReference shopDatabase = MainActivity.mDatabase.child("shop");
+    private boolean search = false;
+    private boolean similar = false;
+    private String date ="";
+    private String name = "";
 
     public Spoonacular(Context context) {
         contextRef = new WeakReference<>(context);
@@ -96,30 +99,47 @@ public class Spoonacular extends AsyncTask <String, String, String> {
     @Override
     protected String doInBackground(String... args) {
         ArrayList<Recipe> recipes = null;
-        if (args[0].equals("search")) {
+        ArrayList<String> roots = new ArrayList<>();
+        if (args[0].equals("search") || args[0].equals("getSimilar")) {
 
-            String datesString = args[8];
-            ArrayList<String> dates = new ArrayList<>();
-            while (datesString.length() >0) {
-                dates.add(datesString.substring(0,10));
-                datesString = datesString.substring(10);
+            int numberOfRecipes = 0;
+
+            if (args[0].equals("search")) {
+                search = true;
+                mDatabase = MainActivity.mDatabase.child("plan");
+                String datesString = args[8];
+
+                while (datesString.length() >0) {
+                    roots.add(datesString.substring(0,10));
+                    datesString = datesString.substring(10);
+                }
+                numberOfRecipes = roots.size();
+                try {
+                    recipes = searchRecipes(args[1], args[2], args[3], args[4], args[5], args[6], args[7], numberOfRecipes);
+                    message.setText("Recipes found! Choosing best recipes...");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            } else if (args[0].equals("getSimilar")) {
+                date = args[3];
+                name = args[2];
+                similar = true;
+                numberOfRecipes = 5;
+                roots.add("alts");
+                mDatabase = MainActivity.mDatabase.child("plan").child(args[3]).child(args[2]);
+                try {
+                    recipes = getSimilarRecipes(Integer.valueOf(args[1]));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-
-            try {
-                recipes = searchRecipes(args[1], args[2], args[3], args[4], args[5], args[6], args[7], dates.size());
-                message.setText("Recipes found! Choosing best recipes...");
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-
-            mDatabase = MainActivity.mDatabase.child("plan");
 
             for (int i = 0; i < RecipeFragment.mealList.size(); i++) {
                 recipeIds.add(RecipeFragment.mealList.get(i).id);
             }
 
-            for (int d = 0; d < dates.size(); d++) {
+            for (int d = 0; d < numberOfRecipes; d++) {
                 Recipe recipe;
                 recipe = recipes.get(d);
 
@@ -129,8 +149,15 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                 recipe.title = recipe.title.replace("#", "");
                 recipe.title = recipe.title.replace("$", "");
 
-                String date = dates.get(d);
-                mDatabase.child(date).child(recipe.title).child("image").setValue(recipe.image);
+                String root;
+                if (roots.get(0).equals("alts")) {
+                    root = "alts";
+                } else {
+                    root = roots.get(d);
+                }
+                mDatabase.child(root).child(recipe.title).child("image").setValue(recipe.image);
+                mDatabase.child(root).child(recipe.title).child("id").setValue(recipe.id);
+                mDatabase.child(root).child(recipe.title).child("time").setValue(recipe.readyInMinutes);
                 Bitmap myBitmap;
                 try {
                     java.net.URL url = new java.net.URL(recipe.image);
@@ -152,18 +179,17 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                     e.printStackTrace();
                 }
 
-                for (Ingredient ingredient: recipe.extendedIngredients) {
-                    mDatabase.child(date).child(recipe.title).child("ingredients").child(ingredient.name).child("amount").setValue(ingredient.amount);
-                    mDatabase.child(date).child(recipe.title).child("ingredients").child(ingredient.name).child("unit").setValue(ingredient.unit);
+                for (Ingredient ingredient : recipe.extendedIngredients) {
+                    mDatabase.child(root).child(recipe.title).child("ingredients").child(ingredient.name).child("amount").setValue(ingredient.amount);
+                    mDatabase.child(root).child(recipe.title).child("ingredients").child(ingredient.name).child("unit").setValue(ingredient.unit);
                     boolean contains = false;
-                    for (Ingredient ing: ingredients) {
+                    for (Ingredient ing : ingredients) {
                         if (ingredient.name.equals(ing.name)) {
                             contains = true;
                             if (ingredient.unit.equals(ing.unit)) {
                                 ing.amount += ingredient.amount;
                             } else {
                                 try {
-                                    System.out.print("CONVERTED UNIT");
                                     ingredient = convertUnit(ingredient, "oz");
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -178,14 +204,14 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                     }
                 }
 
-                for (Ingredient ingredient: ingredients) {
+                for (Ingredient ingredient : ingredients) {
                     shopDatabase.child(ingredient.name).child("amount").setValue(ingredient.amount);
                     shopDatabase.child(ingredient.name).child("unit").setValue(ingredient.unit);
                 }
 
-                mDatabase.child(date).child(recipe.title).child("instructions").setValue(recipe.instructions);
-                mDatabase.child(date).child(recipe.title).child("time").setValue("2:00-3:00pm");
-                progressBar.incrementProgressBy(100/dates.size());
+                mDatabase.child(root).child(recipe.title).child("instructions").setValue(recipe.instructions);
+                mDatabase.child(root).child(recipe.title).child("time").setValue("2:00-3:00pm");
+                progressBar.incrementProgressBy(100 / numberOfRecipes);
             }
         }
         return "Success";
@@ -194,14 +220,25 @@ public class Spoonacular extends AsyncTask <String, String, String> {
     @Override
     protected void onPostExecute(String bitmaps) {
         Context context = contextRef.get();
-        if (context != null ) {
-            Intent myIntent = new Intent(context, MainActivity.class);
-            myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            dialog.dismiss();
-            if (bitmaps == null) {
-                MainActivity.wasFound = false;
+        if (search) {
+            if (context != null) {
+                Intent myIntent = new Intent(context, MainActivity.class);
+                myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                dialog.dismiss();
+                if (bitmaps == null) {
+                    MainActivity.wasFound = false;
+                }
+                context.startActivity(myIntent);
             }
-            context.startActivity(myIntent);
+        } else if (similar) {
+            if (context != null) {
+                Intent myIntent = new Intent(context, ChooseAlternative.class);
+                myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                myIntent.putExtra("name", name);
+                myIntent.putExtra("date",date);
+                dialog.dismiss();
+                context.startActivity(myIntent);
+            }
         }
     }
 
@@ -283,7 +320,7 @@ public class Spoonacular extends AsyncTask <String, String, String> {
         String ids = "";
         for (int i = 0; i < days; i++) {
             while (true) {
-                int id = search.results[new Random().nextInt(search.results.length - 1)].id;
+                long id = search.results[new Random().nextInt(search.results.length - 1)].id;
                 if (!recipeIds.contains(id)) {
                     if (i < days - 1)
                         ids += search.results[i].id + "%2C";
@@ -385,10 +422,12 @@ public class Spoonacular extends AsyncTask <String, String, String> {
     /*This method returns a list of similar recipes given an id; will be very useful when offering alternatives*/
     public static ArrayList<Recipe> getSimilarRecipes(int id) throws IOException {
         StringBuffer json = new StringBuffer();
+        System.out.println(id);
         try{
             URL url = new URL("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/"+ id +"/similar");
             HttpURLConnection connection = (HttpURLConnection)url.openConnection();
             connection.setRequestProperty("X-RapidAPI-Key", "ebbeaa7cbemsh020d1b6ca0a5850p11572bjsnf2dead442a16");
+            connection.setRequestProperty("X-RapidAPI-Host", "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com");
             connection.setRequestMethod("GET");
             connection.setDoInput(true);
             connection.connect();
@@ -421,7 +460,6 @@ public class Spoonacular extends AsyncTask <String, String, String> {
 
         return searchBulk(ids);
     }
-
 
     /*Used for API testing*/
     public static void main (String args[]) throws IOException {
