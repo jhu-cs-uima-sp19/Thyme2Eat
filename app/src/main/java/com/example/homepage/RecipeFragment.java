@@ -87,7 +87,8 @@ public class RecipeFragment extends Fragment {
                         }
                         r.dateText = dateText;
                         r.withPrev = prev;
-                        r.id = (long)meal.child("id").getValue();
+                        if (meal.child("id").exists())
+                            r.id = (long)meal.child("id").getValue();
                         prev = true;
                         mealList.add(r);
                     }

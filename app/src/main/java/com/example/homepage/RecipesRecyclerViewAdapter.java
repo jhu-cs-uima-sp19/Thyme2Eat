@@ -108,7 +108,12 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                                 alert.setMessage("Are you sure you want to delete this recipe from your meal plan?");
                                 alert.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                                     public void onClick (DialogInterface dialog, int which) {
-                                        Recipe r = RecipeFragment.mealList.get(getAdapterPosition());
+                                        Recipe r;
+                                        if (getAdapterPosition() == -1) {
+                                            r = RecipeFragment.mealList.get(0);
+                                        } else {
+                                            r = RecipeFragment.mealList.get(getAdapterPosition());
+                                        }
                                         MainActivity.mDatabase.child("plan").child(r.getDate()).setValue(null);
                                         RecipeFragment.mealList.remove(getAdapterPosition());
                                         RecipesRecyclerViewAdapter.this.notifyItemRemoved(getAdapterPosition());

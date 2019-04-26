@@ -33,7 +33,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 
 
@@ -68,8 +67,15 @@ public class Spoonacular extends AsyncTask <String, String, String> {
         message.setText("Finding recipes based on preferences...");
         progressBar.setMax(100);
         dialog = alertDialogBuilder.create();
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
         dialog.show();
         ingredients = new ArrayList<>();
+
+        for (int i = 0; i < RecipeFragment.mealList.size(); i++) {
+            recipeIds.add(RecipeFragment.mealList.get(i).id);
+        }
+
 
         shopDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -115,7 +121,7 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                 }
                 numberOfRecipes = roots.size();
                 try {
-                    recipes = searchRecipes(args[1], args[2], args[3], args[4], args[5], args[6], args[7], numberOfRecipes);
+                    recipes = searchRecipes(args[1], args[2], args[3], args[4], args[5], args[6], args[7], roots.size());
                     message.setText("Recipes found! Choosing best recipes...");
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -135,13 +141,8 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                 }
             }
 
-            for (int i = 0; i < RecipeFragment.mealList.size(); i++) {
-                recipeIds.add(RecipeFragment.mealList.get(i).id);
-            }
-
             for (int d = 0; d < numberOfRecipes; d++) {
-                Recipe recipe;
-                recipe = recipes.get(d);
+                Recipe recipe = recipes.get(d);
 
                 recipe.title = recipe.title.replace("[", "(");
                 recipe.title = recipe.title.replace("]", ")");
@@ -320,19 +321,21 @@ public class Spoonacular extends AsyncTask <String, String, String> {
         String ids = "";
         for (int i = 0; i < days; i++) {
             while (true) {
-                long id = search.results[new Random().nextInt(search.results.length - 1)].id;
-                if (!recipeIds.contains(id)) {
+                int index = new Random().nextInt(search.results.size() - 1);
+                long id = search.results.get(index).id;
+                if (recipeIds.contains(id) == true) {
                     if (i < days - 1)
-                        ids += search.results[i].id + "%2C";
+                        ids += search.results.get(i).id + "%2C";
                     else {
-                        ids += search.results[i].id;
+                        ids += search.results.get(i).id;
                     }
+                    search.results.remove(index);
                     recipeIds.add(id);
                     break;
                 }
             }
         }
-        System.out.println(json.toString());
+        System.out.println(ids);
 
         return searchBulk(ids);
     }
