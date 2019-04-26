@@ -81,7 +81,11 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                     intent.putExtra("name", r.title);
                     System.out.println(r.title);
                     System.out.println(r.date);
-                    new Spoonacular(mView.getContext()).execute("getSimilar", String.valueOf(r.id), r.title, r.date);
+                    if (r.hasAlts) {
+                        mView.getContext().startActivity(intent);
+                    } else {
+                        new Spoonacular(mView.getContext()).execute("getSimilar", String.valueOf(r.id), r.title, r.date);
+                    }
                 }
             });
 

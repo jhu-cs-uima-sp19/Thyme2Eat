@@ -80,7 +80,11 @@ public class RecipeFragment extends Fragment {
                         }
                         if (meal.child("image").exists())
                             image = meal.child("image").getValue().toString();
+
                         Recipe r = new Recipe(title, date, time, instruct, ingreds, image);
+                        if (meal.child("alts").exists()) {
+                            r.hasAlts = true;
+                        }
                         r.dateText = dateText;
                         r.withPrev = prev;
                         r.id = (long)meal.child("id").getValue();

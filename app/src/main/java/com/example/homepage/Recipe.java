@@ -71,6 +71,8 @@ public class Recipe {
 
     public String timeText;
 
+    public boolean hasAlts = false;
+
     //id needed to search recipe info
     public long id;
 

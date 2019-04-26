@@ -1,5 +1,7 @@
 package com.example.homepage;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 
 import com.example.homepage.dummy.DummyContent.DummyItem;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class AlternateRecipeRcViewAdapter extends RecyclerView.Adapter<AlternateRecipeRcViewAdapter.ViewHolder> {
@@ -88,6 +91,14 @@ public class AlternateRecipeRcViewAdapter extends RecyclerView.Adapter<Alternate
             //name = name.substring(10);
             if (name.length() > 12) {
                 name = name.substring(0, 10) + "...";
+            }
+            String cache = "/data/user/0/com.example.homepage/cache";
+            Recipe recipe = ChooseAlternative.alternativeList.get(getAdapterPosition());
+            File file = new File(cache,
+                    recipe.image.substring((recipe.image.lastIndexOf('/') + 1)));
+            if (file.exists()) {
+                Bitmap bitmap = BitmapFactory.decodeFile(file.toString());
+                image.setImageBitmap(bitmap);
             }
             title.setText(name);
         }
