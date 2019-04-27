@@ -262,7 +262,7 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
     }
 
     public String amOrpm (int hour) {
-        if (hour <= 12) {
+        if (hour <= 11) {
             return "am";
         } else {
             return "pm";

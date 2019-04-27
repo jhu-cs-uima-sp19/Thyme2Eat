@@ -3,10 +3,6 @@
     android:layout_width="10dp">
 
     <item
-        android:id="@+id/one"
-        android:title="Edit Type"/>
-
-    <item
         android:id="@+id/two"
         android:title="Edit Time"/>
 
