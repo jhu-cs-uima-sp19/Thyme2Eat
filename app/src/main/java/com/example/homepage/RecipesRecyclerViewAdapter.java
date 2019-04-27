@@ -79,7 +79,13 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                     Intent intent = new Intent(mView.getContext(), ChooseAlternative.class);
                     intent.putExtra("date", r.date);
                     intent.putExtra("name", r.title);
-                    mView.getContext().startActivity(intent);
+                    System.out.println(r.title);
+                    System.out.println(r.date);
+                    if (r.hasAlts) {
+                        mView.getContext().startActivity(intent);
+                    } else {
+                        new Spoonacular(mView.getContext()).execute("getSimilar", String.valueOf(r.id), r.title, r.date);
+                    }
                 }
             });
 
@@ -103,7 +109,12 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                                 alert.setMessage("Are you sure you want to delete this recipe from your meal plan?");
                                 alert.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                                     public void onClick (DialogInterface dialog, int which) {
-                                        Recipe r = RecipeFragment.mealList.get(getAdapterPosition());
+                                        Recipe r;
+                                        if (getAdapterPosition() == -1) {
+                                            r = RecipeFragment.mealList.get(0);
+                                        } else {
+                                            r = RecipeFragment.mealList.get(getAdapterPosition());
+                                        }
                                         MainActivity.mDatabase.child("plan").child(r.getDate()).setValue(null);
                                         RecipeFragment.mealList.remove(getAdapterPosition());
                                         RecipesRecyclerViewAdapter.this.notifyItemRemoved(getAdapterPosition());
@@ -252,7 +263,7 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
     }
 
     public String amOrpm (int hour) {
-        if (hour <= 12) {
+        if (hour <= 11) {
             return "am";
         } else {
             return "pm";

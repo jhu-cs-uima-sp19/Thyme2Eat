@@ -212,7 +212,7 @@ public class SettingsFragment extends Fragment {
                 }
                 includeUrl = includeUrl.replace(",", "%2C");
                 includeUrl = includeUrl.replace(" ", "+");
-                if (!includeUrl.equals("&includeIngredients=" + include.getText().toString()))
+                if (!include.toString().equals(""))
                     editor.putString("includeUrl", includeUrl);
                 else
                     editor.putString("includeUrl","");
@@ -223,7 +223,7 @@ public class SettingsFragment extends Fragment {
                 }
                 excludeUrl = excludeUrl.replace(",", "%2C");
                 excludeUrl = excludeUrl.replace(" ", "+");
-                if (!excludeUrl.equals("&excludeIngredients=" + exclude.getText().toString()))
+                if (!exclude.toString().equals(""))
                     editor.putString("excludeUrl", excludeUrl);
                 else
                     editor.putString("excludeUrl", "");

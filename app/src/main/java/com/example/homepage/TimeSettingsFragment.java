@@ -24,8 +24,8 @@ public class TimeSettingsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mealTimes = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
-            String start = MainActivity.myPreferences.getString("Meal " + i + " start", "2:00");
-            String end = MainActivity.myPreferences.getString("Meal " + i + " end", "3:00");
+            String start = MainActivity.myPreferences.getString("Meal " + i + " start", "14:00");
+            String end = MainActivity.myPreferences.getString("Meal " + i + " end", "15:00");
             mealTimes.add(new MealTime(i, start, end, "main+course"));
         }
     }

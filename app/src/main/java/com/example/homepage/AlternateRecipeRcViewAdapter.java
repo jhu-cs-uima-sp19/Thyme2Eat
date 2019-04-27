@@ -74,10 +74,7 @@ public class AlternateRecipeRcViewAdapter extends RecyclerView.Adapter<Alternate
             image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mView.getContext(), ViewRecipe.class);
-                    intent.putExtra("index", getAdapterPosition());
-                    intent.putExtra("mealPlan", false);
-                    mView.getContext().startActivity(intent);
+                    Log.w("alternate", "Clicking on " + alternatives.get(getAdapterPosition()).title);
                 }
             });
             title = (TextView) view.findViewById(R.id.titleText);
@@ -89,15 +86,6 @@ public class AlternateRecipeRcViewAdapter extends RecyclerView.Adapter<Alternate
                 this.checkbox.setChecked(true);
             } else {
                 this.checkbox.setChecked(false);
-            }
-
-            String cache = "/data/user/0/com.example.homepage/cache";
-            Recipe recipe = alternatives.get(getAdapterPosition());
-            File file = new File(cache,
-                    recipe.image.substring((recipe.image.lastIndexOf('/') + 1)));
-            if (file.exists()) {
-                Bitmap bitmap = BitmapFactory.decodeFile(file.toString());
-                image.setImageBitmap(bitmap);
             }
 
             String name = alternatives.get(position).title;

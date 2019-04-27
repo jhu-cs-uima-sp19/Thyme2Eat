@@ -24,6 +24,7 @@ import android.provider.Settings.Secure;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import android.content.Intent;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity
     private LinearLayout linearLayout;
     public static boolean wasFound = true;
     public BottomNavigationView navigation;
+    public TextView timeSettingsInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,8 +84,9 @@ public class MainActivity extends AppCompatActivity
         mealSettings = new SettingsFragment();
         timeSettings = new TimeSettingsFragment();
         shoppingList = new ShoppingListItemsFragment();
+        timeSettingsInfo = findViewById(R.id.time_settings_info);
+        timeSettingsInfo.setVisibility(View.INVISIBLE);
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, mealPlan).commit();
-        Log.w("myApp", "hello");
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -168,7 +171,10 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_settings) {
             transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.fragment_container, mealSettings);
+            if (navigation.getSelectedItemId() == R.id.meal_settings)
+                transaction.replace(R.id.fragment_container, mealSettings);
+            else
+                transaction.replace(R.id.fragment_container, timeSettings);
             transaction.addToBackStack(null);
             buttonPanel = findViewById(R.id.buttonPanel);
             buttonPanel.setVisibility(View.INVISIBLE);
@@ -195,12 +201,14 @@ public class MainActivity extends AppCompatActivity
                     transaction.replace(R.id.fragment_container, mealSettings);
                     transaction.addToBackStack(null);
                     transaction.commit();
+                    timeSettingsInfo.setVisibility(View.INVISIBLE);
                     return true;
                 case R.id.time_settings:
                     transaction = getSupportFragmentManager().beginTransaction();
                     transaction.replace(R.id.fragment_container, timeSettings);
                     transaction.addToBackStack(null);
                     transaction.commit();
+                    timeSettingsInfo.setVisibility(View.VISIBLE);
                     return true;
             }
             return false;

@@ -7,6 +7,16 @@
     tools:context=".MainActivity">
 
 
+    <TextView
+        android:id="@+id/time_settings_info"
+        android:layout_width="303dp"
+        android:layout_height="58dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginBottom="376dp"
+        android:text="Check the meals that you want to be included. Long press on the meal to change the time."
+        app:layout_constraintBottom_toTopOf="@+id/buttonPanel"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -30,7 +40,9 @@
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/buttonPanel"></LinearLayout>
+        app:layout_constraintBottom_toTopOf="@id/buttonPanel">
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/buttonPanel"
@@ -54,6 +66,7 @@
             android:text="Add Meals"
             app:layout_constraintBottom_toTopOf="@+id/buttonPanel"
             tools:layout_editor_absoluteX="155dp" />
+
     </LinearLayout>
 
     <android.support.design.widget.BottomNavigationView
@@ -67,7 +80,9 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.083"
-        app:menu="@menu/settings_navigation" />
+        app:menu="@menu/settings_navigation" >
+
+    </android.support.design.widget.BottomNavigationView>
 
 
 </android.support.constraint.ConstraintLayout>

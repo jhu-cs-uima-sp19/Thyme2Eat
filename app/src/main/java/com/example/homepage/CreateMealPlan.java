@@ -68,7 +68,7 @@ public class CreateMealPlan extends AppCompatActivity{
                     new Spoonacular(CreateMealPlan.this).execute("search", myPreferences.getString("cuisineUrl", ""),
                             myPreferences.getString("dietUrl", ""), myPreferences.getString("includeUrl", ""),
                             myPreferences.getString("excludeUrl", ""), myPreferences.getString("intoleranceUrl", ""),
-                            "&type=main+course", "50", dates);
+                            "&type=main+course", "100", dates);
                 }
             }
         });
@@ -79,14 +79,14 @@ public class CreateMealPlan extends AppCompatActivity{
                 Context context = getApplicationContext();
                 long epoch = dateClicked.getTime();
                 Event ev = new Event(Color.BLACK, epoch, "Meal");
-                if (!todayDate.after(dateClicked) && !selectedDates.contains(dateClicked)) {
+                if (!todayDate.after(dateClicked)  && !selectedDates.contains(dateClicked)) {
                     selectedDates.add(dateClicked);
                     calendar.addEvent(ev);
-                }else if (!todayDate.after(dateClicked) && selectedDates.contains(dateClicked)){
+                }else if (!todayDate.after(dateClicked)    && selectedDates.contains(dateClicked)){
                     selectedDates.remove(dateClicked);
                     calendar.removeEvent(ev);
                 }
-                else {
+                else if (todayDate.after(dateClicked)) {
                     Toast.makeText(context, "Error: Past Date", Toast.LENGTH_SHORT).show();
                 }
             }
