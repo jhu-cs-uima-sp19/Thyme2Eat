@@ -223,9 +223,11 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                         }
                     }
 
-                    for (Ingredient ingredient : ingredients) {
-                        shopDatabase.child(ingredient.name).child("amount").setValue(ingredient.amount);
-                        shopDatabase.child(ingredient.name).child("unit").setValue(ingredient.unit);
+                    if (args[0] == "search") {
+                        for (Ingredient ingredient : ingredients) {
+                            shopDatabase.child(ingredient.name).child("amount").setValue(ingredient.amount);
+                            shopDatabase.child(ingredient.name).child("unit").setValue(ingredient.unit);
+                        }
                     }
 
                     mDatabase.child(root).child(recipe.title).child("instructions").setValue(recipe.instructions);
