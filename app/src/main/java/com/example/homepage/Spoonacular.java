@@ -242,11 +242,6 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                     start = sdf.format(cal.getTime());
                     cal.add(Calendar.MINUTE, recipe.readyInMinutes);
                     String end = sdf.format(cal.getTime());
-                    if (cal.get(Calendar.AM_PM) == Calendar.AM) {
-                        end += "am";
-                    } else {
-                        end += "pm";
-                    }
                     mDatabase.child(root).child(recipe.title).child("time").setValue(start + "-" + end);
                     progressBar.incrementProgressBy(100 / numberOfRecipes);
                 }
