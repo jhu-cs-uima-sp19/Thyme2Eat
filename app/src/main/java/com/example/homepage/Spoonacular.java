@@ -232,7 +232,7 @@ public class Spoonacular extends AsyncTask <String, String, String> {
 
                     mDatabase.child(root).child(recipe.title).child("instructions").setValue(recipe.instructions);
                     String start = MainActivity.myPreferences.getString("Meal " + (i + 1) + " start", "14:00");
-                    SimpleDateFormat sdf = new SimpleDateFormat("hh:mm");
+                    SimpleDateFormat sdf = new SimpleDateFormat("kk:mm");
                     Calendar cal = Calendar.getInstance();
                     try {
                         cal.setTime(sdf.parse(start));
