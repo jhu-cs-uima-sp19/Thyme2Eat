@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -42,12 +43,15 @@ public class MyTimeSettingsFragmentRecyclerViewAdapter extends RecyclerView.Adap
 
     public class ViewHolder extends RecyclerView.ViewHolder { ;
         public final TextView mealInfo;
+        public final CheckBox checkBox;
 
 
         public ViewHolder(View view) {
             super(view);
             final View mView = view;
             mealInfo = view.findViewById(R.id.mealInfo);
+            checkBox = view.findViewById(R.id.checkbox);
+
             view.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
@@ -78,14 +82,15 @@ public class MyTimeSettingsFragmentRecyclerViewAdapter extends RecyclerView.Adap
                                                     public void onTimeSet(TimePicker view, int hour,
                                                                           int min) {
                                                         String amPm = amOrpm(hour);
+                                                        int temp = 0;
                                                         if (amPm.equals("pm") && hour != 12) {
-                                                            hour = hour - 12;
+                                                            temp = hour - 12;
                                                         }
-                                                        r.startTime = hour + ":" + f.format(min) + amPm;
-                                                        MainActivity.editor.putString("Meal " + r.mealNumber + " start", r.startTime);
+                                                        r.startTime = temp + ":" + f.format(min) + amPm;
+                                                        MainActivity.editor.putString("Meal " + (r.mealNumber + 1) + " start", hour +":"+ f.format(min));
                                                         MainActivity.editor.commit();
                                                         fromText.setText("From: " + r.startTime + amPm);
-                                                        mealInfo.setText(r.mealType + " " + r.startTime + "-" + r.endTime);
+                                                        mealInfo.setText("Meal " + (r.mealNumber + 1) + "\n " + r.startTime + "-" + r.endTime);
                                                     }
                                                 }, hour, min, false);
                                         timePickerDialog.show();
@@ -101,14 +106,15 @@ public class MyTimeSettingsFragmentRecyclerViewAdapter extends RecyclerView.Adap
                                                     public void onTimeSet(TimePicker view, int hour,
                                                                           int min) {
                                                         String amPm = amOrpm(hour);
+                                                        int temp = 0;
                                                         if (amPm.equals("pm") && hour != 12) {
-                                                            hour = hour - 12;
+                                                            temp = hour - 12;
                                                         }
 
-                                                        r.endTime = hour + ":" + f.format(min) + amPm;
-                                                        MainActivity.editor.putString("Meal " + r.mealNumber + " end", r.endTime);
+                                                        r.endTime = temp + ":" + f.format(min) + amPm;
+                                                        MainActivity.editor.putString("Meal " + (r.mealNumber + 1) + " end", hour + ":" + f.format(min));
                                                         MainActivity.editor.commit();
-                                                        toText.setText("To: " + r.endTime + amPm);
+                                                        toText.setText("To: " + r.endTime);
                                                         mealInfo.setText("Meal " + (r.mealNumber + 1) + "\n " + r.startTime + "-" + r.endTime);
                                                     }
                                                 }, hour, min, false);
@@ -131,6 +137,25 @@ public class MyTimeSettingsFragmentRecyclerViewAdapter extends RecyclerView.Adap
         public void bindView(int position) {
             MealTime meal = TimeSettingsFragment.mealTimes.get(position);
             mealInfo.setText("Meal " + (position + 1) + "\n " + meal.startTime + "-" + meal.endTime);
+            if (MainActivity.myPreferences.getBoolean("Meal " + (position + 1), false)) {
+                System.out.println("yes");
+                checkBox.setChecked(true);
+            } else {
+                checkBox.setChecked(false);
+            }
+            final int mealNum = position + 1;
+            checkBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (checkBox.isChecked()) {
+                        MainActivity.editor.putBoolean("Meal " + (mealNum), true);
+                        MainActivity.editor.commit();
+                    } else {
+                        MainActivity.editor.putBoolean("Meal " + (mealNum), false);
+                        MainActivity.editor.commit();
+                    }
+                }
+            });
         }
 
     }

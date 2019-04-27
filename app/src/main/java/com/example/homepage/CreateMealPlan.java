@@ -68,7 +68,7 @@ public class CreateMealPlan extends AppCompatActivity{
                     new Spoonacular(CreateMealPlan.this).execute("search", myPreferences.getString("cuisineUrl", ""),
                             myPreferences.getString("dietUrl", ""), myPreferences.getString("includeUrl", ""),
                             myPreferences.getString("excludeUrl", ""), myPreferences.getString("intoleranceUrl", ""),
-                            "&type=main+course", "50", dates);
+                            "&type=main+course", "100", dates);
                 }
             }
         });

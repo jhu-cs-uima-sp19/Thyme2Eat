@@ -31,8 +31,12 @@ import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 
 
@@ -109,8 +113,13 @@ public class Spoonacular extends AsyncTask <String, String, String> {
         if (args[0].equals("search") || args[0].equals("getSimilar")) {
 
             int numberOfRecipes = 0;
+            int numMealsPerDay = 0;
 
             if (args[0].equals("search")) {
+                for (int i = 0; i < 3; i++) {
+                    if (MainActivity.myPreferences.getBoolean("Meal " + (i+1), false))
+                        numMealsPerDay++;
+                }
                 search = true;
                 mDatabase = MainActivity.mDatabase.child("plan");
                 String datesString = args[8];
@@ -121,7 +130,7 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                 }
                 numberOfRecipes = roots.size();
                 try {
-                    recipes = searchRecipes(args[1], args[2], args[3], args[4], args[5], args[6], args[7], roots.size());
+                    recipes = searchRecipes(args[1], args[2], args[3], args[4], args[5], args[6], args[7], roots.size(), numMealsPerDay);
                     message.setText("Recipes found! Choosing best recipes...");
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -132,6 +141,7 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                 name = args[2];
                 similar = true;
                 numberOfRecipes = 5;
+                numMealsPerDay = 1;
                 roots.add("alts");
                 mDatabase = MainActivity.mDatabase.child("plan").child(args[3]).child(args[2]);
                 try {
@@ -141,78 +151,103 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                 }
             }
 
+
             for (int d = 0; d < numberOfRecipes; d++) {
-                Recipe recipe = recipes.get(d);
 
-                recipe.title = recipe.title.replace("[", "(");
-                recipe.title = recipe.title.replace("]", ")");
-                recipe.title = recipe.title.replace(".", "");
-                recipe.title = recipe.title.replace("#", "");
-                recipe.title = recipe.title.replace("$", "");
+                for (int i = 0; i < numMealsPerDay; i++) {
 
-                String root;
-                if (roots.get(0).equals("alts")) {
-                    root = "alts";
-                } else {
-                    root = roots.get(d);
-                }
-                mDatabase.child(root).child(recipe.title).child("image").setValue(recipe.image);
-                mDatabase.child(root).child(recipe.title).child("id").setValue(recipe.id);
-                mDatabase.child(root).child(recipe.title).child("readyInMinutes").setValue(recipe.readyInMinutes);
-                Bitmap myBitmap;
-                try {
-                    java.net.URL url = new java.net.URL(recipe.image);
-                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                    connection.setDoInput(true);
-                    connection.connect();
-                    InputStream input = connection.getInputStream();
-                    myBitmap = BitmapFactory.decodeStream(input);
-                    String filename = url.toString().substring(url.toString().lastIndexOf('/') + 1);
-                    File file = new File("/data/user/0/com.example.homepage/cache", filename);
-                    FileOutputStream outputStream = new FileOutputStream(file);
+                    if (i + d*2 >= recipes.size()) {
+                        System.out.println("true");
+                        break;
+                    }
+                    Recipe recipe = recipes.get(i + d*2);
+
+                    recipe.title = recipe.title.replace("[", "(");
+                    recipe.title = recipe.title.replace("]", ")");
+                    recipe.title = recipe.title.replace(".", "");
+                    recipe.title = recipe.title.replace("#", "");
+                    recipe.title = recipe.title.replace("$", "");
+
+                    String root;
+                    if (roots.get(0).equals("alts")) {
+                        root = "alts";
+                    } else {
+                        root = roots.get(d);
+                    }
+                    mDatabase.child(root).child(recipe.title).child("image").setValue(recipe.image);
+                    mDatabase.child(root).child(recipe.title).child("id").setValue(recipe.id);
+                    mDatabase.child(root).child(recipe.title).child("readyInMinutes").setValue(recipe.readyInMinutes);
+                    Bitmap myBitmap;
                     try {
-                        myBitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-                        outputStream.close();
-                    } catch (Exception e) {
+                        java.net.URL url = new java.net.URL(recipe.image);
+                        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                        connection.setDoInput(true);
+                        connection.connect();
+                        InputStream input = connection.getInputStream();
+                        myBitmap = BitmapFactory.decodeStream(input);
+                        String filename = url.toString().substring(url.toString().lastIndexOf('/') + 1);
+                        File file = new File("/data/user/0/com.example.homepage/cache", filename);
+                        FileOutputStream outputStream = new FileOutputStream(file);
+                        try {
+                            myBitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+                            outputStream.close();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
 
-                for (Ingredient ingredient : recipe.extendedIngredients) {
-                    mDatabase.child(root).child(recipe.title).child("ingredients").child(ingredient.name).child("amount").setValue(ingredient.amount);
-                    mDatabase.child(root).child(recipe.title).child("ingredients").child(ingredient.name).child("unit").setValue(ingredient.unit);
-                    boolean contains = false;
-                    for (Ingredient ing : ingredients) {
-                        if (ingredient.name.equals(ing.name)) {
-                            contains = true;
-                            if (ingredient.unit.equals(ing.unit)) {
-                                ing.amount += ingredient.amount;
-                            } else {
-                                try {
-                                    ingredient = convertUnit(ingredient, "oz");
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
+                    for (Ingredient ingredient : recipe.extendedIngredients) {
+                        mDatabase.child(root).child(recipe.title).child("ingredients").child(ingredient.name).child("amount").setValue(ingredient.amount);
+                        mDatabase.child(root).child(recipe.title).child("ingredients").child(ingredient.name).child("unit").setValue(ingredient.unit);
+                        boolean contains = false;
+                        for (Ingredient ing : ingredients) {
+                            if (ingredient.name.equals(ing.name)) {
+                                contains = true;
+                                if (ingredient.unit.equals(ing.unit)) {
+                                    ing.amount += ingredient.amount;
+                                } else {
+                                    try {
+                                        ingredient = convertUnit(ingredient, "oz");
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                    ing.amount += ingredient.amount;
                                 }
-                                ing.amount += ingredient.amount;
+                                break;
                             }
-                            break;
+                        }
+                        if (!contains) {
+                            ingredients.add(ingredient);
                         }
                     }
-                    if (!contains) {
-                        ingredients.add(ingredient);
+
+                    for (Ingredient ingredient : ingredients) {
+                        shopDatabase.child(ingredient.name).child("amount").setValue(ingredient.amount);
+                        shopDatabase.child(ingredient.name).child("unit").setValue(ingredient.unit);
                     }
-                }
 
-                for (Ingredient ingredient : ingredients) {
-                    shopDatabase.child(ingredient.name).child("amount").setValue(ingredient.amount);
-                    shopDatabase.child(ingredient.name).child("unit").setValue(ingredient.unit);
+                    mDatabase.child(root).child(recipe.title).child("instructions").setValue(recipe.instructions);
+                    String start = MainActivity.myPreferences.getString("Meal " + (i + 1) + " start", "14:00");
+                    SimpleDateFormat sdf = new SimpleDateFormat("hh:mm");
+                    Calendar cal = Calendar.getInstance();
+                    try {
+                        cal.setTime(sdf.parse(start));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    start = sdf.format(cal.getTime());
+                    cal.add(Calendar.MINUTE, recipe.readyInMinutes);
+                    String end = sdf.format(cal.getTime());
+                    if (cal.get(Calendar.AM_PM) == Calendar.AM) {
+                        end += "am";
+                    } else {
+                        end += "pm";
+                    }
+                    mDatabase.child(root).child(recipe.title).child("time").setValue(start + "-" + end);
+                    progressBar.incrementProgressBy(100 / numberOfRecipes);
                 }
-
-                mDatabase.child(root).child(recipe.title).child("instructions").setValue(recipe.instructions);
-                mDatabase.child(root).child(recipe.title).child("time").setValue("2:00-3:00pm");
-                progressBar.incrementProgressBy(100 / numberOfRecipes);
             }
         }
         return "Success";
@@ -281,7 +316,7 @@ public class Spoonacular extends AsyncTask <String, String, String> {
     /*This method searches recipes based on a query, but we can make this one more complex if need be*/
     public static ArrayList<Recipe> searchRecipes(String cuisine, String diet, String includeIngredients,
                                          String excludeIngredients, String intolerances,
-                                         String type, String number, int days) throws IOException {
+                                         String type, String number, int days, int meals) throws IOException {
 
         System.out.println("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/searchComplex?" +
                 cuisine + diet + includeIngredients + excludeIngredients + intolerances + type +
@@ -320,30 +355,51 @@ public class Spoonacular extends AsyncTask <String, String, String> {
         //Take all ids to be used to get recipe information
         String ids = "";
         for (int i = 0; i < days; i++) {
-            while (true) {
-                int index = new Random().nextInt(search.results.size() - 1);
-                long id = search.results.get(index).id;
-                boolean contains = false;
-                for (int j = 0; j < recipeIds.size(); j++) {
-                    if (recipeIds.get(j) == id) {
-                        contains = true;
+            for (int j = 0; j < meals; j++) {
+                while (true) {
+                    int index = new Random().nextInt(search.results.size() - 1);
+                    long id = search.results.get(index).id;
+
+                    boolean contains = false;
+                    boolean time = true;
+
+                    for (int k = 0; k < recipeIds.size(); k++) {
+                        if (recipeIds.get(k) == id) {
+                            contains = true;
+                            break;
+                        }
+                    }
+
+                    String start = MainActivity.myPreferences.getString("Meal " + (j + 1) + " start", "14:00");
+                    String end = MainActivity.myPreferences.getString("Meal " + (j + 1) + " end", "15:00");
+                    SimpleDateFormat sdf = new SimpleDateFormat("hh:mm");
+                    Calendar cal = Calendar.getInstance();
+                    Calendar endCal = Calendar.getInstance();
+                    try {
+                        cal.setTime(sdf.parse(start));
+                        endCal.setTime(sdf.parse(end));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    cal.add(Calendar.MINUTE, search.results.get(index).readyInMinutes);
+                    if (cal.getTime().after(endCal.getTime())) {
+                        time = false;
+                    }
+
+                    if (!contains && time) {
+                        if (i < days - 1)
+                            ids += id + "%2C";
+                        else if (i == days - 1 && j == meals - 1) {
+                            ids += id;
+                        }
+                        search.results.remove(index);
+                        recipeIds.add(id);
                         break;
                     }
+                    search.results.remove(search.results.get(index));
                 }
-                if (!contains) {
-                    if (i < days - 1)
-                        ids += id+ "%2C";
-                    else {
-                        ids += id;
-                    }
-                    search.results.remove(index);
-                    recipeIds.add(id);
-                    break;
-                }
-                search.results.remove(search.results.get(index));
             }
         }
-        System.out.println(ids);
 
         return searchBulk(ids);
     }
