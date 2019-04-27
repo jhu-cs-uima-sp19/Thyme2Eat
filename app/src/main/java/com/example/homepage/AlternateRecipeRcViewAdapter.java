@@ -57,6 +57,7 @@ public class AlternateRecipeRcViewAdapter extends RecyclerView.Adapter<Alternate
             super(view);
             mView = view;
             image = (ImageView) view.findViewById(R.id.altImage);
+
             checkbox = (CheckBox) view.findViewById(R.id.alternate_choose);
             checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -74,7 +75,10 @@ public class AlternateRecipeRcViewAdapter extends RecyclerView.Adapter<Alternate
             image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.w("alternate", "Clicking on " + alternatives.get(getAdapterPosition()).title);
+                    Intent intent = new Intent(mView.getContext(), ViewRecipe.class);
+                    intent.putExtra("index", getAdapterPosition());
+                    intent.putExtra("mealPlan", false);
+                    mView.getContext().startActivity(intent);
                 }
             });
             title = (TextView) view.findViewById(R.id.titleText);
@@ -86,6 +90,15 @@ public class AlternateRecipeRcViewAdapter extends RecyclerView.Adapter<Alternate
                 this.checkbox.setChecked(true);
             } else {
                 this.checkbox.setChecked(false);
+            }
+
+            String cache = "/data/user/0/com.example.homepage/cache";
+            Recipe recipe = alternatives.get(position);
+            File file = new File(cache,
+                    recipe.image.substring((recipe.image.lastIndexOf('/') + 1)));
+            if (file.exists()) {
+                Bitmap bitmap = BitmapFactory.decodeFile(file.toString());
+                image.setImageBitmap(bitmap);
             }
 
             String name = alternatives.get(position).title;
