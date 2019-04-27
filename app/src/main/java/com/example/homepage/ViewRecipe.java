@@ -47,11 +47,18 @@ public class ViewRecipe extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_recipe);
+        ArrayList<Recipe> viewArray;
         int index = getIntent().getIntExtra("index", 0);
-        instructions = RecipeFragment.mealList.get(index).instructions;
-        ingredients = RecipeFragment.mealList.get(index).extendedIngredients;
-        imageUrl = RecipeFragment.mealList.get(index).image;
-        title = RecipeFragment.mealList.get(index).title;
+        boolean mealPlan = getIntent().getBooleanExtra("mealPlan", true);
+        if (mealPlan) {
+            viewArray = RecipeFragment.mealList;
+        } else {
+            viewArray = ChooseAlternative.alternativeList;
+        }
+        instructions = viewArray.get(index).instructions;
+        ingredients = viewArray.get(index).extendedIngredients;
+        imageUrl = viewArray.get(index).image;
+        title = viewArray.get(index).title;
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
