@@ -9,10 +9,12 @@ public class Ingredient {
 
     public class Fraction {
 
-        private int numerator, denominator;
+        private int numerator, denominator, whole;
 
         public Fraction(double decimal) {
 
+            whole = (int) decimal;
+            decimal = decimal - whole;
             String stringNumber = String.valueOf(decimal);
             int numberDigitsDecimals = stringNumber.length() - 1 - stringNumber.indexOf('.');
             int denominator = 1;
@@ -28,7 +30,10 @@ public class Ingredient {
         }
 
         public String toString() {
-            return String.valueOf(numerator) + "/" + String.valueOf(denominator);
+            if (whole == 0)
+                return String.valueOf(numerator) + "/" + String.valueOf(denominator);
+            else
+                return String.valueOf(whole) + " " + String.valueOf(numerator) + "/" + String.valueOf(denominator);
         }
 
         public int greatestCommonFactor(int num, int denom) {

@@ -161,7 +161,8 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                         break;
                     }
                     Recipe recipe = recipes.get(i + d*2);
-
+                    if (recipe.instructions == null)
+                        break;
                     recipe.title = recipe.title.replace("[", "(");
                     recipe.title = recipe.title.replace("]", ")");
                     recipe.title = recipe.title.replace(".", "");
@@ -198,6 +199,7 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                         e.printStackTrace();
                     }
 
+                    boolean convert = false;
                     for (Ingredient ingredient : recipe.extendedIngredients) {
                         mDatabase.child(root).child(recipe.title).child("ingredients").child(ingredient.name).child("amount").setValue(ingredient.amount);
                         mDatabase.child(root).child(recipe.title).child("ingredients").child(ingredient.name).child("unit").setValue(ingredient.unit);
@@ -214,17 +216,15 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                                         e.printStackTrace();
                                     }
                                     ing.amount += ingredient.amount;
+                                    shopDatabase.child(ingredient.name).child("unit").setValue("oz");
                                 }
+                                shopDatabase.child(ingredient.name).child("amount").setValue(ing.amount);
+                                shopDatabase.child(ingredient.name).child("unit").setValue(ing.unit);
                                 break;
                             }
                         }
                         if (!contains) {
                             ingredients.add(ingredient);
-                        }
-                    }
-
-                    if (args[0] == "search") {
-                        for (Ingredient ingredient : ingredients) {
                             shopDatabase.child(ingredient.name).child("amount").setValue(ingredient.amount);
                             shopDatabase.child(ingredient.name).child("unit").setValue(ingredient.unit);
                         }
