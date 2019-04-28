@@ -36,14 +36,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Random;
 
 
 public class Spoonacular extends AsyncTask <String, String, String> {
     public static DatabaseReference mDatabase;
     private WeakReference<Context> contextRef;
-    private Context context;
     private ProgressBar progressBar;
     private Dialog dialog;
     private TextView message;
@@ -57,7 +55,6 @@ public class Spoonacular extends AsyncTask <String, String, String> {
 
     public Spoonacular(Context context) {
         contextRef = new WeakReference<>(context);
-        this.context = context;
     }
 
     @Override
@@ -119,6 +116,9 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                 for (int i = 0; i < 3; i++) {
                     if (MainActivity.myPreferences.getBoolean("Meal " + (i+1), false))
                         numMealsPerDay++;
+                }
+                if (numMealsPerDay == 0) {
+                    numMealsPerDay = 1;
                 }
                 search = true;
                 mDatabase = MainActivity.mDatabase.child("plan");
@@ -360,6 +360,7 @@ public class Spoonacular extends AsyncTask <String, String, String> {
 
         //Take all ids to be used to get recipe information
         String ids = "";
+        int count = 0;
         for (int i = 0; i < days; i++) {
             for (int j = 0; j < meals; j++) {
                 while (true) {
@@ -393,12 +394,13 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                     }
 
                     if (!contains && time) {
-                        if (i < days - 1)
-                            ids += id + "%2C";
-                        else if (i == days - 1 && j == meals - 1) {
+                        if (i == days - 1 && j == meals - 1) {
                             ids += id;
+                        } else {
+                            ids += id + "%2C";
                         }
-                        search.results.remove(index);
+                        count++;
+                        search.results.remove(search.results.get(index));
                         recipeIds.add(id);
                         break;
                     }
@@ -406,8 +408,8 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                 }
             }
         }
-
-        return searchBulk(ids);
+        System.out.println("Number of Ids " + count);
+        return searchBulk(ids) ;
     }
 
     /*this method searches by ingredients*/
