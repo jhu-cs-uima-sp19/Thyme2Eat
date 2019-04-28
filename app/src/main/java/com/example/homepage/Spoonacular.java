@@ -246,6 +246,15 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                     progressBar.incrementProgressBy(100 / numberOfRecipes);
                 }
             }
+        } else if (args[0].equals("convert")) {
+            Ingredient i = new Ingredient();
+            i.amount = Double.parseDouble(args[1]);
+            i.unit = args[2];
+            try {
+                RecipesRecyclerViewAdapter.convertedAmount = convertUnit(i, args[3]).amount;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
         return "Success";
     }

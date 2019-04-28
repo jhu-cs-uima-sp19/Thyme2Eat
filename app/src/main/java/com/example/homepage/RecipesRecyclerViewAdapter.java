@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
@@ -24,6 +25,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
 import java.io.File;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -33,6 +39,7 @@ import java.util.Comparator;
 
 public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecyclerViewAdapter.ViewHolder> {
 
+    public static double convertedAmount = -1;
 
     public RecipesRecyclerViewAdapter() {
     }
@@ -109,14 +116,43 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                                 alert.setMessage("Are you sure you want to delete this recipe from your meal plan?");
                                 alert.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                                     public void onClick (DialogInterface dialog, int which) {
-                                        Recipe r;
+                                        final Recipe r;
                                         if (getAdapterPosition() == -1) {
                                             r = RecipeFragment.mealList.get(0);
                                         } else {
                                             r = RecipeFragment.mealList.get(getAdapterPosition());
                                         }
+                                        final DatabaseReference shop = MainActivity.mDatabase.child("shop");
                                         MainActivity.mDatabase.child("plan").child(r.getDate()).setValue(null);
                                         RecipeFragment.mealList.remove(getAdapterPosition());
+                                        shop.addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot shopSnap) {
+                                                for (Ingredient i : r.extendedIngredients) {
+                                                    if (shopSnap.child(i.name).exists()) {
+                                                        DataSnapshot ingred = shopSnap.child(i.name);
+                                                        double subVal;
+                                                        if (!i.unit.equals(ingred.child("unit").getValue().toString())) {
+                                                            new Spoonacular(mView.getContext()).execute("convert", String.valueOf(i.amount), i.unit, ingred.child("unit").getValue().toString());
+                                                            subVal = convertedAmount;
+                                                        } else {
+                                                            subVal = i.amount;
+                                                        }
+                                                        double newAmount = Double.parseDouble(ingred.child("amount").getValue().toString()) - subVal;
+                                                        if (newAmount != 0) {
+                                                            shop.child(i.name).child("amount").setValue(newAmount);
+                                                        } else {
+                                                            shop.child(i.name).setValue(null);
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
                                         RecipesRecyclerViewAdapter.this.notifyItemRemoved(getAdapterPosition());
                                         dialog.cancel();
                                     }
