@@ -7,12 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 
 public class MyShoppingListItemsRecyclerViewAdapter extends RecyclerView.Adapter<MyShoppingListItemsRecyclerViewAdapter.ViewHolder> {
 
-
+    public static ArrayList<String> checked;
 
     public MyShoppingListItemsRecyclerViewAdapter() {
     }
@@ -51,16 +54,22 @@ public class MyShoppingListItemsRecyclerViewAdapter extends RecyclerView.Adapter
             super(view);
             mView = view;
             mContentView = (TextView) view.findViewById(R.id.contentitem);
+            checked = new ArrayList<>();
 
-            check = (CheckBox) view.findViewById(R.id.choose_alternate);
-            check.setOnClickListener(new View.OnClickListener() {
+            check = (CheckBox) view.findViewById(R.id.checkList);
+            check.setChecked(false);
+            check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
-                public void onClick(View v) {
-                    String deleteKey = ShoppingListItemsFragment.stringShopList.get(getAdapterPosition());
-                    deleteKey = deleteKey.substring(0, deleteKey.indexOf(':'));
-                    MainActivity.mDatabase.child("shop").child(deleteKey).setValue(null);
-                    ShoppingListItemsFragment.stringShopList.remove(getAdapterPosition());
-                    MyShoppingListItemsRecyclerViewAdapter.this.notifyItemRemoved(getAdapterPosition());
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        String deleteKey = ShoppingListItemsFragment.stringShopList.get(getAdapterPosition());
+                        deleteKey = deleteKey.substring(0, deleteKey.indexOf(':'));
+                        checked.add(deleteKey);
+                    } else {
+                        String deleteKey = ShoppingListItemsFragment.stringShopList.get(getAdapterPosition());
+                        deleteKey = deleteKey.substring(0, deleteKey.indexOf(':'));
+                        checked.remove(deleteKey);
+                    }
                 }
             });
 
@@ -75,6 +84,7 @@ public class MyShoppingListItemsRecyclerViewAdapter extends RecyclerView.Adapter
                     MyShoppingListItemsRecyclerViewAdapter.this.notifyItemRemoved(getAdapterPosition());
                 }
             });
+
             if (mContentView == null) {
                 Log.w("empty", "content is null");
             }

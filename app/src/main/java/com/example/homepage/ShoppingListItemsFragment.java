@@ -40,6 +40,8 @@ public class ShoppingListItemsFragment extends Fragment {
     final MyShoppingListItemsRecyclerViewAdapter rcshopAdapter = new MyShoppingListItemsRecyclerViewAdapter();
     private OnListFragmentInteractionListener mListener;
     private Button add;
+    private Button del;
+    public static ArrayList<String> haveBeenDel = new ArrayList<>();
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -209,7 +211,23 @@ public class ShoppingListItemsFragment extends Fragment {
                 dialog.show();
 
                 }
-            });
+        });
+
+        del = (Button) shopview.findViewById(R.id.deleteCheckedButton);
+        del.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (int i = 0; i < MyShoppingListItemsRecyclerViewAdapter.checked.size(); i++) {
+                    String toDel = MyShoppingListItemsRecyclerViewAdapter.checked.get(i);
+                    MainActivity.mDatabase.child("shop").child(toDel).setValue(null);
+                    ShoppingListItemsFragment.stringShopList.remove(toDel);
+                    haveBeenDel.add(toDel);
+                }
+                MyShoppingListItemsRecyclerViewAdapter.checked = new ArrayList<>();
+                haveBeenDel = new ArrayList<>();
+                rcshopAdapter.notifyDataSetChanged();
+            }
+        });
 
         return shopview;
     }
