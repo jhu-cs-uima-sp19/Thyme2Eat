@@ -41,6 +41,7 @@ import java.util.Random;
 
 
 public class Spoonacular extends AsyncTask <String, String, String> {
+    public static boolean convert = false;
     public static DatabaseReference mDatabase;
     private WeakReference<Context> contextRef;
     private Context context;
@@ -62,6 +63,10 @@ public class Spoonacular extends AsyncTask <String, String, String> {
 
     @Override
     protected void onPreExecute() {
+        if (convert) {
+            convert = false;
+            return;
+        }
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(contextRef.get());
         LayoutInflater layoutInflater = LayoutInflater.from(contextRef.get());
         View progressDialogBox = layoutInflater.inflate(R.layout.loading_dialog, null);

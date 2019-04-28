@@ -123,7 +123,7 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                                             r = RecipeFragment.mealList.get(getAdapterPosition());
                                         }
                                         final DatabaseReference shop = MainActivity.mDatabase.child("shop");
-                                        MainActivity.mDatabase.child("plan").child(r.getDate()).setValue(null);
+                                        MainActivity.mDatabase.child("plan").child(r.getDate()).child(r.title).setValue(null);
                                         RecipeFragment.mealList.remove(getAdapterPosition());
                                         shop.addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
@@ -133,13 +133,14 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                                                         DataSnapshot ingred = shopSnap.child(i.name);
                                                         double subVal;
                                                         if (!i.unit.equals(ingred.child("unit").getValue().toString())) {
+                                                            Spoonacular.convert = true;
                                                             new Spoonacular(mView.getContext()).execute("convert", String.valueOf(i.amount), i.unit, ingred.child("unit").getValue().toString());
                                                             subVal = convertedAmount;
                                                         } else {
                                                             subVal = i.amount;
                                                         }
                                                         double newAmount = Double.parseDouble(ingred.child("amount").getValue().toString()) - subVal;
-                                                        if (newAmount != 0) {
+                                                        if (newAmount > 0) {
                                                             shop.child(i.name).child("amount").setValue(newAmount);
                                                         } else {
                                                             shop.child(i.name).setValue(null);
