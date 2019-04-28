@@ -15,7 +15,14 @@ public class Ingredient {
 
             whole = (int) decimal;
             decimal = decimal - whole;
-            String stringNumber = String.valueOf(decimal);
+            String stringNumber;
+            if (decimal == 0.3333333333333333) {
+                stringNumber = "1/3";
+            } else if (decimal == 0.6666666666666666) {
+                stringNumber = "2/3";
+            } else{
+                stringNumber = String.valueOf(decimal);
+            }
             int numberDigitsDecimals = stringNumber.length() - 1 - stringNumber.indexOf('.');
             int denominator = 1;
             for (int i = 0; i < numberDigitsDecimals; i++) {

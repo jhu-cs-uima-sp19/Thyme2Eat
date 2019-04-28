@@ -160,12 +160,13 @@ public class Spoonacular extends AsyncTask <String, String, String> {
             for (int d = 0; d < numberOfRecipes; d++) {
 
                 for (int i = 0; i < numMealsPerDay; i++) {
+                    System.out.println("Number of recipes " + numberOfRecipes);
 
-                    if (i + d*2 >= recipes.size()) {
+                    if (i + d*numMealsPerDay >= recipes.size()) {
                         System.out.println("true");
                         break;
                     }
-                    Recipe recipe = recipes.get(i + d*2);
+                    Recipe recipe = recipes.get(i + d*numMealsPerDay);
                     if (recipe.instructions == null)
                         break;
                     recipe.title = recipe.title.replace("[", "(");
@@ -204,7 +205,6 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                         e.printStackTrace();
                     }
 
-                    boolean convert = false;
                     for (Ingredient ingredient : recipe.extendedIngredients) {
                         mDatabase.child(root).child(recipe.title).child("ingredients").child(ingredient.name).child("amount").setValue(ingredient.amount);
                         mDatabase.child(root).child(recipe.title).child("ingredients").child(ingredient.name).child("unit").setValue(ingredient.unit);
