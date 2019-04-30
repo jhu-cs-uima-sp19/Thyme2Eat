@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -112,7 +111,7 @@ public class AlternateRecipeRcViewAdapter extends RecyclerView.Adapter<Alternate
                 image.setImageBitmap(bitmap);
             }
 
-            String name = alternatives.get(position).title;
+            String name = recipe.title;
             //name = name.substring(10);
             if (name.length() > 12) {
                 name = name.substring(0, 10) + "...";

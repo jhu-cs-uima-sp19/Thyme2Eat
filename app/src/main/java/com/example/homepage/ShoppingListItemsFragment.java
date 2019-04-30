@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.Pair;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import java.util.ArrayList;
+import java.util.Map;
 
 
 import com.example.homepage.dummy.DummyContent.DummyItem;
@@ -36,7 +38,7 @@ public class ShoppingListItemsFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
-    public static ArrayList<String> stringShopList;
+    public static ArrayList<Ingredient> stringShopList;
     final MyShoppingListItemsRecyclerViewAdapter rcshopAdapter = new MyShoppingListItemsRecyclerViewAdapter();
     private OnListFragmentInteractionListener mListener;
     private Button add;
@@ -81,17 +83,18 @@ public class ShoppingListItemsFragment extends Fragment {
                 stringShopList = new ArrayList<>();
                 Log.w("data", "in snap");
                 String name;
-                String num;
+                double num;
                 String theunit = "";
                 String wholeitem;
 
                 for (DataSnapshot items : dataSnapshot.getChildren()) {
                     name = items.getKey();
-                    num = items.child("amount").getValue().toString();
+                    num = Double.valueOf(items.child("amount").getValue().toString());
                     if (items.child("unit").exists())
                         theunit = items.child("unit").getValue().toString();
                     wholeitem = name + ": " + num + " " + theunit;
-                    stringShopList.add(wholeitem);
+                    Ingredient i = new Ingredient(wholeitem, num, theunit);
+                    stringShopList.add(i);
                 }
                 rcshopAdapter.notifyDataSetChanged();
             }

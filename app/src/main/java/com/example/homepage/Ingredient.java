@@ -15,14 +15,8 @@ public class Ingredient {
 
             whole = (int) decimal;
             decimal = decimal - whole;
-            String stringNumber;
-            if (decimal == 0.3333333333333333) {
-                stringNumber = "1/3";
-            } else if (decimal == 0.6666666666666666) {
-                stringNumber = "2/3";
-            } else{
-                stringNumber = String.valueOf(decimal);
-            }
+            decimal = Math.floor(decimal * 100) / 100;
+            String stringNumber = String.valueOf(decimal);
             int numberDigitsDecimals = stringNumber.length() - 1 - stringNumber.indexOf('.');
             int denominator = 1;
             for (int i = 0; i < numberDigitsDecimals; i++) {
@@ -67,6 +61,10 @@ public class Ingredient {
             amount = new Fraction(Double.valueOf(this.amount)).toString();
         else
             amount = String.valueOf(Math.round(Double.valueOf(this.amount)));
+        if (amount.equals("33/100"))
+            amount = "1/3";
+        else if (amount.equals("66/100"))
+            amount = "2/3";
         return "\u2022 " + amount + " " + this.unit + " " + this.name + "\n\n";
     }
 
@@ -98,5 +96,7 @@ public class Ingredient {
 
     //any other information that is needed for this ingredient
     public String[] metaInformation;
+
+    public boolean isChecked = false;
 
 }
