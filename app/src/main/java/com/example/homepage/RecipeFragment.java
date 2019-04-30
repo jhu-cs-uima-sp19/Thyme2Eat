@@ -16,6 +16,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+
 import android.widget.TextView;
 
 
@@ -58,7 +60,7 @@ public class RecipeFragment extends Fragment {
                 for (DataSnapshot dates : dataSnapshot.getChildren()) {
                     date = dates.getKey();
                     String dateText = Recipe.makeDateText(date);
-                    Boolean prev = false;
+                    //Boolean prev = false;
                     for (DataSnapshot meal : dates.getChildren()) {
                         title = meal.getKey();
                         time = "0:00-23:59pm";
@@ -92,11 +94,22 @@ public class RecipeFragment extends Fragment {
                             r.hasAlts = true;
                         }
                         r.dateText = dateText;
-                        r.withPrev = prev;
+                        //r.withPrev = prev;
                         if (meal.child("id").exists())
                             r.id = (long)meal.child("id").getValue();
-                        prev = true;
+                        //prev = true;
                         mealList.add(r);
+                    }
+                }
+                Collections.sort(mealList, new RecipesRecyclerViewAdapter.CustomComparator());
+                mealList.get(0).withPrev = false;
+                for (int i = 1; i < mealList.size(); i++) {
+                    Recipe cur = mealList.get(i);
+                    Recipe prev = mealList.get(i - 1);
+                    if (prev.date.equals(cur.date)) {
+                        cur.withPrev = true;
+                    } else {
+                        cur.withPrev = false;
                     }
                 }
                 rcAdapter.notifyDataSetChanged();

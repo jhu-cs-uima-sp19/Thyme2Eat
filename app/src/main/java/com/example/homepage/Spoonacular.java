@@ -653,8 +653,10 @@ public class Spoonacular extends AsyncTask <String, String, String> {
             e.printStackTrace();
         }
         JSONObject jsonObj = new JSONObject(json.toString());
+        Log.w("prev", ingredient.amount + "," + ingredient.unit);
         ingredient.unit = target;
         ingredient.amount = Double.valueOf(jsonObj.get("targetAmount").toString());
+        Log.w("new", ingredient.amount + "," + ingredient.unit);
         return ingredient;
     }
 

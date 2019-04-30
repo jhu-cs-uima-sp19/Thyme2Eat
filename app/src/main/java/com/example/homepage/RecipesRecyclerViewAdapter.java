@@ -223,10 +223,11 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                                                     hour = hour - 12;
                                                 }
 
-                                                r.time = hour + ":" + f.format(min) + r.time.substring(r.time.indexOf('-'));
+                                                r.time = f.format(hour) + ":" + f.format(min) + r.time.substring(r.time.indexOf('-'));
                                                 MainActivity.mDatabase.child("plan").child(r.date).child(r.title).child("time").setValue(r.time);
                                                 fromText.setText("From: " + r.time.substring(0, r.time.indexOf('-')));
                                                 RecipesRecyclerViewAdapter.this.notifyDataSetChanged();
+                                                Collections.sort(RecipeFragment.mealList, new CustomComparator());
                                             }
                                         }, hour, min, false);
                                 timePickerDialog.show();
@@ -250,6 +251,7 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                                                         MainActivity.mDatabase.child("plan").child(r.date).child(r.title).child("time").setValue(r.time);
                                                         toText.setText("To: " + r.time.substring(r.time.indexOf('-') + 1));
                                                         RecipesRecyclerViewAdapter.this.notifyDataSetChanged();
+                                                        Collections.sort(RecipeFragment.mealList, new CustomComparator());
                                                     }
                                                 }, hour, min, false);
                                         timePickerDialog.show();
@@ -293,10 +295,14 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
         }
     }
 
-    public class CustomComparator implements Comparator<Recipe> {
+    public static class CustomComparator implements Comparator<Recipe> {
         @Override
         public int compare(Recipe r1, Recipe r2) {
-            return r1.getDate().compareTo(r2.getDate());
+            if (!r1.date.equals(r2.date)) {
+                return r1.getDate().compareTo(r2.getDate());
+            } else {
+                return r1.time.compareTo(r2.time);
+            }
         }
     }
 
