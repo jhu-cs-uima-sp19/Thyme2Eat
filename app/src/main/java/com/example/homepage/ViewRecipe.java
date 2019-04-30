@@ -6,8 +6,10 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -50,8 +52,9 @@ public class ViewRecipe extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_recipe);
-        Toolbar mToolbar = findViewById(R.id.toolbar);
-
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayUseLogoEnabled(false);
+        actionBar.setDisplayHomeAsUpEnabled(false);
         ArrayList<Recipe> viewArray;
         final int index = getIntent().getIntExtra("index", -1);
         final int arrayChoice = getIntent().getIntExtra("array", 0);
@@ -66,6 +69,7 @@ public class ViewRecipe extends AppCompatActivity {
         ingredients = viewArray.get(index).extendedIngredients;
         imageUrl = viewArray.get(index).image;
         title = viewArray.get(index).title;
+        actionBar.setTitle(title);
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -78,6 +82,20 @@ public class ViewRecipe extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.create_meal_plan, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem){
+        if(menuItem.getItemId() == R.id.back_button){
+            finish();
+        }
+        return true;
     }
 
 }
