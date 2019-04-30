@@ -77,11 +77,13 @@ public class MyShoppingListItemsRecyclerViewAdapter extends RecyclerView.Adapter
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String deleteKey = ShoppingListItemsFragment.stringShopList.get(getAdapterPosition());
-                    deleteKey = deleteKey.substring(0, deleteKey.indexOf(':'));
-                    MainActivity.mDatabase.child("shop").child(deleteKey).setValue(null);
-                    ShoppingListItemsFragment.stringShopList.remove(getAdapterPosition());
-                    MyShoppingListItemsRecyclerViewAdapter.this.notifyItemRemoved(getAdapterPosition());
+                    if (getAdapterPosition() != -1) {
+                        String deleteKey = ShoppingListItemsFragment.stringShopList.get(getAdapterPosition());
+                        deleteKey = deleteKey.substring(0, deleteKey.indexOf(':'));
+                        MainActivity.mDatabase.child("shop").child(deleteKey).setValue(null);
+                        ShoppingListItemsFragment.stringShopList.remove(getAdapterPosition());
+                        MyShoppingListItemsRecyclerViewAdapter.this.notifyItemRemoved(getAdapterPosition());
+                    }
                 }
             });
 

@@ -8,14 +8,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -66,7 +63,7 @@ public class ChooseAlternative extends AppCompatActivity {
                     Recipe r = new Recipe(title, date, time, instruct, ingreds, image);
                     alternativeList.add(r);
                 }
-                rcAdapter.notifyDataSetChanged();;
+                rcAdapter.notifyDataSetChanged();
             }
 
             @Override

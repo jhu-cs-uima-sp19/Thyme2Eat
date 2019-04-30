@@ -152,6 +152,7 @@ public class MainActivity extends AppCompatActivity
             buttonPanel.setVisibility(View.VISIBLE);
             addMeals.setVisibility(View.VISIBLE);
             navigation.setVisibility(View.INVISIBLE);
+            timeSettingsInfo.setVisibility(View.INVISIBLE);
             setTitle("Meal Plan");
             transaction.commit();
         } else if (id == R.id.nav_list) {
@@ -162,6 +163,7 @@ public class MainActivity extends AppCompatActivity
             buttonPanel.setVisibility(View.INVISIBLE);
             addMeals.setVisibility(View.INVISIBLE);
             setTitle("Shopping List");
+            timeSettingsInfo.setVisibility(View.INVISIBLE);
             navigation.setVisibility(View.INVISIBLE);
             transaction.commit();
 
@@ -173,8 +175,10 @@ public class MainActivity extends AppCompatActivity
             transaction = getSupportFragmentManager().beginTransaction();
             if (navigation.getSelectedItemId() == R.id.meal_settings)
                 transaction.replace(R.id.fragment_container, mealSettings);
-            else
+            else {
                 transaction.replace(R.id.fragment_container, timeSettings);
+                timeSettingsInfo.setVisibility(View.VISIBLE);
+            }
             transaction.addToBackStack(null);
             buttonPanel = findViewById(R.id.buttonPanel);
             buttonPanel.setVisibility(View.INVISIBLE);

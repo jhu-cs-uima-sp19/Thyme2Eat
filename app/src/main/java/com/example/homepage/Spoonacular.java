@@ -413,7 +413,6 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                 }
             }
         }
-        System.out.println("Number of Ids " + count);
         return searchBulk(ids) ;
     }
 
