@@ -168,6 +168,7 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
 
                             } else if (item.getTitle().toString().equals("Edit Date")) {
                                 final Calendar c = Calendar.getInstance();
+                                c.add(Calendar.DATE, 0);
                                 int year = c.get(Calendar.YEAR);
                                 int month = c.get(Calendar.MONTH);
                                 int day = c.get(Calendar.DAY_OF_MONTH);
@@ -193,6 +194,7 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                                                 RecipesRecyclerViewAdapter.this.notifyDataSetChanged();
                                             }
                                         }, year, month, day);
+                                datePickerDialog.getDatePicker().setMinDate(c.getTimeInMillis());
                                 datePickerDialog.show();
                             } else if (item.getTitle().toString().equals("Edit Time")) {
                                 final NumberFormat f = new DecimalFormat("00");

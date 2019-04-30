@@ -15,8 +15,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 
 import android.widget.TextView;
 
@@ -40,11 +42,14 @@ public class RecipeFragment extends Fragment {
         rcView.setLayoutManager(new LinearLayoutManager(getActivity()));
         rcView.setAdapter(rcAdapter);
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy;MM;dd");
+        final String curDate = sdf.format(new Date());
+
         if (mealList == null) {
             mealList = new ArrayList<Recipe>();
         }
         //Log.w("here", "" + MainActivity.mealList.size());
-        DatabaseReference mealDatabase = MainActivity.mDatabase.child("plan");
+        final DatabaseReference mealDatabase = MainActivity.mDatabase.child("plan");
         mealDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -59,9 +64,17 @@ public class RecipeFragment extends Fragment {
                 int duration = 60;
                 for (DataSnapshot dates : dataSnapshot.getChildren()) {
                     date = dates.getKey();
+//                    if (date.compareTo(curDate) < 0) {
+//                        mealDatabase.child(date).setValue(null);
+//                        continue;
+//                    }
                     String dateText = Recipe.makeDateText(date);
                     //Boolean prev = false;
                     for (DataSnapshot meal : dates.getChildren()) {
+                        if (date.compareTo(curDate) < 0) {
+                            mealDatabase.child(date).setValue(null);
+                            //continue;
+                        }
                         title = meal.getKey();
                         time = "0:00-23:59pm";
                         if (meal.child("time").exists())
@@ -98,18 +111,24 @@ public class RecipeFragment extends Fragment {
                         if (meal.child("id").exists())
                             r.id = (long)meal.child("id").getValue();
                         //prev = true;
-                        mealList.add(r);
+                        if (date.compareTo(curDate) < 0) {
+                            rcAdapter.deleteIngreds(getContext(), r);
+                        } else {
+                            mealList.add(r);
+                        }
                     }
                 }
                 Collections.sort(mealList, new RecipesRecyclerViewAdapter.CustomComparator());
-                mealList.get(0).withPrev = false;
-                for (int i = 1; i < mealList.size(); i++) {
-                    Recipe cur = mealList.get(i);
-                    Recipe prev = mealList.get(i - 1);
-                    if (prev.date.equals(cur.date)) {
-                        cur.withPrev = true;
-                    } else {
-                        cur.withPrev = false;
+                if (mealList.size() > 0) {
+                    mealList.get(0).withPrev = false;
+                    for (int i = 1; i < mealList.size(); i++) {
+                        Recipe cur = mealList.get(i);
+                        Recipe prev = mealList.get(i - 1);
+                        if (prev.date.equals(cur.date)) {
+                            cur.withPrev = true;
+                        } else {
+                            cur.withPrev = false;
+                        }
                     }
                 }
                 rcAdapter.notifyDataSetChanged();

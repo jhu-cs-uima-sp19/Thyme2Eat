@@ -73,6 +73,7 @@ public class FavoritesRcViewAdapter extends RecyclerView.Adapter<FavoritesRcView
                 @Override
                 public void onClick(View v) {
                     final Calendar c = Calendar.getInstance();
+                    c.add(Calendar.DATE, 0);
                     int year = c.get(Calendar.YEAR);
                     int month = c.get(Calendar.MONTH);
                     int day = c.get(Calendar.DAY_OF_MONTH);
@@ -148,6 +149,7 @@ public class FavoritesRcViewAdapter extends RecyclerView.Adapter<FavoritesRcView
                                     timePickerDialog.show();
                                 }
                             }, year, month, day);
+                    datePickerDialog.getDatePicker().setMinDate(c.getTimeInMillis());
                     datePickerDialog.show();
                 }
             });
