@@ -9,13 +9,14 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.util.Pair;
 
 import java.util.ArrayList;
 
 
 public class MyShoppingListItemsRecyclerViewAdapter extends RecyclerView.Adapter<MyShoppingListItemsRecyclerViewAdapter.ViewHolder> {
 
-    public static ArrayList<String> checked;
+    public static ArrayList<String> checked = new ArrayList<>();
 
     public MyShoppingListItemsRecyclerViewAdapter() {
     }
@@ -24,7 +25,6 @@ public class MyShoppingListItemsRecyclerViewAdapter extends RecyclerView.Adapter
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Log.w("myApp", "at holder add");
-
         //final Button add;
         final View shopview = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_shoppinglistitems, parent, false);
@@ -54,19 +54,24 @@ public class MyShoppingListItemsRecyclerViewAdapter extends RecyclerView.Adapter
             super(view);
             mView = view;
             mContentView = (TextView) view.findViewById(R.id.contentitem);
-            checked = new ArrayList<>();
+
 
             check = (CheckBox) view.findViewById(R.id.checkList);
-            check.setChecked(false);
+
+
+
             check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
-                        String deleteKey = ShoppingListItemsFragment.stringShopList.get(getAdapterPosition());
+                        System.out.println(checked.toString());
+                        ShoppingListItemsFragment.stringShopList.get(getAdapterPosition()).isChecked = true;
+                        String deleteKey = ShoppingListItemsFragment.stringShopList.get(getAdapterPosition()).name;
                         deleteKey = deleteKey.substring(0, deleteKey.indexOf(':'));
                         checked.add(deleteKey);
                     } else {
-                        String deleteKey = ShoppingListItemsFragment.stringShopList.get(getAdapterPosition());
+                        ShoppingListItemsFragment.stringShopList.get(getAdapterPosition()).isChecked = false;
+                        String deleteKey = ShoppingListItemsFragment.stringShopList.get(getAdapterPosition()).name;
                         deleteKey = deleteKey.substring(0, deleteKey.indexOf(':'));
                         checked.remove(deleteKey);
                     }
@@ -78,7 +83,7 @@ public class MyShoppingListItemsRecyclerViewAdapter extends RecyclerView.Adapter
                 @Override
                 public void onClick(View v) {
                     if (getAdapterPosition() != -1) {
-                        String deleteKey = ShoppingListItemsFragment.stringShopList.get(getAdapterPosition());
+                        String deleteKey = ShoppingListItemsFragment.stringShopList.get(getAdapterPosition()).name;
                         deleteKey = deleteKey.substring(0, deleteKey.indexOf(':'));
                         MainActivity.mDatabase.child("shop").child(deleteKey).setValue(null);
                         ShoppingListItemsFragment.stringShopList.remove(getAdapterPosition());
@@ -93,10 +98,16 @@ public class MyShoppingListItemsRecyclerViewAdapter extends RecyclerView.Adapter
         }
 
         public void bindView(int position) {
-            String item = ShoppingListItemsFragment.stringShopList.get(position);
+            String item = ShoppingListItemsFragment.stringShopList.get(position).name;
             if (item != null) {
                 mContentView.setText(item.substring(0, 1).toUpperCase() + item.substring(1));
             }
+            if (getAdapterPosition()!= - 1 && ShoppingListItemsFragment.stringShopList.get(position).isChecked) {
+                check.setChecked(true);
+            } else {
+                check.setChecked(false);
+            }
+
         }
 
         @Override

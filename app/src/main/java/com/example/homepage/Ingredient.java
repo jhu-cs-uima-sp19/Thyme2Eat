@@ -97,4 +97,6 @@ public class Ingredient {
     //any other information that is needed for this ingredient
     public String[] metaInformation;
 
+    public boolean isChecked = false;
+
 }
