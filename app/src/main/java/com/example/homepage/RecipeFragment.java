@@ -54,6 +54,7 @@ public class RecipeFragment extends Fragment {
                 String image = "";
                 String title = "";
                 ArrayList<Ingredient> ingreds;
+                int duration = 60;
                 for (DataSnapshot dates : dataSnapshot.getChildren()) {
                     date = dates.getKey();
                     String dateText = Recipe.makeDateText(date);
@@ -78,10 +79,15 @@ public class RecipeFragment extends Fragment {
                                 }
                             }
                         }
-                        if (meal.child("image").exists())
+                        if (meal.child("image").exists()) {
                             image = meal.child("image").getValue().toString();
+                        }
 
-                        Recipe r = new Recipe(title, date, time, instruct, ingreds, image);
+                        if (meal.child("readyInMinutes").exists()) {
+                            duration = Integer.parseInt(meal.child("readyInMinutes").getValue().toString());
+                        }
+
+                        Recipe r = new Recipe(title, date, time, instruct, ingreds, image, duration);
                         if (meal.child("alts").exists()) {
                             r.hasAlts = true;
                         }

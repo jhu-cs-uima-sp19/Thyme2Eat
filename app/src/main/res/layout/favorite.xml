@@ -10,20 +10,26 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <CheckBox
-            android:id="@+id/alternate_choose"
-            android:layout_width="38dp"
-            android:layout_height="41dp"
-            android:layout_alignParentLeft="true"
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/addButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="27dp"
-            android:layout_marginTop="60dp"
-            android:scaleX="1.5"
-            android:scaleY="1.5"
-            android:text="    " />
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="53dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="40dp"
+            android:scaleX="0.75"
+            android:scaleY="0.75"
+            android:src="@drawable/add"
+            android:tint="@android:color/white"
+            app:backgroundTint="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <ImageView
-            android:id="@+id/altImage"
+            android:id="@+id/favImage"
             android:layout_width="260dp"
             android:layout_height="164dp"
             android:layout_marginLeft="80dp"
@@ -31,7 +37,7 @@
             app:srcCompat="@drawable/food" />
 
         <TextView
-            android:id="@+id/titleText"
+            android:id="@+id/favTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"

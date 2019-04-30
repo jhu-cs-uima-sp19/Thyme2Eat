@@ -48,12 +48,14 @@ public class ViewRecipe extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_recipe);
         ArrayList<Recipe> viewArray;
-        int index = getIntent().getIntExtra("index", 0);
-        boolean mealPlan = getIntent().getBooleanExtra("mealPlan", true);
-        if (mealPlan) {
+        int index = getIntent().getIntExtra("index", -1);
+        int arrayChoice = getIntent().getIntExtra("array", 0);
+        if (arrayChoice == 0) {
             viewArray = RecipeFragment.mealList;
-        } else {
+        } else if (arrayChoice == 1){
             viewArray = ChooseAlternative.alternativeList;
+        } else {
+            viewArray = Favorites.favoritesList;
         }
         instructions = viewArray.get(index).instructions;
         ingredients = viewArray.get(index).extendedIngredients;

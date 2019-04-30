@@ -58,7 +58,7 @@ public class Ingredient {
     }
 
     public Ingredient() {
-
+        this.unit = "";
     }
 
     public String toString() {

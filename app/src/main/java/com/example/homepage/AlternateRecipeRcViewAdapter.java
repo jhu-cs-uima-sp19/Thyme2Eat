@@ -1,8 +1,11 @@
 package com.example.homepage;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,8 +22,8 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class AlternateRecipeRcViewAdapter extends RecyclerView.Adapter<AlternateRecipeRcViewAdapter.ViewHolder> {
-    private ArrayList<Recipe> alternatives;
-    private int selected;
+    public static ArrayList<Recipe> alternatives;
+    public static int selected;
     private boolean onBind = true;
 
     public AlternateRecipeRcViewAdapter(ArrayList<Recipe> alts) {
@@ -69,15 +72,23 @@ public class AlternateRecipeRcViewAdapter extends RecyclerView.Adapter<Alternate
                             selected = -1;
                         }
                         AlternateRecipeRcViewAdapter.this.notifyDataSetChanged();
+                        if (selected == -1) {
+                            ChooseAlternative.swap.setEnabled(false);
+                            ChooseAlternative.swap.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
+                        } else {
+                            ChooseAlternative.swap.setEnabled(true);
+                            ChooseAlternative.swap.setBackgroundTintList(ColorStateList.valueOf(mView.getContext().getResources().getColor(R.color.colorPrimary)));
+                        }
                     }
                 }
             });
             image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Log.w("alternate ingreds", alternatives.get(getAdapterPosition()).extendedIngredients.toString());
                     Intent intent = new Intent(mView.getContext(), ViewRecipe.class);
                     intent.putExtra("index", getAdapterPosition());
-                    intent.putExtra("mealPlan", false);
+                    intent.putExtra("array", 1);
                     mView.getContext().startActivity(intent);
                 }
             });

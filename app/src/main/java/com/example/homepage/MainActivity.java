@@ -168,7 +168,8 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_search) {
 
         } else if (id == R.id.nav_favorite) {
-
+            Favorites favs = new Favorites();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, favs).commit();
         } else if (id == R.id.nav_settings) {
             transaction = getSupportFragmentManager().beginTransaction();
             if (navigation.getSelectedItemId() == R.id.meal_settings)

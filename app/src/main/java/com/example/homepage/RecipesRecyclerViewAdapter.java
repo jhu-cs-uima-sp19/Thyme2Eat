@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -84,6 +85,7 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                     Intent intent = new Intent(mView.getContext(), ChooseAlternative.class);
                     intent.putExtra("date", r.date);
                     intent.putExtra("name", r.title);
+                    intent.putExtra("pos", getAdapterPosition());
                     System.out.println(r.title);
                     System.out.println(r.date);
                     if (r.hasAlts) {
@@ -99,7 +101,7 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                 public void onClick(View v) {
                     Intent intent = new Intent(mView.getContext(), ViewRecipe.class);
                     intent.putExtra("index", getAdapterPosition());
-                    intent.putExtra("mealPlan", true);
+                    intent.putExtra("array", 0);
                     mView.getContext().startActivity(intent);
                 }
             });
@@ -120,38 +122,39 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                                         } else {
                                             r = RecipeFragment.mealList.get(getAdapterPosition());
                                         }
-                                        final DatabaseReference shop = MainActivity.mDatabase.child("shop");
+                                        //final DatabaseReference shop = MainActivity.mDatabase.child("shop");
                                         MainActivity.mDatabase.child("plan").child(r.getDate()).child(r.title).setValue(null);
                                         RecipeFragment.mealList.remove(getAdapterPosition());
-                                        shop.addListenerForSingleValueEvent(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(@NonNull DataSnapshot shopSnap) {
-                                                for (Ingredient i : r.extendedIngredients) {
-                                                    if (shopSnap.child(i.name).exists()) {
-                                                        DataSnapshot ingred = shopSnap.child(i.name);
-                                                        double subVal;
-                                                        if (!i.unit.equals(ingred.child("unit").getValue().toString())) {
-                                                            Spoonacular.convert = true;
-                                                            new Spoonacular(mView.getContext()).execute("convert", String.valueOf(i.amount), i.unit, ingred.child("unit").getValue().toString());
-                                                            subVal = convertedAmount;
-                                                        } else {
-                                                            subVal = i.amount;
-                                                        }
-                                                        double newAmount = Double.parseDouble(ingred.child("amount").getValue().toString()) - subVal;
-                                                        if (newAmount > 0) {
-                                                            shop.child(i.name).child("amount").setValue(newAmount);
-                                                        } else {
-                                                            shop.child(i.name).setValue(null);
-                                                        }
-                                                    }
-                                                }
-                                            }
-
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                            }
-                                        });
+                                        RecipesRecyclerViewAdapter.deleteIngreds(mView.getContext(), r);
+//                                        shop.addListenerForSingleValueEvent(new ValueEventListener() {
+//                                            @Override
+//                                            public void onDataChange(@NonNull DataSnapshot shopSnap) {
+//                                                for (Ingredient i : r.extendedIngredients) {
+//                                                    if (shopSnap.child(i.name).exists()) {
+//                                                        DataSnapshot ingred = shopSnap.child(i.name);
+//                                                        double subVal;
+//                                                        if (!i.unit.equals(ingred.child("unit").getValue().toString())) {
+//                                                            Spoonacular.convert = true;
+//                                                            new Spoonacular(mView.getContext()).execute("convert", String.valueOf(i.amount), i.unit, ingred.child("unit").getValue().toString());
+//                                                            subVal = convertedAmount;
+//                                                        } else {
+//                                                            subVal = i.amount;
+//                                                        }
+//                                                        double newAmount = Double.parseDouble(ingred.child("amount").getValue().toString()) - subVal;
+//                                                        if (newAmount > 0) {
+//                                                            shop.child(i.name).child("amount").setValue(newAmount);
+//                                                        } else {
+//                                                            shop.child(i.name).setValue(null);
+//                                                        }
+//                                                    }
+//                                                }
+//                                            }
+//
+//                                            @Override
+//                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                                            }
+//                                        });
                                         RecipesRecyclerViewAdapter.this.notifyItemRemoved(getAdapterPosition());
                                         dialog.cancel();
                                     }
@@ -303,5 +306,39 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
         } else {
             return "pm";
         }
+    }
+
+    public static void deleteIngreds(final Context context, final Recipe r) {
+        Log.w("delete", r.extendedIngredients.toString());
+        final DatabaseReference shop = MainActivity.mDatabase.child("shop");
+        shop.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot shopSnap) {
+                for (Ingredient i : r.extendedIngredients) {
+                    if (shopSnap.child(i.name).exists()) {
+                        DataSnapshot ingred = shopSnap.child(i.name);
+                        double subVal;
+                        if (!i.unit.equals(ingred.child("unit").getValue().toString())) {
+                            Spoonacular.skip = true;
+                            new Spoonacular(context).execute("convert", String.valueOf(i.amount), i.unit, ingred.child("unit").getValue().toString());
+                            subVal = convertedAmount;
+                        } else {
+                            subVal = i.amount;
+                        }
+                        double newAmount = Double.parseDouble(ingred.child("amount").getValue().toString()) - subVal;
+                        if (newAmount > 0) {
+                            shop.child(i.name).child("amount").setValue(newAmount);
+                        } else {
+                            shop.child(i.name).setValue(null);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }

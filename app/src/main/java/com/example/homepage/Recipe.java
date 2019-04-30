@@ -3,6 +3,7 @@ package com.example.homepage;
 import android.graphics.Bitmap;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -21,13 +22,14 @@ import java.util.HashMap;
 public class Recipe {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public Recipe (String title, String date, String time, String instruct, ArrayList<Ingredient> ingreds, String image) {
+    public Recipe (String title, String date, String time, String instruct, ArrayList<Ingredient> ingreds, String image, int duration) {
         this.title = title;
         this.date = date;
         this.time = time;
         this.instructions = instruct;
         this.extendedIngredients = ingreds;
         this.image = image;
+        this.readyInMinutes = duration;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -122,5 +124,53 @@ public class Recipe {
         }
         dateText = convertedDate.toString().substring(0, 11);
         return dateText;
+    }
+
+    public static void readMeals(DatabaseReference db, final ArrayList<Recipe> meals, final RecipesRecyclerViewAdapter rcAdapter, final String date) {
+        db.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String altDate = date;
+                String time = "";
+                String instruct = "";
+                String image = "";
+                String title = "";
+                ArrayList<Ingredient> ingreds;
+                int duration = 60;
+                for (DataSnapshot meal : dataSnapshot.getChildren()) {
+                    ingreds = new ArrayList<>();
+                    title = meal.getKey();
+                    time = "0:00-23:59pm";
+                    if (meal.child("time").exists())
+                        time = meal.child("time").getValue().toString();
+                    instruct = "Insert Instructions Here";
+                    if (meal.child("instructions").exists())
+                        instruct = meal.child("instructions").getValue().toString();
+                    if (meal.child("ingredients").exists()) {
+                        for (DataSnapshot ingred : meal.child("ingredients").getChildren()) {
+                            if (ingred.child("amount").exists() && ingred.child("unit").exists()) {
+                                Ingredient i = new Ingredient(ingred.getKey(),
+                                        Double.parseDouble(ingred.child("amount").getValue().toString()),
+                                        ingred.child("unit").getValue().toString());
+                                ingreds.add(i);
+                            }
+                        }
+                    }
+                    if (meal.child("readyInMinutes").exists()) {
+                        duration = Integer.parseInt(meal.child("readyInMinutes").getValue().toString());
+                    }
+                    if (meal.child("image").exists())
+                        image = meal.child("image").getValue().toString();
+                    Recipe r = new Recipe(title, altDate, time, instruct, ingreds, image, duration);
+                    meals.add(r);
+                }
+                rcAdapter.notifyDataSetChanged();;
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }
