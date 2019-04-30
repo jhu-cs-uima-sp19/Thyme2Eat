@@ -221,17 +221,13 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                                             public void onTimeSet(TimePicker view, int hour,
                                                                   int min) {
                                                 String amPm = amOrpm(hour);
-                                                if (amPm.equals("pm")) {
-                                                    hour = hour - 12;
-                                                }
-
                                                 r.time = f.format(hour) + ":" + f.format(min) + r.time.substring(r.time.indexOf('-'));
                                                 MainActivity.mDatabase.child("plan").child(r.date).child(r.title).child("time").setValue(r.time);
                                                 fromText.setText("From: " + r.time.substring(0, r.time.indexOf('-')));
                                                 RecipesRecyclerViewAdapter.this.notifyDataSetChanged();
                                                 Collections.sort(RecipeFragment.mealList, new CustomComparator());
                                             }
-                                        }, hour, min, false);
+                                        }, hour, min, true);
                                 timePickerDialog.show();
                                     }
                                 });
@@ -245,17 +241,13 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                                                     public void onTimeSet(TimePicker view, int hour,
                                                                           int min) {
                                                         String amPm = amOrpm(hour);
-                                                        if (amPm.equals("pm")) {
-                                                            hour = hour - 12;
-                                                        }
-
-                                                        r.time = r.time.substring(0, r.time.indexOf('-') + 1) + hour + ":" + f.format(min) + amPm;
+                                                        r.time = r.time.substring(0, r.time.indexOf('-') + 1) + hour + ":" + f.format(min);
                                                         MainActivity.mDatabase.child("plan").child(r.date).child(r.title).child("time").setValue(r.time);
                                                         toText.setText("To: " + r.time.substring(r.time.indexOf('-') + 1));
                                                         RecipesRecyclerViewAdapter.this.notifyDataSetChanged();
                                                         Collections.sort(RecipeFragment.mealList, new CustomComparator());
                                                     }
-                                                }, hour, min, false);
+                                                }, hour, min, true);
                                         timePickerDialog.show();
                                     }
                                 });

@@ -1,12 +1,15 @@
 package com.example.homepage;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 
 import java.util.ArrayList;
 
@@ -47,9 +50,11 @@ public class ViewRecipe extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_recipe);
+        Toolbar mToolbar = findViewById(R.id.toolbar);
+
         ArrayList<Recipe> viewArray;
-        int index = getIntent().getIntExtra("index", -1);
-        int arrayChoice = getIntent().getIntExtra("array", 0);
+        final int index = getIntent().getIntExtra("index", -1);
+        final int arrayChoice = getIntent().getIntExtra("array", 0);
         if (arrayChoice == 0) {
             viewArray = RecipeFragment.mealList;
         } else if (arrayChoice == 1){
@@ -72,8 +77,6 @@ public class ViewRecipe extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
-
         finish();
     }
 

@@ -89,7 +89,7 @@ public class SettingsFragment extends Fragment {
         include = view.findViewById(R.id.editInclusions);
         dependents = view.findViewById(R.id.editDependents);
         btnDS = view.findViewById(R.id.btnDS);
-        btnDS.setTextColor(Color.parseColor("gray"));
+        btnDS.setTextColor(Color.parseColor("black"));
         btnDS2 = view.findViewById(R.id.btnDS2);
         btnDS2.setTextColor(Color.parseColor("gray"));
         btnDS3 = view.findViewById(R.id.btnDS3);
@@ -192,8 +192,14 @@ public class SettingsFragment extends Fragment {
                     DSpressed = true;
                 }
                 else {
-                    btnDS.setTextColor(Color.GRAY);
-                    DSpressed = false;
+                    btnDS2.setTextColor(Color.GRAY);
+                    DS2pressed = false;
+                    btnDS3.setTextColor(Color.GRAY);
+                    DS3pressed = false;
+                    btnDS4.setTextColor(Color.GRAY);
+                    DS4pressed = false;
+                    btnDS5.setTextColor(Color.GRAY);
+                    DS5pressed = false;
                 }
             }
         });
@@ -202,12 +208,18 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(DS2pressed == false) {
+                    btnDS.setTextColor(Color.BLACK);
+                    DSpressed = true;
                     btnDS2.setTextColor(Color.BLACK);
                     DS2pressed = true;
                 }
                 else {
-                    btnDS2.setTextColor(Color.GRAY);
-                    DS2pressed = false;
+                    btnDS3.setTextColor(Color.GRAY);
+                    DS3pressed = false;
+                    btnDS4.setTextColor(Color.GRAY);
+                    DS4pressed = false;
+                    btnDS5.setTextColor(Color.GRAY);
+                    DS5pressed = false;
                 }
             }
         });
@@ -216,12 +228,18 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(DS3pressed == false) {
+                    btnDS.setTextColor(Color.BLACK);
+                    DSpressed = true;
+                    btnDS2.setTextColor(Color.BLACK);
+                    DS2pressed = true;
                     btnDS3.setTextColor(Color.BLACK);
                     DS3pressed = true;
                 }
                 else {
-                    btnDS3.setTextColor(Color.GRAY);
-                    DS3pressed = false;
+                    btnDS4.setTextColor(Color.GRAY);
+                    DS4pressed = false;
+                    btnDS5.setTextColor(Color.GRAY);
+                    DS5pressed = false;
                 }
             }
         });
@@ -230,12 +248,18 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(DS4pressed == false) {
+                    btnDS.setTextColor(Color.BLACK);
+                    DSpressed = true;
+                    btnDS2.setTextColor(Color.BLACK);
+                    DS2pressed = true;
+                    btnDS3.setTextColor(Color.BLACK);
+                    DS3pressed = true;
                     btnDS4.setTextColor(Color.BLACK);
                     DS4pressed = true;
                 }
                 else {
-                    btnDS4.setTextColor(Color.GRAY);
-                    DS4pressed = false;
+                    btnDS5.setTextColor(Color.GRAY);
+                    DS5pressed = false;
                 }
             }
         });
@@ -244,12 +268,16 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(DS5pressed == false) {
+                    btnDS.setTextColor(Color.BLACK);
+                    DSpressed = true;
+                    btnDS2.setTextColor(Color.BLACK);
+                    DS2pressed = true;
+                    btnDS3.setTextColor(Color.BLACK);
+                    DS3pressed = true;
+                    btnDS4.setTextColor(Color.BLACK);
+                    DS4pressed = true;
                     btnDS5.setTextColor(Color.BLACK);
                     DS5pressed = true;
-                }
-                else {
-                    btnDS5.setTextColor(Color.GRAY);
-                    DS5pressed = false;
                 }
             }
         });
