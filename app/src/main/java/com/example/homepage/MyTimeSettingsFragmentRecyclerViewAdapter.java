@@ -67,7 +67,7 @@ public class MyTimeSettingsFragmentRecyclerViewAdapter extends RecyclerView.Adap
                                 final int hour = c.get(Calendar.HOUR_OF_DAY);
                                 final int min = c.get(Calendar.MINUTE);
                                 Dialog dialog = new Dialog(mView.getContext());
-                                dialog.setContentView(R.layout.edit_time);
+                                dialog.setContentView(R.layout.edit_meal_time);
                                 final MealTime r = TimeSettingsFragment.mealTimes.get(getAdapterPosition());
                                 final TextView fromText = (TextView) dialog.findViewById(R.id.fromText);
                                 fromText.setText("From: " + start);
