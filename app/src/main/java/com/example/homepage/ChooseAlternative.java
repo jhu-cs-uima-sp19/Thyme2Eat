@@ -47,6 +47,7 @@ public class ChooseAlternative extends AppCompatActivity {
         alts.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                long id = 0;
                 String altDate = date;
                 String time = "";
                 String instruct = "";
@@ -58,6 +59,10 @@ public class ChooseAlternative extends AppCompatActivity {
                     ingreds = new ArrayList<>();
                     title = meal.getKey();
                     time = "0:00-23:59pm";
+                    if (meal.child("id").exists()) {
+                        id = Integer.parseInt(meal.child("id").getValue().toString());
+                    }
+
                     if (meal.child("time").exists())
                         time = meal.child("time").getValue().toString();
                     instruct = "Insert Instructions Here";
@@ -78,7 +83,8 @@ public class ChooseAlternative extends AppCompatActivity {
                     }
                     if (meal.child("image").exists())
                         image = meal.child("image").getValue().toString();
-                    Recipe r = new Recipe(title, altDate, time, instruct, ingreds, image, duration);
+                    Recipe r = new Recipe(id, title, altDate, time, instruct, ingreds, image, duration);
+                    r.parentName = oldName;
                     alternativeList.add(r);
                 }
                 rcAdapter.notifyDataSetChanged();;

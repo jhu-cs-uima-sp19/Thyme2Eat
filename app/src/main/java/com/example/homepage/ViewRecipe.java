@@ -6,12 +6,19 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -24,6 +31,10 @@ public class ViewRecipe extends AppCompatActivity {
     public static String instructions;
     public static ArrayList<Ingredient> ingredients;
     public static String imageUrl;
+    public static Recipe r;
+    public static int arrayChoice;
+
+    public static boolean fav;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -57,7 +68,7 @@ public class ViewRecipe extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(false);
         ArrayList<Recipe> viewArray;
         final int index = getIntent().getIntExtra("index", -1);
-        final int arrayChoice = getIntent().getIntExtra("array", 0);
+        arrayChoice = getIntent().getIntExtra("array", 0);
         if (arrayChoice == 0) {
             viewArray = RecipeFragment.mealList;
         } else if (arrayChoice == 1){
@@ -65,6 +76,33 @@ public class ViewRecipe extends AppCompatActivity {
         } else {
             viewArray = Favorites.favoritesList;
         }
+        r = viewArray.get(index);
+
+        DatabaseReference favs = MainActivity.mDatabase.child("favs");
+        favs.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot favRecipes) {
+                boolean found = false;
+                for (DataSnapshot fav : favRecipes.getChildren()) {
+                    if (r.id == Integer.parseInt(fav.child("id").getValue().toString())) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (found) {
+                    fav = true;
+                } else {
+                    fav = false;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
         instructions = viewArray.get(index).instructions;
         ingredients = viewArray.get(index).extendedIngredients;
         imageUrl = viewArray.get(index).image;
@@ -98,4 +136,31 @@ public class ViewRecipe extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.w("closing", "view recipe");
+        final DatabaseReference db = MainActivity.mDatabase;
+        if (fav && arrayChoice != 2) {
+            Log.w("closing", "here");
+            db.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (arrayChoice == 0) {
+                        db.child("favs").child(r.title).setValue(dataSnapshot.child("plan").child(r.date).child(r.title).getValue());
+                    } else if (arrayChoice == 1) {
+                        db.child("favs").child(r.title).setValue(dataSnapshot.child("plan").child(r.date).child(r.parentName).child("alts").child(r.title).getValue());
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+        if (!fav) {
+            db.child("favs").child(r.title).setValue(null);
+        }
+    }
 }

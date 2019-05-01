@@ -22,7 +22,8 @@ import java.util.HashMap;
 public class Recipe {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public Recipe (String title, String date, String time, String instruct, ArrayList<Ingredient> ingreds, String image, int duration) {
+    public Recipe (long id, String title, String date, String time, String instruct, ArrayList<Ingredient> ingreds, String image, int duration) {
+        this.id = id;
         this.title = title;
         this.date = date;
         this.time = time;
@@ -95,6 +96,8 @@ public class Recipe {
     //number of servings (useful to determine if there will be leftovers)
     public int servings;
 
+    public String parentName;
+
     //list of all ingredients present in the recipe
     public ArrayList<Ingredient> extendedIngredients;
 
@@ -130,6 +133,7 @@ public class Recipe {
         db.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                long id = 0;
                 String altDate = date;
                 String time = "";
                 String instruct = "";
@@ -141,6 +145,9 @@ public class Recipe {
                     ingreds = new ArrayList<>();
                     title = meal.getKey();
                     time = "0:00-23:59pm";
+                    if (meal.child("id").exists()) {
+                        id = Integer.parseInt(meal.child("id").getValue().toString());
+                    }
                     if (meal.child("time").exists())
                         time = meal.child("time").getValue().toString();
                     instruct = "Insert Instructions Here";
@@ -161,7 +168,7 @@ public class Recipe {
                     }
                     if (meal.child("image").exists())
                         image = meal.child("image").getValue().toString();
-                    Recipe r = new Recipe(title, altDate, time, instruct, ingreds, image, duration);
+                    Recipe r = new Recipe(id, title, altDate, time, instruct, ingreds, image, duration);
                     meals.add(r);
                 }
                 rcAdapter.notifyDataSetChanged();;

@@ -55,6 +55,7 @@ public class RecipeFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 mealList = new ArrayList<Recipe>();
                 Log.w("data", "in snap");
+                long id = 0;
                 String date;
                 String time;
                 String instruct;
@@ -77,6 +78,9 @@ public class RecipeFragment extends Fragment {
                         }
                         title = meal.getKey();
                         time = "0:00-23:59pm";
+                        if (meal.child("id").exists()) {
+                            id = Integer.parseInt(meal.child("id").getValue().toString());
+                        }
                         if (meal.child("time").exists())
                             time = meal.child("time").getValue().toString();
                         Log.w("myApp", time + dateText);
@@ -102,7 +106,7 @@ public class RecipeFragment extends Fragment {
                             duration = Integer.parseInt(meal.child("readyInMinutes").getValue().toString());
                         }
 
-                        Recipe r = new Recipe(title, date, time, instruct, ingreds, image, duration);
+                        Recipe r = new Recipe(id, title, date, time, instruct, ingreds, image, duration);
                         if (meal.child("alts").exists()) {
                             r.hasAlts = true;
                         }

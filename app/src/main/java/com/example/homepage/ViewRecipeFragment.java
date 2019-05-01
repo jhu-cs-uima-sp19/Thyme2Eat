@@ -3,7 +3,10 @@ package com.example.homepage;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +15,7 @@ import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
@@ -31,6 +35,7 @@ public class ViewRecipeFragment extends Fragment {
     private Bitmap image;
     private ImageView imageView;
     private TextView title;
+    private FloatingActionButton favButton;
 
     public ViewRecipeFragment() {
         // Required empty public constructor
@@ -79,6 +84,26 @@ public class ViewRecipeFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_view_recipe, container, false);
         imageView = view.findViewById(R.id.recipeImage);
+        favButton = (FloatingActionButton) view.findViewById(R.id.fav_button);
+        final Recipe r = ViewRecipe.r;
+        if (ViewRecipe.fav) {
+            favButton.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.favd_star));
+        } else {
+            favButton.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.star));
+        }
+        favButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ViewRecipe.fav) {
+                    favButton.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.star));
+                    ViewRecipe.fav = false;
+                } else {
+                    favButton.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.favd_star));
+                    ViewRecipe.fav = true;
+                }
+            }
+        });
+
         title = view.findViewById(R.id.recipeTitle);
         title.setText(ViewRecipe.title);
         File file = new File(getContext().getCacheDir(), ViewRecipe.imageUrl.substring(ViewRecipe.imageUrl.lastIndexOf('/') + 1));

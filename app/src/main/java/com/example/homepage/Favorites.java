@@ -43,6 +43,7 @@ public class Favorites extends Fragment {
         favs.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                long id = 0;
                 String date = "";
                 String time = "";
                 String instruct = "";
@@ -54,6 +55,9 @@ public class Favorites extends Fragment {
                     ingreds = new ArrayList<>();
                     title = meal.getKey();
                     time = "0:00-23:59pm";
+                    if (meal.child("id").exists()) {
+                        id = Integer.parseInt(meal.child("id").getValue().toString());
+                    }
                     if (meal.child("time").exists())
                         time = meal.child("time").getValue().toString();
                     instruct = "Insert Instructions Here";
@@ -74,7 +78,7 @@ public class Favorites extends Fragment {
                     }
                     if (meal.child("image").exists())
                         image = meal.child("image").getValue().toString();
-                    Recipe r = new Recipe(title, date, time, instruct, ingreds, image, duration);
+                    Recipe r = new Recipe(id, title, date, time, instruct, ingreds, image, duration);
                     favoritesList.add(r);
                 }
                 rcAdapter.notifyDataSetChanged();;
