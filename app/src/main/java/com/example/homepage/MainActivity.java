@@ -154,8 +154,6 @@ public class MainActivity extends AppCompatActivity
             navigation.setVisibility(View.INVISIBLE);
             transaction.commit();
 
-        } else if (id == R.id.nav_search) {
-
         } else if (id == R.id.nav_favorite) {
             buttonPanel = findViewById(R.id.buttonPanel);
             buttonPanel.setVisibility(View.INVISIBLE);

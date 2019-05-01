@@ -61,9 +61,9 @@ public class Ingredient {
             amount = new Fraction(Double.valueOf(this.amount)).toString();
         else
             amount = String.valueOf(Math.round(Double.valueOf(this.amount)));
-        if (amount.equals("33/100"))
+        if (amount.equals("333/1000") || amount.equals("33/100"))
             amount = "1/3";
-        else if (amount.equals("66/100"))
+        else if (amount.equals("666/1000") || amount.equals("66/100"))
             amount = "2/3";
         return "\u2022 " + amount + " " + this.unit + " " + this.name + "\n\n";
     }
