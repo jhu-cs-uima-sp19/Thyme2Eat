@@ -65,13 +65,13 @@ public class MyShoppingListItemsRecyclerViewAdapter extends RecyclerView.Adapter
                     if (isChecked) {
                         System.out.println(checked.toString());
                         ShoppingListItemsFragment.stringShopList.get(getAdapterPosition()).isChecked = true;
-                        String deleteKey = ShoppingListItemsFragment.stringShopList.get(getAdapterPosition()).name;
-                        deleteKey = deleteKey.substring(0, deleteKey.indexOf(':'));
+                        String deleteKey = ShoppingListItemsFragment.stringShopList.get(getAdapterPosition()).key;
+                        //deleteKey = deleteKey.substring(0, deleteKey.indexOf(':'));
                         checked.add(deleteKey);
                     } else {
                         ShoppingListItemsFragment.stringShopList.get(getAdapterPosition()).isChecked = false;
-                        String deleteKey = ShoppingListItemsFragment.stringShopList.get(getAdapterPosition()).name;
-                        deleteKey = deleteKey.substring(0, deleteKey.indexOf(':'));
+                        String deleteKey = ShoppingListItemsFragment.stringShopList.get(getAdapterPosition()).key;
+                        //deleteKey = deleteKey.substring(0, deleteKey.indexOf(':'));
                         checked.remove(deleteKey);
                     }
                 }
@@ -82,8 +82,8 @@ public class MyShoppingListItemsRecyclerViewAdapter extends RecyclerView.Adapter
                 @Override
                 public void onClick(View v) {
                     if (getAdapterPosition() != -1) {
-                        String deleteKey = ShoppingListItemsFragment.stringShopList.get(getAdapterPosition()).name;
-                        deleteKey = deleteKey.substring(0, deleteKey.indexOf(':'));
+                        String deleteKey = ShoppingListItemsFragment.stringShopList.get(getAdapterPosition()).key;
+                        //deleteKey = deleteKey.substring(0, deleteKey.indexOf(':'));
                         MainActivity.mDatabase.child("shop").child(deleteKey).setValue(null);
                         ShoppingListItemsFragment.stringShopList.remove(getAdapterPosition());
                         MyShoppingListItemsRecyclerViewAdapter.this.notifyItemRemoved(getAdapterPosition());

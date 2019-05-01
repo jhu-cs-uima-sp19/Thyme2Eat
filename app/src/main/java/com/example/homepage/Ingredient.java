@@ -71,6 +71,8 @@ public class Ingredient {
     //ingredient id (may be useful for something but for now not used)
     public int id;
 
+    public String key;
+
     //ingredient name
     public String name;
 

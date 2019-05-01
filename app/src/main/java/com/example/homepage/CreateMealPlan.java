@@ -38,7 +38,7 @@ public class CreateMealPlan extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_meal_plan);
-
+        setTitle("Create Meal Plan");
         calendar = (CompactCalendarView) findViewById(R.id.compactcalendar_view);
         calendar.setUseThreeLetterAbbreviation(true);
         confirmBtn = (Button) findViewById(R.id.confirmBtn);

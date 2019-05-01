@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/shopListLayout"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
@@ -16,47 +16,23 @@
         android:textColor="@color/colorPrimary"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/shoppingListID"
-        app:layout_constraintHorizontal_bias="0.148"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.179" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/addShopItemButton"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:background="@drawable/ic_add_circle_outline_black_24dp"
-        android:backgroundTint="#E15509"
-        android:padding="8dp"
-        android:textColorHighlight="#E15509"
-        android:textColorHint="#E15509"
-        android:textColorLink="@color/colorPrimary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.849"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/shoppingListID" />
-
-    <Button
-        android:id="@+id/deleteCheckedButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="Delete"
-        android:backgroundTint="#E15509"
-        android:textColor="@color/white"
-        android:clickable="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/addShopItemButton"
-        app:layout_constraintHorizontal_bias="0.268"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/shoppingListID"
-        app:layout_constraintVertical_bias="0.48" />
+    <!--<Button-->
+        <!--android:id="@+id/addShopItemButton"-->
+        <!--android:layout_width="60dp"-->
+        <!--android:layout_height="60dp"-->
+        <!--android:layout_marginEnd="28dp"-->
+        <!--android:layout_marginBottom="28dp"-->
+        <!--android:background="@drawable/ic_add_circle_outline_black_24dp"-->
+        <!--android:backgroundTint="#E15509"-->
+        <!--android:padding="8dp"-->
+        <!--android:textColorHighlight="#E15509"-->
+        <!--android:textColorHint="#E15509"-->
+        <!--android:textColorLink="@color/colorPrimary"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintEnd_toEndOf="parent" />-->
 
     <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -64,17 +40,47 @@
         android:id="@+id/shoppingListID"
         android:name="com.example.homepage.ShoppingListItemsFragment"
         android:layout_width="wrap_content"
-        android:layout_height="397dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="8dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="128dp"
+        android:layout_marginBottom="100dp"
         app:layoutManager="LinearLayoutManager"
-        app:layout_constraintBottom_toTopOf="@+id/addShopItemButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/thisWeeksList"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintTop_toTopOf="parent"
         tools:context=".ShoppingListItemsFragment"
         tools:listitem="@layout/fragment_shoppinglistitems" />
 
-</android.support.constraint.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="0dp">
+
+        <Button
+            android:id="@+id/deleteCheckedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:backgroundTint="#E15509"
+            android:clickable="true"
+            android:text="Delete"
+            android:textColor="@color/white" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/addShopItemButton"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/thisWeeksList"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="220dp"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/add"
+            android:tint="@android:color/white"
+            app:backgroundTint="@color/colorPrimary" />
+    </LinearLayout>
+</RelativeLayout>

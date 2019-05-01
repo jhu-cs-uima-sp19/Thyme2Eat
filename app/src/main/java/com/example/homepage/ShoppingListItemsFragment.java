@@ -3,6 +3,7 @@ package com.example.homepage;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
@@ -41,7 +42,7 @@ public class ShoppingListItemsFragment extends Fragment {
     public static ArrayList<Ingredient> stringShopList;
     final MyShoppingListItemsRecyclerViewAdapter rcshopAdapter = new MyShoppingListItemsRecyclerViewAdapter();
     private OnListFragmentInteractionListener mListener;
-    private Button add;
+    private FloatingActionButton add;
     private Button del;
     public static ArrayList<String> haveBeenDel = new ArrayList<>();
 
@@ -89,11 +90,15 @@ public class ShoppingListItemsFragment extends Fragment {
 
                 for (DataSnapshot items : dataSnapshot.getChildren()) {
                     name = items.getKey();
+                    if (name.indexOf(':') != -1) {
+                        name = name.substring(0, name.indexOf(':') - 1);
+                    }
                     num = Double.valueOf(items.child("amount").getValue().toString());
                     if (items.child("unit").exists())
                         theunit = items.child("unit").getValue().toString();
                     wholeitem = name + ": " + num + " " + theunit;
                     Ingredient i = new Ingredient(wholeitem, num, theunit);
+                    i.key = items.getKey();
                     stringShopList.add(i);
                 }
                 rcshopAdapter.notifyDataSetChanged();
@@ -118,7 +123,7 @@ public class ShoppingListItemsFragment extends Fragment {
         DatabaseReference shopDatabase = MainActivity.mDatabase.child("shop");
         getShopDatabase(shopDatabase);
 
-        add = (Button) shopview.findViewById(R.id.addShopItemButton);
+        add = (FloatingActionButton) shopview.findViewById(R.id.addShopItemButton);
         if (add == null) {
             Log.w("add is", "null");
         }

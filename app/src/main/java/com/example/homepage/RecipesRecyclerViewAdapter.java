@@ -357,12 +357,12 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                         double subVal;
                         String ingredientUnit = ingred.child("unit").getValue().toString();
                         if (!i.unit.equals(ingredientUnit) || !i.unit.contains(ingredientUnit) || !ingredientUnit.contains(i.unit)){
-                            if (shopSnap.child(i.name + " " + i.unit).exists()) {
-                                ingred = shopSnap.child(i.name + " " + i.unit);
+                            if (shopSnap.child(i.name + " :" + i.unit).exists()) {
+                                ingred = shopSnap.child(i.name + " :" + i.unit);
                                 subVal = i.amount;
                             } else {
                                 Spoonacular.skip = true;
-                                new Spoonacular(context).execute("convert", String.valueOf(i.amount), i.unit, ingred.child("unit").getValue().toString());
+                                new Spoonacular(context).execute("convert", String.valueOf(i.amount), i.unit, ingred.child("unit").getValue().toString(), i.name);
                                 subVal = convertedAmount;
                             }
                         } else {
@@ -374,13 +374,13 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                         } else {
                             shop.child(i.name).setValue(null);
                         }
-                    } else if(shopSnap.child(i.name + " " + i.unit).exists()) {
-                        DataSnapshot ingred = shopSnap.child(i.name + " " + i.unit);
+                    } else if(shopSnap.child(i.name + " :" + i.unit).exists()) {
+                        DataSnapshot ingred = shopSnap.child(i.name + " :" + i.unit);
                         double newAmount = Double.parseDouble(ingred.child("amount").getValue().toString()) - i.amount;
                         if (newAmount > 0)
-                            shop.child(i.name + " " + i.unit).child("amount").setValue(newAmount);
+                            shop.child(i.name + " :" + i.unit).child("amount").setValue(newAmount);
                         else
-                            shop.child(i.name + " " + i.unit).setValue(null);
+                            shop.child(i.name + " :" + i.unit).setValue(null);
                     }
                 }
             }

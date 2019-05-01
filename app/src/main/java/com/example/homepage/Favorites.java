@@ -34,7 +34,9 @@ public class Favorites extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.favorites_list, container, false);
-        favoritesList = new ArrayList<Recipe>();
+        if (favoritesList == null) {
+            favoritesList = new ArrayList<Recipe>();
+        }
         final FavoritesRcViewAdapter rcAdapter = new FavoritesRcViewAdapter(favoritesList);
         RecyclerView rcView = (RecyclerView) view.findViewById(R.id.favsList);
         rcView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -43,6 +45,7 @@ public class Favorites extends Fragment {
         favs.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                favoritesList = new ArrayList<>();
                 long id = 0;
                 String date = "";
                 String time = "";

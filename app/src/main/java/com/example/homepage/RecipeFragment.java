@@ -84,7 +84,6 @@ public class RecipeFragment extends Fragment {
                         }
                         if (meal.child("time").exists())
                             time = meal.child("time").getValue().toString();
-                        Log.w("myApp", time + dateText);
                         instruct = "Insert Instructions Here";
                         if (meal.child("instructions").exists())
                             instruct = meal.child("instructions").getValue().toString();

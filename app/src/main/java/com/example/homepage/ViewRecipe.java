@@ -33,6 +33,7 @@ public class ViewRecipe extends AppCompatActivity {
     public static String imageUrl;
     public static Recipe r;
     public static int arrayChoice;
+    public int index;
 
     public static boolean fav;
 
@@ -67,7 +68,7 @@ public class ViewRecipe extends AppCompatActivity {
         actionBar.setDisplayUseLogoEnabled(false);
         actionBar.setDisplayHomeAsUpEnabled(false);
         ArrayList<Recipe> viewArray;
-        final int index = getIntent().getIntExtra("index", -1);
+        index = getIntent().getIntExtra("index", -1);
         arrayChoice = getIntent().getIntExtra("array", 0);
         if (arrayChoice == 0) {
             viewArray = RecipeFragment.mealList;
@@ -161,6 +162,9 @@ public class ViewRecipe extends AppCompatActivity {
         }
         if (!fav) {
             db.child("favs").child(r.title).setValue(null);
+            if (arrayChoice == 2) {
+                FavoritesRcViewAdapter.favorites.remove(index);
+            }
         }
     }
 }
