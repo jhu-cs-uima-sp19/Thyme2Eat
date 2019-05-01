@@ -29,6 +29,7 @@ public class RecipeFragment extends Fragment {
     final RecipesRecyclerViewAdapter rcAdapter = new RecipesRecyclerViewAdapter();
 
     public RecipeFragment() {
+
     }
 
     @Override

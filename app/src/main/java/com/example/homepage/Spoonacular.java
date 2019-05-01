@@ -260,7 +260,10 @@ public class Spoonacular extends AsyncTask <String, String, String> {
             i.amount = Double.parseDouble(args[1]);
             i.unit = args[2];
             try {
-                RecipesRecyclerViewAdapter.convertedAmount = convertUnit(i, args[3]).amount;
+                Double temp = convertUnit(i, args[3]).amount;
+                if (temp == i.amount) {
+                    RecipesRecyclerViewAdapter.convertedAmount = 0;
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -390,13 +393,19 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                             double existingVal = Double.parseDouble(dataSnapshot.child(ingredient.name).child("amount").getValue().toString());
                             String dbUnit = dataSnapshot.child(ingredient.name).child("unit").toString();
                             double addVal;
-                            if (ingredient.unit.equals(dbUnit)) {
+                            if (ingredient.unit.equals(dbUnit) || ingredient.unit.contains(dbUnit) || dbUnit.contains(ingredient.unit)) {
                                 shopDatabase.child(ingredient.name).child("amount").setValue(existingVal + ingredient.amount);
                             } else {
                                 Spoonacular.skip = true;
                                 new Spoonacular(Spoonacular.this.c).execute("convert", String.valueOf(ingredient.amount), ingredient.unit, dbUnit);
                                 addVal = RecipesRecyclerViewAdapter.convertedAmount;
-                                shopDatabase.child(ingredient.name).child("amount").setValue(existingVal + addVal);
+                                if (addVal != 0)
+                                    shopDatabase.child(ingredient.name).child("amount").setValue(existingVal + addVal);
+                                else {
+                                    ingredient.name += " " + ingredient.unit;
+                                    shopDatabase.child(ingredient.name).child("amount").setValue(ingredient.amount);
+                                    shopDatabase.child(ingredient.name).child("unit").setValue(ingredient.unit);
+                                }
                                 //shopDatabase.child(ingredient.name).child("unit").setValue("oz");
                             }
 //                            shopDatabase.child(ingredient.name).child("amount").setValue(ing.amount);
@@ -652,10 +661,17 @@ public class Spoonacular extends AsyncTask <String, String, String> {
             // Writing exception to log
             e.printStackTrace();
         }
-        JSONObject jsonObj = new JSONObject(json.toString());
+        JSONObject jsonObj = null;
+        jsonObj = new JSONObject(json.toString());
         Log.w("prev", ingredient.amount + "," + ingredient.unit);
         ingredient.unit = target;
-        ingredient.amount = Double.valueOf(jsonObj.get("targetAmount").toString());
+        try {
+            ingredient.amount = Double.valueOf(jsonObj.get("targetAmount").toString());
+        } catch (JSONException e) {
+            ingredient.name += " " + ingredient.unit;
+
+            e.printStackTrace();
+        }
         Log.w("new", ingredient.amount + "," + ingredient.unit);
         return ingredient;
     }

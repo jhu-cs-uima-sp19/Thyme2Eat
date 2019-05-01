@@ -227,7 +227,7 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                                                 RecipesRecyclerViewAdapter.this.notifyDataSetChanged();
                                                 Collections.sort(RecipeFragment.mealList, new CustomComparator());
                                             }
-                                        }, hour, min, false);
+                                        }, hour, min, true);
                                 timePickerDialog.show();
 //
 //                                Dialog dialog = new Dialog(mView.getContext());
@@ -355,10 +355,16 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                     if (shopSnap.child(i.name).exists()) {
                         DataSnapshot ingred = shopSnap.child(i.name);
                         double subVal;
-                        if (!i.unit.equals(ingred.child("unit").getValue().toString())) {
-                            Spoonacular.skip = true;
-                            new Spoonacular(context).execute("convert", String.valueOf(i.amount), i.unit, ingred.child("unit").getValue().toString());
-                            subVal = convertedAmount;
+                        String ingredientUnit = ingred.child("unit").getValue().toString();
+                        if (!i.unit.equals(ingredientUnit) || !i.unit.contains(ingredientUnit) || !ingredientUnit.contains(i.unit)){
+                            if (shopSnap.child(i.name + " " + i.unit).exists()) {
+                                ingred = shopSnap.child(i.name + " " + i.unit);
+                                subVal = i.amount;
+                            } else {
+                                Spoonacular.skip = true;
+                                new Spoonacular(context).execute("convert", String.valueOf(i.amount), i.unit, ingred.child("unit").getValue().toString());
+                                subVal = convertedAmount;
+                            }
                         } else {
                             subVal = i.amount;
                         }
@@ -368,6 +374,13 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                         } else {
                             shop.child(i.name).setValue(null);
                         }
+                    } else if(shopSnap.child(i.name + " " + i.unit).exists()) {
+                        DataSnapshot ingred = shopSnap.child(i.name + " " + i.unit);
+                        double newAmount = Double.parseDouble(ingred.child("amount").getValue().toString()) - i.amount;
+                        if (newAmount > 0)
+                            shop.child(i.name + " " + i.unit).child("amount").setValue(newAmount);
+                        else
+                            shop.child(i.name + " " + i.unit).setValue(null);
                     }
                 }
             }
