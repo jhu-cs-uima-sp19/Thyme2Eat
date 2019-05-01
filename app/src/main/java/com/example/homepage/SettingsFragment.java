@@ -2,6 +2,7 @@ package com.example.homepage;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +34,16 @@ public class SettingsFragment extends Fragment {
     EditText dependents;
     SharedPreferences myPreferences;
     SharedPreferences.Editor editor;
+    Button btnDS;
+    boolean DSpressed = false;
+    Button btnDS2;
+    boolean DS2pressed = false;
+    Button btnDS3;
+    boolean DS3pressed = false;
+    Button btnDS4;
+    boolean DS4pressed = false;
+    Button btnDS5;
+    boolean DS5pressed = false;
 
 
     public SettingsFragment() {
@@ -76,6 +88,18 @@ public class SettingsFragment extends Fragment {
         exclude = view.findViewById(R.id.editExclusions);
         include = view.findViewById(R.id.editInclusions);
         dependents = view.findViewById(R.id.editDependents);
+        btnDS = view.findViewById(R.id.btnDS);
+        btnDS.setTextColor(Color.parseColor("black"));
+        btnDS2 = view.findViewById(R.id.btnDS2);
+        btnDS2.setTextColor(Color.parseColor("gray"));
+        btnDS3 = view.findViewById(R.id.btnDS3);
+        btnDS3.setTextColor(Color.parseColor("gray"));
+        btnDS4 = view.findViewById(R.id.btnDS4);
+        btnDS4.setTextColor(Color.parseColor("gray"));
+        btnDS5 = view.findViewById(R.id.btnDS5);
+        btnDS5.setTextColor(Color.parseColor("gray"));
+
+
 
 
         Spinner cuisine_spinner = (Spinner) view.findViewById(R.id.cuisine_spinner);
@@ -159,6 +183,106 @@ public class SettingsFragment extends Fragment {
         if (myPreferences.contains("dependents")) {
             dependents.setText(String.valueOf(myPreferences.getInt("dependents", 0)), TextView.BufferType.EDITABLE);
         }
+
+        btnDS.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(DSpressed == false) {
+                    btnDS.setTextColor(Color.BLACK);
+                    DSpressed = true;
+                }
+                else {
+                    btnDS2.setTextColor(Color.GRAY);
+                    DS2pressed = false;
+                    btnDS3.setTextColor(Color.GRAY);
+                    DS3pressed = false;
+                    btnDS4.setTextColor(Color.GRAY);
+                    DS4pressed = false;
+                    btnDS5.setTextColor(Color.GRAY);
+                    DS5pressed = false;
+                }
+            }
+        });
+
+        btnDS2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(DS2pressed == false) {
+                    btnDS.setTextColor(Color.BLACK);
+                    DSpressed = true;
+                    btnDS2.setTextColor(Color.BLACK);
+                    DS2pressed = true;
+                }
+                else {
+                    btnDS3.setTextColor(Color.GRAY);
+                    DS3pressed = false;
+                    btnDS4.setTextColor(Color.GRAY);
+                    DS4pressed = false;
+                    btnDS5.setTextColor(Color.GRAY);
+                    DS5pressed = false;
+                }
+            }
+        });
+
+        btnDS3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(DS3pressed == false) {
+                    btnDS.setTextColor(Color.BLACK);
+                    DSpressed = true;
+                    btnDS2.setTextColor(Color.BLACK);
+                    DS2pressed = true;
+                    btnDS3.setTextColor(Color.BLACK);
+                    DS3pressed = true;
+                }
+                else {
+                    btnDS4.setTextColor(Color.GRAY);
+                    DS4pressed = false;
+                    btnDS5.setTextColor(Color.GRAY);
+                    DS5pressed = false;
+                }
+            }
+        });
+
+        btnDS4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(DS4pressed == false) {
+                    btnDS.setTextColor(Color.BLACK);
+                    DSpressed = true;
+                    btnDS2.setTextColor(Color.BLACK);
+                    DS2pressed = true;
+                    btnDS3.setTextColor(Color.BLACK);
+                    DS3pressed = true;
+                    btnDS4.setTextColor(Color.BLACK);
+                    DS4pressed = true;
+                }
+                else {
+                    btnDS5.setTextColor(Color.GRAY);
+                    DS5pressed = false;
+                }
+            }
+        });
+
+        btnDS5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(DS5pressed == false) {
+                    btnDS.setTextColor(Color.BLACK);
+                    DSpressed = true;
+                    btnDS2.setTextColor(Color.BLACK);
+                    DS2pressed = true;
+                    btnDS3.setTextColor(Color.BLACK);
+                    DS3pressed = true;
+                    btnDS4.setTextColor(Color.BLACK);
+                    DS4pressed = true;
+                    btnDS5.setTextColor(Color.BLACK);
+                    DS5pressed = true;
+                }
+            }
+        });
+
+
 
         confirm = view.findViewById(R.id.button);
         confirm.setOnClickListener(new View.OnClickListener() {
