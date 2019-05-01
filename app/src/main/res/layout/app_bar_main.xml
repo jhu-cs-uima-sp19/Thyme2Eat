@@ -39,8 +39,7 @@
         android:layout_gravity="center_horizontal"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/buttonPanel">
+        app:layout_constraintTop_toTopOf="parent">
 
     </LinearLayout>
 
