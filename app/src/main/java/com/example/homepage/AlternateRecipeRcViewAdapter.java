@@ -114,8 +114,8 @@ public class AlternateRecipeRcViewAdapter extends RecyclerView.Adapter<Alternate
 
             String name = recipe.title;
             //name = name.substring(10);
-            if (name.length() > 12) {
-                name = name.substring(0, 10) + "...";
+            if (name.length() > 20) {
+                name = name.substring(0, 20) + "...";
             }
             title.setText(name);
         }

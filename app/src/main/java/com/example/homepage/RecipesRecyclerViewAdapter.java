@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
@@ -67,7 +68,7 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
         public final TextView dateView;
         public final TextView timeView;
         public final ImageView imageView;
-        public final Button alt;
+        public final FloatingActionButton alt;
         public Bitmap image;
 
         public ViewHolder(View view) {
@@ -76,7 +77,7 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
             dateView = (TextView) view.findViewById(R.id.dateText);
             timeView = (TextView) view.findViewById(R.id.timeText);
             imageView = (ImageView) view.findViewById(R.id.image);
-            alt = (Button) view.findViewById(R.id.choose_alternate);
+            alt = (FloatingActionButton) view.findViewById(R.id.choose_alternate);
 
             alt.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -196,70 +197,98 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                                         }, year, month, day);
                                 datePickerDialog.getDatePicker().setMinDate(c.getTimeInMillis());
                                 datePickerDialog.show();
-                            } else if (item.getTitle().toString().equals("Edit Time")) {
+                            } else if (item.getTitle().toString().equals("Edit Start Time")) {
                                 final NumberFormat f = new DecimalFormat("00");
                                 final Calendar c = Calendar.getInstance();
                                 final int hour = c.get(Calendar.HOUR_OF_DAY);
                                 final int min = c.get(Calendar.MINUTE);
                                 final Recipe r = RecipeFragment.mealList.get(getAdapterPosition());
-                                Dialog dialog = new Dialog(mView.getContext());
-                                dialog.setContentView(R.layout.edit_time);
-                                final TextView fromText = (TextView) dialog.findViewById(R.id.fromText);
-                                Log.w("Index", "" + r.time.substring(0, r.time.indexOf('-')));
-                                fromText.setText("From: " + r.time.substring(0, r.time.indexOf('-')));
-                                final TextView toText = (TextView) dialog.findViewById(R.id.toText);
-                                toText.setText("To: " + r.time.substring(r.time.indexOf('-') + 1));
-                                Button fromButton = (Button) dialog.findViewById(R.id.fromButton);
-                                Button toButton = (Button) dialog.findViewById(R.id.toButton);
-                                fromButton.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        TimePickerDialog timePickerDialog = new TimePickerDialog(mView.getContext(),
+
+                                TimePickerDialog timePickerDialog = new TimePickerDialog(mView.getContext(),
                                         new TimePickerDialog.OnTimeSetListener() {
 
                                             @Override
                                             public void onTimeSet(TimePicker view, int hour,
                                                                   int min) {
-                                                String amPm = amOrpm(hour);
-                                                if (amPm.equals("pm")) {
-                                                    hour = hour - 12;
+                                                int addHour = 0;
+                                                int addMin = r.readyInMinutes;
+                                                int newMin = addMin + min;
+                                                int newHour = hour + addHour;
+                                                if (newMin >= 60) {
+                                                    newHour += newMin / 60;
+                                                    newMin = newMin % 60;
                                                 }
-
-                                                r.time = f.format(hour) + ":" + f.format(min) + r.time.substring(r.time.indexOf('-'));
+                                                if (newHour >= 24) {
+                                                    newHour -= 24;
+                                                }
+                                                r.time = f.format(hour) + ":" + f.format(min) + "-" + f.format(newHour) + ":" + f.format(newMin);
+                                                Log.w("new time", r.time);
                                                 MainActivity.mDatabase.child("plan").child(r.date).child(r.title).child("time").setValue(r.time);
-                                                fromText.setText("From: " + r.time.substring(0, r.time.indexOf('-')));
                                                 RecipesRecyclerViewAdapter.this.notifyDataSetChanged();
                                                 Collections.sort(RecipeFragment.mealList, new CustomComparator());
                                             }
                                         }, hour, min, false);
                                 timePickerDialog.show();
-                                    }
-                                });
-                                toButton.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        TimePickerDialog timePickerDialog = new TimePickerDialog(mView.getContext(),
-                                                new TimePickerDialog.OnTimeSetListener() {
-
-                                                    @Override
-                                                    public void onTimeSet(TimePicker view, int hour,
-                                                                          int min) {
-                                                        String amPm = amOrpm(hour);
-                                                        if (amPm.equals("pm")) {
-                                                            hour = hour - 12;
-                                                        }
-
-                                                        r.time = r.time.substring(0, r.time.indexOf('-') + 1) + hour + ":" + f.format(min) + amPm;
-                                                        MainActivity.mDatabase.child("plan").child(r.date).child(r.title).child("time").setValue(r.time);
-                                                        toText.setText("To: " + r.time.substring(r.time.indexOf('-') + 1));
-                                                        RecipesRecyclerViewAdapter.this.notifyDataSetChanged();
-                                                        Collections.sort(RecipeFragment.mealList, new CustomComparator());
-                                                    }
-                                                }, hour, min, false);
-                                        timePickerDialog.show();
-                                    }
-                                });
-                                dialog.show();
+//
+//                                Dialog dialog = new Dialog(mView.getContext());
+//                                dialog.setContentView(R.layout.edit_time);
+//                                final TextView fromText = (TextView) dialog.findViewById(R.id.fromText);
+//                                Log.w("Index", "" + r.time.substring(0, r.time.indexOf('-')));
+//                                fromText.setText("From: " + r.time.substring(0, r.time.indexOf('-')));
+//                                final TextView toText = (TextView) dialog.findViewById(R.id.toText);
+//                                toText.setText("To: " + r.time.substring(r.time.indexOf('-') + 1));
+//                                Button fromButton = (Button) dialog.findViewById(R.id.fromButton);
+//                                Button toButton = (Button) dialog.findViewById(R.id.toButton);
+//                                fromButton.setOnClickListener(new View.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(View v) {
+//                                        TimePickerDialog timePickerDialog = new TimePickerDialog(mView.getContext(),
+//                                        new TimePickerDialog.OnTimeSetListener() {
+//
+//                                            @Override
+//                                            public void onTimeSet(TimePicker view, int hour,
+//                                                                  int min) {
+//                                                String amPm = amOrpm(hour);
+//                                                if (amPm.equals("pm")) {
+//                                                    hour = hour - 12;
+//                                                }
+//
+//                                                r.time = f.format(hour) + ":" + f.format(min) + r.time.substring(r.time.indexOf('-'));
+//                                                MainActivity.mDatabase.child("plan").child(r.date).child(r.title).child("time").setValue(r.time);
+//                                                fromText.setText("From: " + r.time.substring(0, r.time.indexOf('-')));
+//                                                RecipesRecyclerViewAdapter.this.notifyDataSetChanged();
+//                                                Collections.sort(RecipeFragment.mealList, new CustomComparator());
+//                                            }
+//                                        }, hour, min, false);
+//                                        timePickerDialog.setCustomTitle(fromText);
+//                                        timePickerDialog.show();
+//                                    }
+//                                });
+//                                toButton.setOnClickListener(new View.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(View v) {
+//                                        TimePickerDialog timePickerDialog = new TimePickerDialog(mView.getContext(),
+//                                                new TimePickerDialog.OnTimeSetListener() {
+//
+//                                                    @Override
+//                                                    public void onTimeSet(TimePicker view, int hour,
+//                                                                          int min) {
+//                                                        String amPm = amOrpm(hour);
+//                                                        if (amPm.equals("pm")) {
+//                                                            hour = hour - 12;
+//                                                        }
+//
+//                                                        r.time = r.time.substring(0, r.time.indexOf('-') + 1) + hour + ":" + f.format(min) + amPm;
+//                                                        MainActivity.mDatabase.child("plan").child(r.date).child(r.title).child("time").setValue(r.time);
+//                                                        toText.setText("To: " + r.time.substring(r.time.indexOf('-') + 1));
+//                                                        RecipesRecyclerViewAdapter.this.notifyDataSetChanged();
+//                                                        Collections.sort(RecipeFragment.mealList, new CustomComparator());
+//                                                    }
+//                                                }, hour, min, false);
+//                                        timePickerDialog.show();
+//                                    }
+//                                });
+//                                dialog.show();
                             }
                             return true;
                         }

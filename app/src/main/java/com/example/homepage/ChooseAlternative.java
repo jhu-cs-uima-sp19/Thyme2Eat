@@ -34,6 +34,7 @@ public class ChooseAlternative extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle("Alternate Recipes");
         Intent intent = getIntent();
         final String date = intent.getStringExtra("date");
         final String oldName = intent.getStringExtra("name");

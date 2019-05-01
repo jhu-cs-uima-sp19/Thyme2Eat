@@ -170,7 +170,12 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_search) {
 
         } else if (id == R.id.nav_favorite) {
+            buttonPanel = findViewById(R.id.buttonPanel);
+            buttonPanel.setVisibility(View.INVISIBLE);
+            navigation.setVisibility(View.INVISIBLE);
+            timeSettingsInfo.setVisibility(View.INVISIBLE);
             Favorites favs = new Favorites();
+            setTitle("Favorite Recipes");
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, favs).commit();
         } else if (id == R.id.nav_settings) {
             transaction = getSupportFragmentManager().beginTransaction();

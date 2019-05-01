@@ -19,14 +19,18 @@
             android:layout_height="match_parent"
             android:layout_width="match_parent">
 
-            <Button
+            <android.support.design.widget.FloatingActionButton
                 android:id="@+id/choose_alternate"
-                android:layout_width="38dp"
-                android:layout_height="41dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="4dp"
                 android:layout_marginTop="50dp"
-                android:background="@drawable/alternative" />
+                android:scaleX="0.75"
+                android:scaleY="0.75"
+                android:src="@drawable/alternative"
+                android:tint="@android:color/white"
+                app:backgroundTint="@color/colorPrimary" />
 
             <ImageView
                 android:id="@+id/image"

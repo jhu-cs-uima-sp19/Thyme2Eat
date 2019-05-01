@@ -179,8 +179,8 @@ public class FavoritesRcViewAdapter extends RecyclerView.Adapter<FavoritesRcView
 
             String name = favorites.get(position).title;
             //name = name.substring(10);
-            if (name.length() > 12) {
-                name = name.substring(0, 10) + "...";
+            if (name.length() > 20) {
+                name = name.substring(0, 20) + "...";
             }
             title.setText(name);
         }
