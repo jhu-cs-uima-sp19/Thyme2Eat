@@ -35,10 +35,9 @@ import java.util.Calendar;
 import java.util.Collections;
 
 public class FavoritesRcViewAdapter extends RecyclerView.Adapter<FavoritesRcViewAdapter.ViewHolder> {
-    public static ArrayList<Recipe> favorites;
 
-    public FavoritesRcViewAdapter(ArrayList<Recipe> favs) {
-        favorites = favs;
+    public FavoritesRcViewAdapter() {
+
     }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -54,7 +53,7 @@ public class FavoritesRcViewAdapter extends RecyclerView.Adapter<FavoritesRcView
 
     @Override
     public int getItemCount() {
-        return favorites.size();
+        return Favorites.favoritesList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -89,7 +88,7 @@ public class FavoritesRcViewAdapter extends RecyclerView.Adapter<FavoritesRcView
                                     month++;
                                     Log.w("Month", "" + month);
                                     final NumberFormat f = new DecimalFormat("00");
-                                    final Recipe r = favorites.get(getAdapterPosition());
+                                    final Recipe r = Favorites.favoritesList.get(getAdapterPosition());
                                     r.date = year + ";" +
                                             String.valueOf(f.format(month)) + ";" + String.valueOf(f.format(day));
                                     r.dateText = Recipe.makeDateText(r.date);
@@ -169,7 +168,7 @@ public class FavoritesRcViewAdapter extends RecyclerView.Adapter<FavoritesRcView
         public void bindView(int position) {
 
             String cache = "/data/user/0/com.example.homepage/cache";
-            Recipe recipe = favorites.get(position);
+            Recipe recipe = Favorites.favoritesList.get(position);
             File file = new File(cache,
                     recipe.image.substring((recipe.image.lastIndexOf('/') + 1)));
             if (file.exists()) {
@@ -177,7 +176,7 @@ public class FavoritesRcViewAdapter extends RecyclerView.Adapter<FavoritesRcView
                 image.setImageBitmap(bitmap);
             }
 
-            String name = favorites.get(position).title;
+            String name = Favorites.favoritesList.get(position).title;
             //name = name.substring(10);
             if (name.length() > 20) {
                 name = name.substring(0, 20) + "...";

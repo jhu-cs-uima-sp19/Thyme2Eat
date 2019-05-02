@@ -163,7 +163,7 @@ public class ViewRecipe extends AppCompatActivity {
         if (!fav) {
             db.child("favs").child(r.title).setValue(null);
             if (arrayChoice == 2) {
-                FavoritesRcViewAdapter.favorites.remove(index);
+                Favorites.favoritesList.remove(index);
             }
         }
     }

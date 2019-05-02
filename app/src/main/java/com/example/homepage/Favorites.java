@@ -37,7 +37,7 @@ public class Favorites extends Fragment {
         if (favoritesList == null) {
             favoritesList = new ArrayList<Recipe>();
         }
-        final FavoritesRcViewAdapter rcAdapter = new FavoritesRcViewAdapter(favoritesList);
+        final FavoritesRcViewAdapter rcAdapter = new FavoritesRcViewAdapter();
         RecyclerView rcView = (RecyclerView) view.findViewById(R.id.favsList);
         rcView.setLayoutManager(new LinearLayoutManager(getActivity()));
         rcView.setAdapter(rcAdapter);

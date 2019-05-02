@@ -279,7 +279,7 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                 r = AlternateRecipeRcViewAdapter.alternatives.get(AlternateRecipeRcViewAdapter.selected);
             } else {
                 int idx = Integer.parseInt(args[2]);
-                r = FavoritesRcViewAdapter.favorites.get(idx);
+                r = Favorites.favoritesList.get(idx);
             }
 //            shopDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
 //                @Override
@@ -323,7 +323,7 @@ public class Spoonacular extends AsyncTask <String, String, String> {
 //
 //                }
 //            });
-            updateShopList(r, r.date, true, false, "");
+            updateShopList(r, r.date, false, false, "");
         }
         return "Success";
     }
