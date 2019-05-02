@@ -369,14 +369,20 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                                 subVal = i.amount;
                             } else {
                                 Spoonacular.skip = true;
-                                new Spoonacular(context).execute("convert", String.valueOf(i.amount), i.unit, ingred.child("unit").getValue().toString(), i.name);
+                                try {
+                                    new Spoonacular(context).execute("convert", String.valueOf(i.amount), i.unit, ingred.child("unit").getValue().toString(), i.name).get();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                                 long startTime = System.currentTimeMillis();
                                 Toast.makeText(context, "Deleting, just a moment...",
                                         Toast.LENGTH_LONG).show();
+                                /*
                                 while (!Spoonacular.wentThrough || (System.currentTimeMillis()-startTime)<3000) {
                                     Log.w("in loop", "delete loop");
                                     continue;
                                 }
+                                */
                                 Spoonacular.wentThrough = false;
                                 subVal = convertedAmount;
                                 double inDB;

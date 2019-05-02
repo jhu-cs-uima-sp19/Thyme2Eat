@@ -161,7 +161,7 @@ public class ShoppingListItemsFragment extends Fragment {
                             quantText.setError("Ingredient quantity is required!");
                         }
                         if (valid) {
-                            String name = nameText.getText().toString();
+                            String name = nameText.getText().toString().toLowerCase();
                             Double quant = Double.parseDouble(quantText.getText().toString());
                             String unit = unitChoice.getSelectedItem().toString();
                             if (unit.equals("No Unit")) {
@@ -181,12 +181,18 @@ public class ShoppingListItemsFragment extends Fragment {
                                             shopDatabase.child(i.name).child("amount").setValue(existingVal + i.amount);
                                         } else {
                                             Spoonacular.skip = true;
-                                            new Spoonacular(getContext()).execute("convert", String.valueOf(i.amount), i.unit, dbUnit, i.name);
+                                            try {
+                                                new Spoonacular(getContext()).execute("convert", String.valueOf(i.amount), i.unit, dbUnit, i.name).get();
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
                                             long startTime = System.currentTimeMillis();
+                                            /*
                                             while(!Spoonacular.wentThrough || (System.currentTimeMillis()-startTime)<3000) {
                                                 Log.w("loop", "in while loop");
                                                 continue;
                                             }
+                                            */
                                             Spoonacular.wentThrough = false;
                                             addVal = RecipesRecyclerViewAdapter.convertedAmount;
                                             if (addVal != -1)

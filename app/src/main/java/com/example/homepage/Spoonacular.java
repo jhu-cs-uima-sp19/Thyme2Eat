@@ -421,12 +421,18 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                                     subVal = i.amount;
                                 } else {
                                     Spoonacular.skip = true;
-                                    new Spoonacular(Spoonacular.this.c).execute("convert", String.valueOf(i.amount), i.unit, ingred.child("unit").getValue().toString(), i.name);
+                                    try {
+                                        new Spoonacular(Spoonacular.this.c).execute("convert", String.valueOf(i.amount), i.unit, ingred.child("unit").getValue().toString(), i.name).get();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
                                     long startTime = System.currentTimeMillis();
+                                    /*
                                     while (!Spoonacular.wentThrough || (System.currentTimeMillis()-startTime)<3000) {
                                         Log.w("in loop", "delete loop");
                                         continue;
                                     }
+                                    */
                                     Spoonacular.wentThrough = false;
                                     subVal = RecipesRecyclerViewAdapter.convertedAmount;
                                     double inDB;
@@ -486,12 +492,18 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                                             shopDatabase.child(ingredient.name).child("amount").setValue(existingVal + ingredient.amount);
                                         } else {
                                             Spoonacular.skip = true;
-                                            new Spoonacular(Spoonacular.this.c).execute("convert", String.valueOf(ingredient.amount), ingredient.unit, dbUnit, ingredient.name);
+                                            try {
+                                                new Spoonacular(Spoonacular.this.c).execute("convert", String.valueOf(ingredient.amount), ingredient.unit, dbUnit, ingredient.name).get();
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
                                             long startTime = System.currentTimeMillis();
+                                            /*
                                             while(!Spoonacular.wentThrough || (System.currentTimeMillis()-startTime)<3000) {
                                                 Log.w("loop", "in while loop");
                                                 continue;
                                             }
+                                            */
                                             Spoonacular.wentThrough = false;
                                             addVal = RecipesRecyclerViewAdapter.convertedAmount;
                                             Log.w("convert", ingredient.name + "From: " + ingredient.amount + " " + ingredient.unit + " To: " + dbUnit);
@@ -542,12 +554,18 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                                 shopDatabase.child(ingredient.name).child("amount").setValue(existingVal + ingredient.amount);
                             } else {
                                 Spoonacular.skip = true;
-                                new Spoonacular(Spoonacular.this.c).execute("convert", String.valueOf(ingredient.amount), ingredient.unit, dbUnit, ingredient.name);
+                                try {
+                                    new Spoonacular(Spoonacular.this.c).execute("convert", String.valueOf(ingredient.amount), ingredient.unit, dbUnit, ingredient.name).get();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                                 long startTime = System.currentTimeMillis();
+                                /*
                                 while(!Spoonacular.wentThrough || (System.currentTimeMillis()-startTime)<3000) {
                                     Log.w("loop", "in while loop");
                                     continue;
                                 }
+                                */
                                 Spoonacular.wentThrough = false;
                                 addVal = RecipesRecyclerViewAdapter.convertedAmount;
                                 Log.w("convert", ingredient.name + "From: " + ingredient.amount + " " + ingredient.unit + " To: " + dbUnit);
