@@ -557,7 +557,9 @@ public class Spoonacular extends AsyncTask <String, String, String> {
         }
 
         ObjectMapper mapper = new ObjectMapper();
-        Search search = mapper.readValue(json.toString(), Search.class);
+        Search search = new Search();
+        search = mapper.readValue(json.toString(), Search.class);
+        System.out.println(search.results.size());
 
         //Take all ids to be used to get recipe information
         String ids = "";
@@ -565,47 +567,51 @@ public class Spoonacular extends AsyncTask <String, String, String> {
         for (int i = 0; i < days; i++) {
             for (int j = 0; j < meals; j++) {
                 while (true) {
-                    int index = new Random().nextInt(search.results.size() - 1);
-                    long id = search.results.get(index).id;
+                    if (search.results.size() - 1 != 0) {
+                        int index = new Random().nextInt(search.results.size() - 1);
+                        long id = search.results.get(index).id;
 
-                    boolean contains = false;
-                    boolean time = true;
+                        boolean contains = false;
+                        boolean time = true;
 
-                    for (int k = 0; k < recipeIds.size(); k++) {
-                        if (recipeIds.get(k) == id) {
-                            contains = true;
+                        for (int k = 0; k < recipeIds.size(); k++) {
+                            if (recipeIds.get(k) == id) {
+                                contains = true;
+                                break;
+                            }
+                        }
+
+                        String start = MainActivity.myPreferences.getString("Meal " + (j + 1) + " start", "14:00");
+                        String end = MainActivity.myPreferences.getString("Meal " + (j + 1) + " end", "15:00");
+                        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm");
+                        Calendar cal = Calendar.getInstance();
+                        Calendar endCal = Calendar.getInstance();
+                        try {
+                            cal.setTime(sdf.parse(start));
+                            endCal.setTime(sdf.parse(end));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        cal.add(Calendar.MINUTE, search.results.get(index).readyInMinutes);
+                        if (cal.getTime().after(endCal.getTime())) {
+                            time = false;
+                        }
+
+                        if (!contains && time) {
+                            if (i == days - 1 && j == meals - 1) {
+                                ids += id;
+                            } else {
+                                ids += id + "%2C";
+                            }
+                            count++;
+                            search.results.remove(search.results.get(index));
+                            recipeIds.add(id);
                             break;
                         }
-                    }
-
-                    String start = MainActivity.myPreferences.getString("Meal " + (j + 1) + " start", "14:00");
-                    String end = MainActivity.myPreferences.getString("Meal " + (j + 1) + " end", "15:00");
-                    SimpleDateFormat sdf = new SimpleDateFormat("hh:mm");
-                    Calendar cal = Calendar.getInstance();
-                    Calendar endCal = Calendar.getInstance();
-                    try {
-                        cal.setTime(sdf.parse(start));
-                        endCal.setTime(sdf.parse(end));
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    cal.add(Calendar.MINUTE, search.results.get(index).readyInMinutes);
-                    if (cal.getTime().after(endCal.getTime())) {
-                        time = false;
-                    }
-
-                    if (!contains && time) {
-                        if (i == days - 1 && j == meals - 1) {
-                            ids += id;
-                        } else {
-                            ids += id + "%2C";
-                        }
-                        count++;
                         search.results.remove(search.results.get(index));
-                        recipeIds.add(id);
+                    } else {
                         break;
                     }
-                    search.results.remove(search.results.get(index));
                 }
             }
         }

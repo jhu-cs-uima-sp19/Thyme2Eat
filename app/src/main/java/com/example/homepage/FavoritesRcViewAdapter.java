@@ -144,7 +144,7 @@ public class FavoritesRcViewAdapter extends RecyclerView.Adapter<FavoritesRcView
                                                         }
                                                     });
                                                 }
-                                            }, hour, min, false);
+                                            }, hour, min, true);
                                     timePickerDialog.show();
                                 }
                             }, year, month, day);
