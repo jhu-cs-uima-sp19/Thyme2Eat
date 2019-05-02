@@ -376,7 +376,24 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                                 }
                                 Spoonacular.wentThrough = false;
                                 subVal = convertedAmount;
-                                Log.w("delete", "Deleting " + i.name + " " + convertedAmount + " " + ingredientUnit);
+                                double inDB;
+                                double newAmount;
+                                if (subVal != -1) {
+                                    inDB = Double.parseDouble(ingred.child("amount").getValue().toString());
+                                    newAmount = inDB - subVal;
+                                    shop.child(i.name).child("amount").setValue(inDB - subVal);
+                                } else {
+                                    i.name += " :" + i.unit;
+                                    inDB = Double.parseDouble(shopSnap.child(i.name).child("amount").getValue().toString());
+                                    newAmount = inDB - i.amount;
+                                }
+                                if (newAmount > 0) {
+                                    shop.child(i.name).child("amount").setValue(newAmount);
+                                } else {
+                                    shop.child(i.name).setValue(null);
+                                }
+                                Log.w("delete", "Deleting " + i.name + " " + RecipesRecyclerViewAdapter.convertedAmount + " " + ingredientUnit);
+                                continue;
                             }
                         } else {
                             subVal = i.amount;

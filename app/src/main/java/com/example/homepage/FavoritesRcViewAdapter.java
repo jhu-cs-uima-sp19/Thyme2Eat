@@ -20,6 +20,7 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.homepage.dummy.DummyContent.DummyItem;
 import com.google.firebase.database.DataSnapshot;
@@ -136,6 +137,8 @@ public class FavoritesRcViewAdapter extends RecyclerView.Adapter<FavoritesRcView
                                                             db.child("plan").child(r.date).child(r.title).setValue(dataSnapshot.child("favs").child(r.title).getValue());
                                                             MainActivity.mDatabase.child("plan").child(r.date).child(r.title).child("time").setValue(r.time);
                                                             new Spoonacular(mView.getContext()).execute("updateShop", "favs", getAdapterPosition() + "");
+                                                            Toast.makeText(mView.getContext(), "Recipe added to the meal plan!",
+                                                                    Toast.LENGTH_LONG).show();
                                                         }
 
                                                         @Override
