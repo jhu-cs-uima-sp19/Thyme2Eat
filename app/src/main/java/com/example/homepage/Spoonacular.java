@@ -55,6 +55,7 @@ public class Spoonacular extends AsyncTask <String, String, String> {
     private String date ="";
     private String name = "";
     private Context c;
+    private static boolean wentThrough = false;
 
     public Spoonacular(Context context) {
         c = context;
@@ -271,6 +272,7 @@ public class Spoonacular extends AsyncTask <String, String, String> {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            Spoonacular.wentThrough = true;
         } else if (args[0].equals("updateShop")) {
             final Recipe r;
             if (args[1].equals("alts")) {
@@ -414,6 +416,11 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                             } else {
                                 Spoonacular.skip = true;
                                 new Spoonacular(Spoonacular.this.c).execute("convert", String.valueOf(ingredient.amount), ingredient.unit, dbUnit, ingredient.name);
+                                while(!Spoonacular.wentThrough) {
+                                    Log.w("loop", "in while loop");
+                                    continue;
+                                }
+                                Spoonacular.wentThrough = false;
                                 addVal = RecipesRecyclerViewAdapter.convertedAmount;
                                 Log.w("convert", ingredient.name + "From: " + ingredient.amount + " " + ingredient.unit + " To: " + dbUnit);
                                 Log.w("convert", "Converted amount is " + + RecipesRecyclerViewAdapter.convertedAmount);

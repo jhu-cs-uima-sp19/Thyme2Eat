@@ -363,6 +363,7 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                             } else {
                                 Spoonacular.skip = true;
                                 new Spoonacular(context).execute("convert", String.valueOf(i.amount), i.unit, ingred.child("unit").getValue().toString(), i.name);
+
                                 subVal = convertedAmount;
                             }
                         } else {
