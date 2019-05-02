@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.support.v7.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -372,6 +373,8 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                                 long startTime = System.currentTimeMillis();
                                 while (!Spoonacular.wentThrough || (System.currentTimeMillis()-startTime)<3000) {
                                     Log.w("in loop", "delete loop");
+                                    Toast.makeText(context, "Deleting, just a moment...",
+                                            Toast.LENGTH_LONG).show();
                                     continue;
                                 }
                                 Spoonacular.wentThrough = false;
