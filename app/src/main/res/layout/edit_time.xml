@@ -53,7 +53,7 @@
     <android.support.constraint.ConstraintLayout
         android:id="@+id/relativeLayout2"
         android:layout_width="match_parent"
-        android:layout_height="76dp"
+        android:layout_height="50dp"
         android:layout_gravity="center_horizontal"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -68,7 +68,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_gravity="center_horizontal"
-            android:layout_marginStart="28dp"
+            android:layout_marginStart="41dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:text="Quantity"
@@ -86,8 +86,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="28dp"
             android:layout_marginBottom="8dp"
             android:layout_toEndOf="@+id/toText"
             android:ems="10"
@@ -95,8 +94,7 @@
             android:inputType="numberDecimal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toTopOf="parent" />
     </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.ConstraintLayout
@@ -130,7 +128,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_gravity="center_horizontal"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="41dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:text="Unit"
@@ -146,7 +144,7 @@
             android:id="@+id/unit_choice"
             android:layout_width="178dp"
             android:layout_height="37dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="24dp"
             android:layout_marginBottom="40dp"
             android:entries="@array/spinnerItems"
             app:layout_constraintBottom_toBottomOf="parent"
