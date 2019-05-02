@@ -40,6 +40,7 @@ import java.util.Comparator;
 public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecyclerViewAdapter.ViewHolder> {
 
     public static double convertedAmount = -1;
+    public static boolean deleting;
 
     public RecipesRecyclerViewAdapter() {
     }
@@ -395,6 +396,7 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                             shop.child(i.name + " :" + i.unit).setValue(null);
                     }
                 }
+                //deleting = false;
             }
 
             @Override

@@ -30,6 +30,7 @@ public class ChooseAlternative extends AppCompatActivity {
     public static ArrayList<Recipe> alternativeList;
     public static FloatingActionButton swap;
     public static String spoonacularArgs[];
+    public static Recipe oldRecipe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,7 @@ public class ChooseAlternative extends AppCompatActivity {
         final String date = intent.getStringExtra("date");
         final String oldName = intent.getStringExtra("name");
         int pos = intent.getIntExtra("pos", 0);
-        final Recipe oldRecipe = RecipeFragment.mealList.get(pos);
+        oldRecipe = RecipeFragment.mealList.get(pos);
         setContentView(R.layout.alternative_recipe_list);
         alternativeList = new ArrayList<Recipe>();
         final AlternateRecipeRcViewAdapter rcAdapter = new AlternateRecipeRcViewAdapter(alternativeList);
@@ -129,8 +130,15 @@ public class ChooseAlternative extends AppCompatActivity {
                         ChooseAlternative.spoonacularArgs = new String[]{rcAdapter.selected + "", r.date, "true", "false", ""};
                         //Spoonacular.updateShopList(r, r.date, true, false, "");
                         Spoonacular.skip = true;
+                        /*
                         RecipesRecyclerViewAdapter.deleteIngreds(ChooseAlternative.this, oldRecipe);
+                        long startTime = System.currentTimeMillis();
+                        RecipesRecyclerViewAdapter.deleting = true;
+                        while(RecipesRecyclerViewAdapter.deleting && (System.currentTimeMillis()-startTime)<3000) {
+                            continue;
+                        }
                         Log.w("deleting ingreds", oldRecipe.extendedIngredients.toString());
+                        */
                         new Spoonacular(ChooseAlternative.this).execute("updateShop", "alts");
                     }
 
