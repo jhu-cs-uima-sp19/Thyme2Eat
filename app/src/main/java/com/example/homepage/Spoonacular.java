@@ -55,7 +55,7 @@ public class Spoonacular extends AsyncTask <String, String, String> {
     private String date ="";
     private String name = "";
     private Context c;
-    private static boolean wentThrough = false;
+    public static boolean wentThrough = false;
 
     public Spoonacular(Context context) {
         c = context;
@@ -416,7 +416,8 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                             } else {
                                 Spoonacular.skip = true;
                                 new Spoonacular(Spoonacular.this.c).execute("convert", String.valueOf(ingredient.amount), ingredient.unit, dbUnit, ingredient.name);
-                                while(!Spoonacular.wentThrough) {
+                                long startTime = System.currentTimeMillis();
+                                while(!Spoonacular.wentThrough || (System.currentTimeMillis()-startTime)<10000) {
                                     Log.w("loop", "in while loop");
                                     continue;
                                 }

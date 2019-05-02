@@ -355,7 +355,12 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                     if (shopSnap.child(i.name).exists()) {
                         DataSnapshot ingred = shopSnap.child(i.name);
                         double subVal;
-                        String ingredientUnit = ingred.child("unit").getValue().toString();
+                        String ingredientUnit;
+                        if (ingred.child("unit").exists()) {
+                            ingredientUnit = ingred.child("unit").getValue().toString();
+                        } else {
+                            ingredientUnit = "";
+                        }
                         if (!i.unit.equals(ingredientUnit) || !i.unit.contains(ingredientUnit) || !ingredientUnit.contains(i.unit)){
                             if (shopSnap.child(i.name + " :" + i.unit).exists()) {
                                 ingred = shopSnap.child(i.name + " :" + i.unit);
@@ -363,8 +368,14 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                             } else {
                                 Spoonacular.skip = true;
                                 new Spoonacular(context).execute("convert", String.valueOf(i.amount), i.unit, ingred.child("unit").getValue().toString(), i.name);
-
+                                long startTime = System.currentTimeMillis();
+                                while (!Spoonacular.wentThrough || (System.currentTimeMillis()-startTime)<3000) {
+                                    Log.w("in loop", "delete loop");
+                                    continue;
+                                }
+                                Spoonacular.wentThrough = false;
                                 subVal = convertedAmount;
+                                Log.w("delete", "Deleting " + i.name + " " + convertedAmount + " " + ingredientUnit);
                             }
                         } else {
                             subVal = i.amount;
