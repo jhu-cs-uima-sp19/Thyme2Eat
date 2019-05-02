@@ -94,9 +94,15 @@ public class ShoppingListItemsFragment extends Fragment {
                         name = name.substring(0, name.indexOf(':') - 1);
                     }
                     num = Double.valueOf(items.child("amount").getValue().toString());
+
                     if (items.child("unit").exists())
                         theunit = items.child("unit").getValue().toString();
-                    wholeitem = name + ": " + num + " " + theunit;
+                    if (num % 1 == 0) {
+                        wholeitem = name + ": " + (int) num + " " + theunit;
+                    } else {
+                        num = ((int) (num * 100)) / (double) 100;
+                        wholeitem = name + ": " + num + " " + theunit;
+                    }
                     Ingredient i = new Ingredient(wholeitem, num, theunit);
                     i.key = items.getKey();
                     stringShopList.add(i);

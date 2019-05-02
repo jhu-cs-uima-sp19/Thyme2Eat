@@ -55,14 +55,16 @@
                     android:src="@drawable/star"
                     app:backgroundTint="@color/colorPrimary" />
             </RelativeLayout>
+
             <TextView
                 android:id="@+id/recipe_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
                 android:layout_marginBottom="10dp"
+                android:padding="10dp"
                 android:scrollHorizontally="false"
                 android:text="Phasellus eleifend pellentesque aliquam netus aptent facilisis per ut accumsan dui Volutpat curae magna nam metus faucibus sapien aliquet faucibus cursus potenti Sagittis porttitor morbi nullam varius nostra vehicula potenti proin malesuada primis auctor Elementum bibendum litora porttitor pellentesque phasellus porttitor consectetur turpis Suspendisse rutrum amet cursus vitae nibh imperdiet eros cubilia Hac tempus sodales eleifend dictum dui felis sed Posuere fusce donec convallis morbi pretium sit duis eros nec torquent arcu Fames nullam ullamcorper arcu placerat rutrum arcu tristique euismod duis varius porta netusPhasellus eleifend pellentesque aliquam netus aptent facilisis per ut accumsan dui Volutpat curae magna nam metus faucibus sapien aliquet faucibus cursus potenti Sagittis porttitor morbi nullam varius nostra vehicula potenti proin malesuada primis auctor Elementum bibendum litora porttitor pellentesque phasellus porttitor consectetur turpis Suspendisse rutrum amet cursus vitae nibh imperdiet eros cubilia Hac tempus sodales eleifend dictum dui felis sed Posuere fusce donec convallis morbi pretium sit duis eros nec torquent arcu Fames nullam ullamcorper arcu placerat rutrum arcu tristique euismod duis varius porta netus"
+                android:textColor="@color/black"
                 android:textSize="48px" />
         </LinearLayout>
     </ScrollView>

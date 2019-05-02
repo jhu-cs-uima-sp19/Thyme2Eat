@@ -1,7 +1,9 @@
 package com.example.homepage;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -45,6 +47,16 @@ public class RecipeFragment extends Fragment {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy;MM;dd");
         final String curDate = sdf.format(new Date());
+
+        FloatingActionButton addMeals = (FloatingActionButton)view.findViewById(R.id.addMeals);
+        addMeals.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent myIntent = new Intent(getContext(), CreateMealPlan.class);
+                startActivity(myIntent);
+            }
+        });
 
         if (mealList == null) {
             mealList = new ArrayList<Recipe>();

@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.design.widget.NavigationView;
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity
     private Fragment shoppingList;
     private FragmentTransaction transaction;
     private LinearLayout buttonPanel;
-    private Button addMeals;
+    private FloatingActionButton addMeals;
     public static SharedPreferences myPreferences;
     public static SharedPreferences.Editor editor;
     private LinearLayout linearLayout;
@@ -84,15 +85,15 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        addMeals = (Button)findViewById(R.id.addMeals);
-        addMeals.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                
-                Intent myIntent = new Intent(MainActivity.this, CreateMealPlan.class);
-                startActivity(myIntent);
-            }
-        });
+//        addMeals = (FloatingActionButton)findViewById(R.id.addMeals);
+//        addMeals.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                Intent myIntent = new Intent(MainActivity.this, CreateMealPlan.class);
+//                startActivity(myIntent);
+//            }
+//        });
     }
 
     @Override
@@ -107,9 +108,9 @@ public class MainActivity extends AppCompatActivity
             transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.fragment_container, mealPlan);
             transaction.addToBackStack(null);
-            buttonPanel = findViewById(R.id.buttonPanel);
-            buttonPanel.setVisibility(View.VISIBLE);
-            addMeals.setVisibility(View.VISIBLE);
+            //buttonPanel = findViewById(R.id.buttonPanel);
+            //buttonPanel.setVisibility(View.VISIBLE);
+            //addMeals.setVisibility(View.VISIBLE);
             setTitle("Meal Plan");
             transaction.commit();
         }
@@ -135,9 +136,9 @@ public class MainActivity extends AppCompatActivity
             transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.fragment_container, mealPlan);
             transaction.addToBackStack(null);
-            buttonPanel = findViewById(R.id.buttonPanel);
-            buttonPanel.setVisibility(View.VISIBLE);
-            addMeals.setVisibility(View.VISIBLE);
+            //buttonPanel = findViewById(R.id.buttonPanel);
+            //buttonPanel.setVisibility(View.VISIBLE);
+            //addMeals.setVisibility(View.VISIBLE);
             navigation.setVisibility(View.INVISIBLE);
             timeSettingsInfo.setVisibility(View.INVISIBLE);
             setTitle("Meal Plan");
@@ -146,17 +147,17 @@ public class MainActivity extends AppCompatActivity
             transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.fragment_container, shoppingList);
             transaction.addToBackStack(null);
-            buttonPanel = findViewById(R.id.buttonPanel);
-            buttonPanel.setVisibility(View.INVISIBLE);
-            addMeals.setVisibility(View.INVISIBLE);
+            //buttonPanel = findViewById(R.id.buttonPanel);
+            //buttonPanel.setVisibility(View.INVISIBLE);
+            //addMeals.setVisibility(View.INVISIBLE);
             setTitle("Shopping List");
             timeSettingsInfo.setVisibility(View.INVISIBLE);
             navigation.setVisibility(View.INVISIBLE);
             transaction.commit();
 
         } else if (id == R.id.nav_favorite) {
-            buttonPanel = findViewById(R.id.buttonPanel);
-            buttonPanel.setVisibility(View.INVISIBLE);
+            //buttonPanel = findViewById(R.id.buttonPanel);
+            //buttonPanel.setVisibility(View.INVISIBLE);
             navigation.setVisibility(View.INVISIBLE);
             timeSettingsInfo.setVisibility(View.INVISIBLE);
             Favorites favs = new Favorites();
@@ -171,9 +172,9 @@ public class MainActivity extends AppCompatActivity
                 timeSettingsInfo.setVisibility(View.VISIBLE);
             }
             transaction.addToBackStack(null);
-            buttonPanel = findViewById(R.id.buttonPanel);
-            buttonPanel.setVisibility(View.INVISIBLE);
-            addMeals.setVisibility(View.INVISIBLE);
+            //buttonPanel = findViewById(R.id.buttonPanel);
+            //buttonPanel.setVisibility(View.INVISIBLE);
+            //addMeals.setVisibility(View.INVISIBLE);
             linearLayout = findViewById(R.id.fragment_container);
             setTitle("Settings");
             navigation.setVisibility(View.VISIBLE);

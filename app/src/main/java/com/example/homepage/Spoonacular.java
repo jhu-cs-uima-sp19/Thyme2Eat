@@ -383,6 +383,16 @@ public class Spoonacular extends AsyncTask <String, String, String> {
 
         }
         Log.w("current", ingredients.toString());
+        double conversions[] = new double[recipe.extendedIngredients.size()];
+        int i = 0;
+        /*
+        for (Ingredient ingredient : recipe.extendedIngredients) {
+            if (shopDatabase.child(ingredient.name) != null) {
+                convertUnit(ingredient, )
+            }
+        }
+        */
+
         shopDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -405,6 +415,7 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                                 Spoonacular.skip = true;
                                 new Spoonacular(Spoonacular.this.c).execute("convert", String.valueOf(ingredient.amount), ingredient.unit, dbUnit, ingredient.name);
                                 addVal = RecipesRecyclerViewAdapter.convertedAmount;
+                                Log.w("convert", ingredient.name + "From: " + ingredient.amount + " " + ingredient.unit + " To: " + dbUnit);
                                 Log.w("convert", "Converted amount is " + + RecipesRecyclerViewAdapter.convertedAmount);
                                 if (addVal != -1)
                                     shopDatabase.child(ingredient.name).child("amount").setValue(existingVal + addVal);
