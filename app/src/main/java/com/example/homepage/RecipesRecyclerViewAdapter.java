@@ -355,14 +355,16 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                     if (shopSnap.child(i.name).exists()) {
                         DataSnapshot ingred = shopSnap.child(i.name);
                         double subVal;
-                        String ingredientUnit = ingred.child("unit").getValue().toString();
+                        String ingredientUnit = "";
+                        if (ingred.child("unit").exists())
+                            ingredientUnit = ingred.child("unit").getValue().toString();
                         if (!i.unit.equals(ingredientUnit) || !i.unit.contains(ingredientUnit) || !ingredientUnit.contains(i.unit)){
                             if (shopSnap.child(i.name + " :" + i.unit).exists()) {
                                 ingred = shopSnap.child(i.name + " :" + i.unit);
                                 subVal = i.amount;
                             } else {
                                 Spoonacular.skip = true;
-                                new Spoonacular(context).execute("convert", String.valueOf(i.amount), i.unit, ingred.child("unit").getValue().toString(), i.name);
+                                new Spoonacular(context).execute("convert", String.valueOf(i.amount), i.unit, ingredientUnit, i.name);
 
                                 subVal = convertedAmount;
                             }
