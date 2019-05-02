@@ -371,10 +371,10 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                                 Spoonacular.skip = true;
                                 new Spoonacular(context).execute("convert", String.valueOf(i.amount), i.unit, ingred.child("unit").getValue().toString(), i.name);
                                 long startTime = System.currentTimeMillis();
+                                Toast.makeText(context, "Deleting, just a moment...",
+                                        Toast.LENGTH_LONG).show();
                                 while (!Spoonacular.wentThrough || (System.currentTimeMillis()-startTime)<3000) {
                                     Log.w("in loop", "delete loop");
-                                    Toast.makeText(context, "Deleting, just a moment...",
-                                            Toast.LENGTH_LONG).show();
                                     continue;
                                 }
                                 Spoonacular.wentThrough = false;
@@ -390,7 +390,7 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                                     inDB = Double.parseDouble(shopSnap.child(i.name).child("amount").getValue().toString());
                                     newAmount = inDB - i.amount;
                                 }
-                                if (newAmount > 0) {
+                                if (newAmount > 0.1) {
                                     shop.child(i.name).child("amount").setValue(newAmount);
                                 } else {
                                     shop.child(i.name).setValue(null);
@@ -402,7 +402,7 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                             subVal = i.amount;
                         }
                         double newAmount = Double.parseDouble(ingred.child("amount").getValue().toString()) - subVal;
-                        if (newAmount > 0) {
+                        if (newAmount > 0.1) {
                             shop.child(i.name).child("amount").setValue(newAmount);
                         } else {
                             shop.child(i.name).setValue(null);
