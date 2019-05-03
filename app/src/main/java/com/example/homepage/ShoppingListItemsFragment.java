@@ -89,7 +89,7 @@ public class ShoppingListItemsFragment extends Fragment {
                 stringShopList = new ArrayList<>();
                 Log.w("data", "in snap");
                 String name;
-                double num;
+                double num = 0;
                 String theunit = "";
                 String wholeitem;
 
@@ -98,8 +98,9 @@ public class ShoppingListItemsFragment extends Fragment {
                     if (name.indexOf(':') != -1) {
                         name = name.substring(0, name.indexOf(':') - 1);
                     }
-                    num = Double.valueOf(items.child("amount").getValue().toString());
-
+                    if (items.child("amount").exists()) {
+                        num = Double.valueOf(items.child("amount").getValue().toString());
+                    }
                     if (items.child("unit").exists())
                         theunit = items.child("unit").getValue().toString();
                     if (num % 1 == 0) {

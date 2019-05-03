@@ -36,7 +36,7 @@
         <EditText
             android:id="@+id/name_choice"
             android:layout_width="181dp"
-            android:layout_height="36dp"
+            android:layout_height="47dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="24dp"
             android:layout_marginBottom="8dp"
