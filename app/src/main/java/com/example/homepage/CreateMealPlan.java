@@ -104,7 +104,7 @@ public class CreateMealPlan extends AppCompatActivity{
                     datesPicked.remove(dateClicked);
                     calendar.removeEvent(ev);
                 }
-                else if (todayDate.after(dateClicked)) {
+                else if (todayDate.after(dateClicked) && todayDate.getTime() - epoch >= 86400000) {
                     Toast.makeText(context, "Error: Past Date", Toast.LENGTH_SHORT).show();
                 }
                 else if (selectedDates.contains(dateClicked)) {
