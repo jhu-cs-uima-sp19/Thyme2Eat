@@ -14,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,15 +22,26 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.provider.Settings.Secure;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import android.content.Intent;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+
+    private static final String TAG = "Calendar";
     public static DatabaseReference mDatabase;
     private RecipeFragment mealPlan;
     private Fragment mealSettings;
@@ -44,9 +56,12 @@ public class MainActivity extends AppCompatActivity
     public static boolean wasFound = true;
     public BottomNavigationView navigation;
     public TextView timeSettingsInfo;
+    private SharedPreferences myDates;
+    private SharedPreferences.Editor dateEditor;
+    private static int i = 0;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)  {
         myPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE);
         editor = myPreferences.edit();
         String android_id = Secure.getString(getContentResolver(),
@@ -84,6 +99,8 @@ public class MainActivity extends AppCompatActivity
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, mealPlan).commit();
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        myDates = getSharedPreferences("dates", MODE_PRIVATE);
+        dateEditor = myDates.edit();
 
 //        addMeals = (FloatingActionButton)findViewById(R.id.addMeals);
 //        addMeals.setOnClickListener(new View.OnClickListener() {
@@ -94,6 +111,37 @@ public class MainActivity extends AppCompatActivity
 //                startActivity(myIntent);
 //            }
 //        });
+
+        DatabaseReference planDB = mDatabase.child("plan");
+        planDB.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                i = 0;
+                for (DataSnapshot planDate : dataSnapshot.getChildren()) {
+                    String date = planDate.getKey();
+                    //year;month;day
+                    Log.d(TAG, "date " + date);
+                    try {
+                        Date datePlanned = new SimpleDateFormat("yyyy;MM;dd").parse(date);
+                        Log.d(TAG, "date planned" + datePlanned);
+                        dateEditor.putLong("date" + i, datePlanned.getTime());
+                    }
+                    catch(java.text.ParseException e) {
+                        e.printStackTrace();
+                    }
+                    i++;
+                }
+                dateEditor.putInt("numDates", i);
+                dateEditor.commit();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
     }
 
     @Override
@@ -210,5 +258,64 @@ public class MainActivity extends AppCompatActivity
             return false;
         }
     };
+
+    public int getYear(String date){
+        return Integer.parseInt(date.substring(0,4));
+    }
+
+    public int getMonth(String date){
+        return Integer.parseInt(date.substring(5,7));
+    }
+
+    public int getDate(String date){
+        return Integer.parseInt(date.substring(8));
+    }
+
+    public String convertDate(Date dateClicked){
+        String date = dateClicked.toString();
+        String convertedDate = date.substring(24);
+        convertedDate += ";";
+        String month = date.substring(4,7);
+        switch(month){
+            case "Jan":
+                convertedDate += "01;";
+                break;
+            case "Feb":
+                convertedDate += "02;";
+                break;
+            case "Mar":
+                convertedDate += "03;";
+                break;
+            case "Apr":
+                convertedDate += "04;";
+                break;
+            case "May":
+                convertedDate += "05;";
+                break;
+            case "Jun":
+                convertedDate += "06;";
+                break;
+            case "Jul":
+                convertedDate += "07;";
+                break;
+            case "Aug":
+                convertedDate += "08;";
+                break;
+            case "Sep":
+                convertedDate += "09;";
+                break;
+            case "Oct":
+                convertedDate += "10;";
+                break;
+            case "Nov":
+                convertedDate += "11;";
+                break;
+            case "Dec":
+                convertedDate += "12;";
+                break;
+        }
+        convertedDate += date.substring(8,10);
+        return convertedDate;
+    }
 
 }
