@@ -61,4 +61,5 @@ When you add a recipe to your meal plan, all of the ingredients and their amount
 - Conglomerating like ingredients based on quantities has been optimized.
 - Data persistence of the calendar for both adding new meals and adding favorited meals is functional.
 - Alternative meals are suggested to the user by clicking the fork and knife button beside a meal; this is based on the type of recipe and the ingredients within it.
+- We changed buttons, colors, layouts, and overall UI to make it resemble an Android application more.
 
