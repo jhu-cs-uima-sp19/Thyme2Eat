@@ -67,7 +67,6 @@ public class MainActivity extends AppCompatActivity
         String android_id = Secure.getString(getContentResolver(),
                 Secure.ANDROID_ID);
         mDatabase = FirebaseDatabase.getInstance().getReference().child(android_id);
-        //DatabaseReference shopDatabase = mDatabase.child("shop");
 
         if (!wasFound) {
             Toast.makeText(MainActivity.this, "No results found! Please change your preferences!", Toast.LENGTH_SHORT).show();
@@ -102,15 +101,6 @@ public class MainActivity extends AppCompatActivity
         myDates = getSharedPreferences("dates", MODE_PRIVATE);
         dateEditor = myDates.edit();
 
-//        addMeals = (FloatingActionButton)findViewById(R.id.addMeals);
-//        addMeals.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                Intent myIntent = new Intent(MainActivity.this, CreateMealPlan.class);
-//                startActivity(myIntent);
-//            }
-//        });
 
         DatabaseReference planDB = mDatabase.child("plan");
         planDB.addValueEventListener(new ValueEventListener() {
@@ -119,8 +109,6 @@ public class MainActivity extends AppCompatActivity
                 i = 0;
                 for (DataSnapshot planDate : dataSnapshot.getChildren()) {
                     String date = planDate.getKey();
-                    //year;month;day
-                    Log.d(TAG, "date " + date);
                     try {
                         Date datePlanned = new SimpleDateFormat("yyyy;MM;dd").parse(date);
                         Log.d(TAG, "date planned" + datePlanned);
@@ -156,9 +144,6 @@ public class MainActivity extends AppCompatActivity
             transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.fragment_container, mealPlan);
             transaction.addToBackStack(null);
-            //buttonPanel = findViewById(R.id.buttonPanel);
-            //buttonPanel.setVisibility(View.VISIBLE);
-            //addMeals.setVisibility(View.VISIBLE);
             setTitle("Meal Plan");
             transaction.commit();
         }
@@ -184,9 +169,6 @@ public class MainActivity extends AppCompatActivity
             transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.fragment_container, mealPlan);
             transaction.addToBackStack(null);
-            //buttonPanel = findViewById(R.id.buttonPanel);
-            //buttonPanel.setVisibility(View.VISIBLE);
-            //addMeals.setVisibility(View.VISIBLE);
             navigation.setVisibility(View.INVISIBLE);
             timeSettingsInfo.setVisibility(View.INVISIBLE);
             setTitle("Meal Plan");
@@ -195,17 +177,12 @@ public class MainActivity extends AppCompatActivity
             transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.fragment_container, shoppingList);
             transaction.addToBackStack(null);
-            //buttonPanel = findViewById(R.id.buttonPanel);
-            //buttonPanel.setVisibility(View.INVISIBLE);
-            //addMeals.setVisibility(View.INVISIBLE);
             setTitle("Shopping List");
             timeSettingsInfo.setVisibility(View.INVISIBLE);
             navigation.setVisibility(View.INVISIBLE);
             transaction.commit();
 
         } else if (id == R.id.nav_favorite) {
-            //buttonPanel = findViewById(R.id.buttonPanel);
-            //buttonPanel.setVisibility(View.INVISIBLE);
             navigation.setVisibility(View.INVISIBLE);
             timeSettingsInfo.setVisibility(View.INVISIBLE);
             Favorites favs = new Favorites();
@@ -220,9 +197,6 @@ public class MainActivity extends AppCompatActivity
                 timeSettingsInfo.setVisibility(View.VISIBLE);
             }
             transaction.addToBackStack(null);
-            //buttonPanel = findViewById(R.id.buttonPanel);
-            //buttonPanel.setVisibility(View.INVISIBLE);
-            //addMeals.setVisibility(View.INVISIBLE);
             linearLayout = findViewById(R.id.fragment_container);
             setTitle("Settings");
             navigation.setVisibility(View.VISIBLE);
@@ -258,64 +232,5 @@ public class MainActivity extends AppCompatActivity
             return false;
         }
     };
-
-    public int getYear(String date){
-        return Integer.parseInt(date.substring(0,4));
-    }
-
-    public int getMonth(String date){
-        return Integer.parseInt(date.substring(5,7));
-    }
-
-    public int getDate(String date){
-        return Integer.parseInt(date.substring(8));
-    }
-
-    public String convertDate(Date dateClicked){
-        String date = dateClicked.toString();
-        String convertedDate = date.substring(24);
-        convertedDate += ";";
-        String month = date.substring(4,7);
-        switch(month){
-            case "Jan":
-                convertedDate += "01;";
-                break;
-            case "Feb":
-                convertedDate += "02;";
-                break;
-            case "Mar":
-                convertedDate += "03;";
-                break;
-            case "Apr":
-                convertedDate += "04;";
-                break;
-            case "May":
-                convertedDate += "05;";
-                break;
-            case "Jun":
-                convertedDate += "06;";
-                break;
-            case "Jul":
-                convertedDate += "07;";
-                break;
-            case "Aug":
-                convertedDate += "08;";
-                break;
-            case "Sep":
-                convertedDate += "09;";
-                break;
-            case "Oct":
-                convertedDate += "10;";
-                break;
-            case "Nov":
-                convertedDate += "11;";
-                break;
-            case "Dec":
-                convertedDate += "12;";
-                break;
-        }
-        convertedDate += date.substring(8,10);
-        return convertedDate;
-    }
 
 }

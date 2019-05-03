@@ -81,7 +81,6 @@ public class FavoritesRcViewAdapter extends RecyclerView.Adapter<FavoritesRcView
                                                       int month, int day) {
                                     //Month is 0-indexed.
                                     month++;
-                                    Log.w("Month", "" + month);
                                     final NumberFormat f = new DecimalFormat("00");
                                     final Recipe r = Favorites.favoritesList.get(getAdapterPosition());
                                     r.date = year + ";" +
@@ -108,8 +107,6 @@ public class FavoritesRcViewAdapter extends RecyclerView.Adapter<FavoritesRcView
                                                         newHour -= 24;
                                                     }
                                                     r.time = f.format(hour) + ":" + f.format(min) + "-" + f.format(newHour) + ":" + f.format(newMin);
-                                                    Log.w("newtime", r.time);
-//                                                    MainActivity.mDatabase.child("plan").child(r.date).child(r.title).child("time").setValue(r.time);
                                                     final DatabaseReference db = MainActivity.mDatabase;
                                                     db.addListenerForSingleValueEvent(new ValueEventListener() {
                                                         @Override

@@ -37,8 +37,6 @@ public class RecipeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        Log.w("myApp", "atRecFrag");
         View view = inflater.inflate(R.layout.fragment_recipeschedule_list, container, false);
         RecyclerView rcView = (RecyclerView) view.findViewById(R.id.planList);
         final TextView emptyView = (TextView)view.findViewById(R.id.empty_view);
@@ -61,13 +59,11 @@ public class RecipeFragment extends Fragment {
         if (mealList == null) {
             mealList = new ArrayList<Recipe>();
         }
-        //Log.w("here", "" + MainActivity.mealList.size());
         final DatabaseReference mealDatabase = MainActivity.mDatabase.child("plan");
         mealDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 mealList = new ArrayList<Recipe>();
-                Log.w("data", "in snap");
                 long id = 0;
                 String date;
                 String time;
