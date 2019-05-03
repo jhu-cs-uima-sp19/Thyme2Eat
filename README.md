@@ -61,7 +61,7 @@ When you add a recipe to your meal plan, all of the ingredients and their amount
 - Adding a shopping list item now has a functional dialog box with error handling built in.
 - The checkboxes within the shopping list function properly and are used to mass delete items from the list for easy use.
 - Conglomerating like ingredients based on quantities has been optimized.
-- Data persistence of the calendar, where the user will be shown if they already have a meal planned for a date.
+- Data persistence of the calendar, where the user will be shown if they already have a meal planned for a date. They will also be shown an error message if a date they chose is in the past, or if they have a meal planned already.
 - Alternative meals are suggested to the user by clicking the fork and knife button beside a meal; this is based on the type of recipe and the ingredients within it. Users can only check off one alternative recipe and can only swap to one alternative recipe.
 - We changed buttons, colors, layouts, and overall UI to make it resemble an Android application more.
 
