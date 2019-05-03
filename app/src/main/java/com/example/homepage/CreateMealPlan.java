@@ -32,7 +32,7 @@ public class CreateMealPlan extends AppCompatActivity{
     TextView planTextView;
     private SharedPreferences myPreferences;
     private SharedPreferences.Editor editor;
-    private static ArrayList<Date> selectedDates = new ArrayList<>();
+    private ArrayList<Date> selectedDates = new ArrayList<>();
     private ArrayList<Date> datesPicked = new ArrayList<>();
     TextView monthTV;
     private SharedPreferences myDates;
@@ -71,16 +71,18 @@ public class CreateMealPlan extends AppCompatActivity{
                 String dates =  "";
                 for (Date d: datesPicked) {
                     dates+=convertDate(d);
-                    selectedDates.add(d);
+                    //selectedDates.add(d);
                 }
-                if (selectedDates.size() == 0) {
+                //check this!!
+                /*if (selectedDates.size() == 0) {
                     Toast.makeText(CreateMealPlan.this, "Please select at least one date!", Toast.LENGTH_SHORT).show();
                 } else {
+                */
                     new Spoonacular(CreateMealPlan.this).execute("search", myPreferences.getString("cuisineUrl", ""),
                             myPreferences.getString("dietUrl", ""), myPreferences.getString("includeUrl", ""),
                             myPreferences.getString("excludeUrl", ""), myPreferences.getString("intoleranceUrl", ""),
                             "&type=main+course", "100", dates);
-                }
+                //}
             }
         });
 
@@ -138,8 +140,11 @@ public class CreateMealPlan extends AppCompatActivity{
         for(int m = 0; m < n; m++){
             Event ev = new Event(Color.GRAY, myDates.getLong("date" + m, 0), "Meal");
             calendar.addEvent(ev);
+            Date newDate = new Date(myDates.getLong("date" + m, 0));
+            if(!selectedDates.contains(newDate)){
+                selectedDates.add(newDate);
+            }
         }
-
     }
 
     @Override
