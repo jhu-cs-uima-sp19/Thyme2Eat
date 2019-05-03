@@ -87,7 +87,6 @@ public class ShoppingListItemsFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 stringShopList = new ArrayList<>();
-                Log.w("data", "in snap");
                 String name;
                 double num = 0;
                 String theunit = "";
@@ -126,7 +125,6 @@ public class ShoppingListItemsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.w("myApp", "atShopFrag");
         final View shopview = inflater.inflate(R.layout.fragment_shoppinglistitems_list, container, false);
         RecyclerView shoprec = (RecyclerView) shopview.findViewById(R.id.shoppingListID);
         shoprec.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -137,7 +135,6 @@ public class ShoppingListItemsFragment extends Fragment {
 
         add = (FloatingActionButton) shopview.findViewById(R.id.addShopItemButton);
         if (add == null) {
-            Log.w("add is", "null");
         }
         add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,9 +173,7 @@ public class ShoppingListItemsFragment extends Fragment {
                                         double existingVal = Double.parseDouble(dataSnapshot.child(i.name).child("amount").getValue().toString());
                                         String dbUnit = dataSnapshot.child(i.name).child("unit").toString();
                                         double addVal;
-                                        Log.w("convert", "dbunit: " + dbUnit);
                                         if (i.unit.equals(dbUnit) || i.unit.contains(dbUnit) || dbUnit.contains(i.unit)) {
-                                            Log.w("convert", "here with " + dbUnit);
                                             shopDatabase.child(i.name).child("amount").setValue(existingVal + i.amount);
                                         } else {
                                             Spoonacular.skip = true;
@@ -188,12 +183,6 @@ public class ShoppingListItemsFragment extends Fragment {
                                                 e.printStackTrace();
                                             }
                                             long startTime = System.currentTimeMillis();
-                                            /*
-                                            while(!Spoonacular.wentThrough || (System.currentTimeMillis()-startTime)<3000) {
-                                                Log.w("loop", "in while loop");
-                                                continue;
-                                            }
-                                            */
                                             Spoonacular.wentThrough = false;
                                             addVal = RecipesRecyclerViewAdapter.convertedAmount;
                                             if (addVal != -1)
@@ -222,88 +211,8 @@ public class ShoppingListItemsFragment extends Fragment {
                         }
                     }
                 });
-
-//                Log.w("in on click", "here");
-//                AlertDialog.Builder dialog = new AlertDialog.Builder(shopview.getContext());
-//                dialog.setTitle("Add your shopping list item:");
-//
-//                final EditText nameinput = new EditText(shopview.getContext());
-//
-//                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-//                        LinearLayout.LayoutParams.MATCH_PARENT,
-//                        LinearLayout.LayoutParams.MATCH_PARENT);
-//                nameinput.setLayoutParams(lp);
-//                dialog.setView(nameinput);
-//                nameinput.setGravity(Gravity.CENTER_HORIZONTAL);
-//
-//
-//                dialog.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-//                    public void onClick (DialogInterface dialog, int which) {
-//                        String strname = nameinput.getText().toString();
-//                        MainActivity.mDatabase.child("shop").setValue(strname);
-//                        rcshopAdapter.notifyDataSetChanged();
-//                        dialog.cancel();
-
-                        // TO BE USED FOR SECOND SPRINT!!
-
-//                        AlertDialog.Builder dialog2 = new AlertDialog.Builder(shopview.getContext());
-//
-//                        dialog2.setTitle("What unit?");
-//
-//                        final EditText unitinput = new EditText(shopview.getContext());
-//
-//                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-//                                LinearLayout.LayoutParams.MATCH_PARENT,
-//                                LinearLayout.LayoutParams.MATCH_PARENT);
-//                        unitinput.setLayoutParams(lp);
-//                        dialog2.setView(unitinput);
-//                        unitinput.setGravity(Gravity.CENTER_HORIZONTAL);
-//
-//
-//                        dialog2.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-//                            public void onClick (DialogInterface dialog2, int which) {
-//                                String strunit = unitinput.getText().toString();
-//                                MainActivity.mDatabase.child("shop").setValue(strunit);
-//                                rcshopAdapter.notifyDataSetChanged();
-//                                dialog2.cancel();
-//                                AlertDialog.Builder dialog3 = new AlertDialog.Builder(shopview.getContext());
-//                                dialog3.setTitle("How many?");
-//
-//                                final EditText numinput = new EditText(shopview.getContext());
-//
-//                                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-//                                        LinearLayout.LayoutParams.MATCH_PARENT,
-//                                        LinearLayout.LayoutParams.MATCH_PARENT);
-//                                numinput.setLayoutParams(lp);
-//                                dialog3.setView(unitinput);
-//                                numinput.setGravity(Gravity.CENTER_HORIZONTAL);
-//
-//
-//                                dialog3.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-//                                    public void onClick (DialogInterface dialog3, int which) {
-//                                        String strnum = numinput.getText().toString();
-//                                        MainActivity.mDatabase.child("shop").setValue(strnum);
-//                                        rcshopAdapter.notifyDataSetChanged();
-//                                        dialog3.cancel();
-//                                    }
-//                                });
-//                                dialog3.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//                                    public void onClick (DialogInterface dialog3, int which) {
-//                                        dialog3.cancel();
-//                                    }
-//                                });
-//                                dialog3.show();
-//
-//                            }
-//                        });
-//                        dialog2.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//                            public void onClick (DialogInterface dialog2, int which) {
-//                                dialog2.cancel();
-//                            }
-//                        });
-//                        dialog2.show();
-                    }
-                });
+            }
+        });
 
         del = (Button) shopview.findViewById(R.id.deleteCheckedButton);
         del.setOnClickListener(new View.OnClickListener() {

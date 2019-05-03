@@ -140,10 +140,8 @@ public class ViewRecipe extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        Log.w("closing", "view recipe");
         final DatabaseReference db = MainActivity.mDatabase;
         if (fav && arrayChoice != 2) {
-            Log.w("closing", "here");
             db.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

@@ -48,7 +48,6 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Log.w("myApp", "atList");
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_recipeschedule, parent, false);
         return new ViewHolder(view);
@@ -56,7 +55,6 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        Log.w("myApp", "atBindView");
         ((ViewHolder) holder).bindView(position);
     }
 
@@ -185,7 +183,6 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                                                                   int month, int day) {
                                                 //Month is 0-indexed.
                                                 month++;
-                                                Log.w("Month", "" + month);
                                                 NumberFormat f = new DecimalFormat("00");
                                                 Recipe r = RecipeFragment.mealList.get(getAdapterPosition());
                                                 String oldDate = r.date;
@@ -224,73 +221,12 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                                                     newHour -= 24;
                                                 }
                                                 r.time = f.format(hour) + ":" + f.format(min) + "-" + f.format(newHour) + ":" + f.format(newMin);
-                                                Log.w("new time", r.time);
                                                 MainActivity.mDatabase.child("plan").child(r.date).child(r.title).child("time").setValue(r.time);
                                                 RecipesRecyclerViewAdapter.this.notifyDataSetChanged();
                                                 Collections.sort(RecipeFragment.mealList, new CustomComparator());
                                             }
                                         }, hour, min, true);
                                 timePickerDialog.show();
-//
-//                                Dialog dialog = new Dialog(mView.getContext());
-//                                dialog.setContentView(R.layout.edit_time);
-//                                final TextView fromText = (TextView) dialog.findViewById(R.id.fromText);
-//                                Log.w("Index", "" + r.time.substring(0, r.time.indexOf('-')));
-//                                fromText.setText("From: " + r.time.substring(0, r.time.indexOf('-')));
-//                                final TextView toText = (TextView) dialog.findViewById(R.id.toText);
-//                                toText.setText("To: " + r.time.substring(r.time.indexOf('-') + 1));
-//                                Button fromButton = (Button) dialog.findViewById(R.id.fromButton);
-//                                Button toButton = (Button) dialog.findViewById(R.id.toButton);
-//                                fromButton.setOnClickListener(new View.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(View v) {
-//                                        TimePickerDialog timePickerDialog = new TimePickerDialog(mView.getContext(),
-//                                        new TimePickerDialog.OnTimeSetListener() {
-//
-//                                            @Override
-//                                            public void onTimeSet(TimePicker view, int hour,
-//                                                                  int min) {
-//                                                String amPm = amOrpm(hour);
-//                                                if (amPm.equals("pm")) {
-//                                                    hour = hour - 12;
-//                                                }
-//
-//                                                r.time = f.format(hour) + ":" + f.format(min) + r.time.substring(r.time.indexOf('-'));
-//                                                MainActivity.mDatabase.child("plan").child(r.date).child(r.title).child("time").setValue(r.time);
-//                                                fromText.setText("From: " + r.time.substring(0, r.time.indexOf('-')));
-//                                                RecipesRecyclerViewAdapter.this.notifyDataSetChanged();
-//                                                Collections.sort(RecipeFragment.mealList, new CustomComparator());
-//                                            }
-//                                        }, hour, min, false);
-//                                        timePickerDialog.setCustomTitle(fromText);
-//                                        timePickerDialog.show();
-//                                    }
-//                                });
-//                                toButton.setOnClickListener(new View.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(View v) {
-//                                        TimePickerDialog timePickerDialog = new TimePickerDialog(mView.getContext(),
-//                                                new TimePickerDialog.OnTimeSetListener() {
-//
-//                                                    @Override
-//                                                    public void onTimeSet(TimePicker view, int hour,
-//                                                                          int min) {
-//                                                        String amPm = amOrpm(hour);
-//                                                        if (amPm.equals("pm")) {
-//                                                            hour = hour - 12;
-//                                                        }
-//
-//                                                        r.time = r.time.substring(0, r.time.indexOf('-') + 1) + hour + ":" + f.format(min) + amPm;
-//                                                        MainActivity.mDatabase.child("plan").child(r.date).child(r.title).child("time").setValue(r.time);
-//                                                        toText.setText("To: " + r.time.substring(r.time.indexOf('-') + 1));
-//                                                        RecipesRecyclerViewAdapter.this.notifyDataSetChanged();
-//                                                        Collections.sort(RecipeFragment.mealList, new CustomComparator());
-//                                                    }
-//                                                }, hour, min, false);
-//                                        timePickerDialog.show();
-//                                    }
-//                                });
-//                                dialog.show();
                             }
                             return true;
                         }
@@ -348,8 +284,6 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
     }
 
     public static void deleteIngreds(final Context context, final Recipe r) {
-        Log.w("delete", r.extendedIngredients.toString());
-
         final DatabaseReference shopDatabase = MainActivity.mDatabase.child("shop");
         shopDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -360,10 +294,8 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                         double existingVal = Double.parseDouble(dataSnapshot.child(ingredient.name).child("amount").getValue().toString());
                         String dbUnit = dataSnapshot.child(ingredient.name).child("unit").toString();
                         double addVal;
-                        Log.w("convert", "dbunit: " + dbUnit);
                         if (ingredient.unit.equals(dbUnit) || ingredient.unit.contains(dbUnit) || dbUnit.contains(ingredient.unit)) {
                             Double newAmount = existingVal - ingredient.amount;
-                            Log.w("delete", "Deleting " + ingredient.name + " " + ingredient.amount + " " + ingredient.unit);
                             if (newAmount > 0.1) {
                                 shopDatabase.child(ingredient.name).child("amount").setValue(newAmount);
                             } else {
@@ -377,19 +309,10 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                                 e.printStackTrace();
                             }
                             long startTime = System.currentTimeMillis();
-                                            /*
-                                            while(!Spoonacular.wentThrough || (System.currentTimeMillis()-startTime)<3000) {
-                                                Log.w("loop", "in while loop");
-                                                continue;
-                                            }
-                                            */
                             Spoonacular.wentThrough = false;
                             addVal = RecipesRecyclerViewAdapter.convertedAmount;
-                            Log.w("convert", ingredient.name + "From: " + ingredient.amount + " " + ingredient.unit + " To: " + dbUnit);
-                            Log.w("convert", "Converted amount is " + +RecipesRecyclerViewAdapter.convertedAmount);
                             if (addVal != -1) {
                                 Double newAmount = existingVal - addVal;
-                                Log.w("delete", "Deleting " + ingredient.name + " " + addVal + " " + dbUnit);
                                 if (newAmount > 0.1) {
                                     shopDatabase.child(ingredient.name).child("amount").setValue(newAmount);
                                 } else {
@@ -398,7 +321,6 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                             } else if (dataSnapshot.child(altKey).exists()){
                                 existingVal = Double.parseDouble(dataSnapshot.child(altKey).child("amount").getValue().toString());
                                 Double newAmount = existingVal - ingredient.amount;
-                                Log.w("delete", "Deleting " + altKey + " " + ingredient.amount + " " + ingredient.unit);
                                 if (newAmount > 0.1) {
                                     shopDatabase.child(altKey).child("amount").setValue(newAmount);
                                 } else {
@@ -410,7 +332,6 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
 //                            shopDatabase.child(ingredient.name).child("amount").setValue(ing.amount);
 //                            shopDatabase.child(ingredient.name).child("unit").setValue(ing.unit);
                     } else if (dataSnapshot.child(altKey).exists()){
-                        Log.w("delete", "Deleting " + altKey + " " + ingredient.amount + " " + ingredient.unit);
                         Double existingVal = Double.parseDouble(dataSnapshot.child(altKey).child("amount").getValue().toString());
                         Double newAmount = existingVal - ingredient.amount;
                         if (newAmount > 0.1) {
@@ -419,73 +340,6 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                             shopDatabase.child(altKey).setValue(null);
                         }
                     }
-//                for (Ingredient i : r.extendedIngredients) {
-//                    if (shopSnap.child(i.name).exists()) {
-//                        DataSnapshot ingred = shopSnap.child(i.name);
-//                        double subVal;
-//                        String ingredientUnit;
-//                        if (ingred.child("unit").exists()) {
-//                            ingredientUnit = ingred.child("unit").getValue().toString();
-//                        } else {
-//                            ingredientUnit = "";
-//                        }
-//                        if (!i.unit.equals(ingredientUnit) || !i.unit.contains(ingredientUnit) || !ingredientUnit.contains(i.unit)){
-//                            if (shopSnap.child(i.name + " :" + i.unit).exists()) {
-//                                ingred = shopSnap.child(i.name + " :" + i.unit);
-//                                subVal = i.amount;
-//                            } else {
-//                                Spoonacular.skip = true;
-//                                try {
-//                                    new Spoonacular(context).execute("convert", String.valueOf(i.amount), i.unit, ingred.child("unit").getValue().toString(), i.name).get();
-//                                } catch (Exception e) {
-//                                    e.printStackTrace();
-//                                }
-//                                long startTime = System.currentTimeMillis();
-//                                /*
-//                                while (!Spoonacular.wentThrough || (System.currentTimeMillis()-startTime)<3000) {
-//                                    Log.w("in loop", "delete loop");
-//                                    continue;
-//                                }
-//                                */
-//                                Spoonacular.wentThrough = false;
-//                                subVal = convertedAmount;
-//                                double inDB;
-//                                double newAmount;
-//                                if (subVal != -1) {
-//                                    inDB = Double.parseDouble(ingred.child("amount").getValue().toString());
-//                                    newAmount = inDB - subVal;
-//                                    shop.child(i.name).child("amount").setValue(inDB - subVal);
-//                                } else {
-//                                    i.name += " :" + i.unit;
-//                                    inDB = Double.parseDouble(shopSnap.child(i.name).child("amount").getValue().toString());
-//                                    newAmount = inDB - i.amount;
-//                                }
-//                                if (newAmount > 0.1) {
-//                                    shop.child(i.name).child("amount").setValue(newAmount);
-//                                } else {
-//                                    shop.child(i.name).setValue(null);
-//                                }
-//                                Log.w("delete", "Deleting " + i.name + " " + RecipesRecyclerViewAdapter.convertedAmount + " " + ingredientUnit);
-//                                continue;
-//                            }
-//                        } else {
-//                            subVal = i.amount;
-//                        }
-//                        double newAmount = Double.parseDouble(ingred.child("amount").getValue().toString()) - subVal;
-//                        if (newAmount > 0.1) {
-//                            shop.child(i.name).child("amount").setValue(newAmount);
-//                        } else {
-//                            shop.child(i.name).setValue(null);
-//                        }
-//                    } else if(shopSnap.child(i.name + " :" + i.unit).exists()) {
-//                        DataSnapshot ingred = shopSnap.child(i.name + " :" + i.unit);
-//                        double newAmount = Double.parseDouble(ingred.child("amount").getValue().toString()) - i.amount;
-//                        if (newAmount > 0)
-//                            shop.child(i.name + " :" + i.unit).child("amount").setValue(newAmount);
-//                        else
-//                            shop.child(i.name + " :" + i.unit).setValue(null);
-//                    }
-                    //deleting = false;
                 }
             }
 
