@@ -13,6 +13,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import android.content.Context;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -31,8 +32,14 @@ public class CreateMealPlan extends AppCompatActivity{
     TextView planTextView;
     private SharedPreferences myPreferences;
     private SharedPreferences.Editor editor;
-    private ArrayList<Date> selectedDates = new ArrayList<>();
+    private static ArrayList<Date> selectedDates = new ArrayList<>();
+    private ArrayList<Date> datesPicked = new ArrayList<>();
     TextView monthTV;
+    private SharedPreferences myDates;
+    private SharedPreferences.Editor dateEditor;
+    private static int i = 0;
+    //boolean confPress = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +54,8 @@ public class CreateMealPlan extends AppCompatActivity{
         planTextView.setText("Tap the dates to plan for!");
         myPreferences = getSharedPreferences("preferences", MODE_PRIVATE);
         editor = myPreferences.edit();
+        myDates = getSharedPreferences("preferences", MODE_PRIVATE);
+        dateEditor = myPreferences.edit();
         final Date todayDate = new Date();
         monthTV = (TextView) findViewById(R.id.monthTV);
         Calendar c = Calendar.getInstance();
@@ -54,13 +63,18 @@ public class CreateMealPlan extends AppCompatActivity{
         int m = c.get(Calendar.MONTH);
         String month = convertMonth(m);
         monthTV.setText(month + " " + y);
+        //Log.d(TAG, "start");
+
+
 
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String dates =  "";
-                for (Date d: selectedDates) {
+                //confPress = true;
+                for (Date d: datesPicked) {
                     dates+=convertDate(d);
+                    selectedDates.add(d);
                 }
                 if (selectedDates.size() == 0) {
                     Toast.makeText(CreateMealPlan.this, "Please select at least one date!", Toast.LENGTH_SHORT).show();
@@ -79,15 +93,22 @@ public class CreateMealPlan extends AppCompatActivity{
                 Context context = getApplicationContext();
                 long epoch = dateClicked.getTime();
                 Event ev = new Event(Color.BLACK, epoch, "Meal");
-                if (!todayDate.after(dateClicked)  && !selectedDates.contains(dateClicked)) {
-                    selectedDates.add(dateClicked);
+                if ((!todayDate.after(dateClicked) || todayDate.getTime() - epoch < 86400000)
+                        && !datesPicked.contains(dateClicked) && !selectedDates.contains(dateClicked)) {
+                    //selectedDates.add(dateClicked);
+                    datesPicked.add(dateClicked);
                     calendar.addEvent(ev);
-                }else if (!todayDate.after(dateClicked)    && selectedDates.contains(dateClicked)){
-                    selectedDates.remove(dateClicked);
+                }else if ((!todayDate.after(dateClicked) || todayDate.getTime() - epoch < 86400000)
+                        && datesPicked.contains(dateClicked) && !selectedDates.contains(dateClicked)){
+                    //selectedDates.remove(dateClicked);
+                    datesPicked.remove(dateClicked);
                     calendar.removeEvent(ev);
                 }
-                else if (todayDate.after(dateClicked)) {
+                else if (todayDate.after(dateClicked) && todayDate.getTime() - epoch >= 86400000) {
                     Toast.makeText(context, "Error: Past Date", Toast.LENGTH_SHORT).show();
+                }
+                else if (selectedDates.contains(dateClicked)) {
+                    Toast.makeText(context, "Edit in Meal Plan", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -114,6 +135,65 @@ public class CreateMealPlan extends AppCompatActivity{
         }
         return true;
     }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        int n = myDates.getInt("num", 0);
+        Log.d(TAG, n + " resuming");
+        for(int m = 0; m < n; m++){
+            //Log.d(TAG, myDates.getLong("date" + m, 0) + " " + m);
+            Event ev = new Event(Color.GRAY, myDates.getLong("date" + m, 0),
+                    "Meal");
+            calendar.addEvent(ev);
+        }
+
+    }
+
+    @Override
+    protected void onPause() {
+        i = 0;
+        for(Date d: selectedDates){
+            dateEditor.putLong("date" + i, d.getTime());
+            //Log.d(TAG, d.getTime() + " " + i);
+            i++;
+        }
+        dateEditor.putInt("num", i);
+        dateEditor.commit();
+        Log.d(TAG, i+" stopping");
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        i = 0;
+        for(Date d: selectedDates){
+            dateEditor.putLong("date" + i, d.getTime());
+            //Log.d(TAG, d.getTime() + " " + i);
+            i++;
+        }
+        dateEditor.putInt("num", i);
+        dateEditor.commit();
+        Log.d(TAG, i+" stopping");
+        super.onStop();
+    }
+
+
+
+    @Override
+    protected void onDestroy() {
+        i = 0;
+        for(Date d: selectedDates){
+            dateEditor.putLong("date" + i, d.getTime());
+            //Log.d(TAG, d.getTime() + " " + i);
+            i++;
+        }
+        dateEditor.putInt("num", i);
+        dateEditor.commit();
+        Log.d(TAG, i+" stopping");
+        super.onDestroy();
+    }
+
 
     public String convertDate(Date dateClicked){
         String date = dateClicked.toString();
