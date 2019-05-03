@@ -98,7 +98,9 @@ public class ShoppingListItemsFragment extends Fragment {
                     if (name.indexOf(':') != -1) {
                         name = name.substring(0, name.indexOf(':') - 1);
                     }
-                    num = Double.valueOf(items.child("amount").getValue().toString());
+                    num = 0;
+                    if (items.child("amount").exists())
+                        num = Double.valueOf(items.child("amount").getValue().toString());
 
                     if (items.child("unit").exists())
                         theunit = items.child("unit").getValue().toString();

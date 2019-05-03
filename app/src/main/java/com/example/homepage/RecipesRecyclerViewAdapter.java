@@ -356,7 +356,7 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (Ingredient ingredient : r.extendedIngredients) {
                     String altKey = ingredient.name + " :" + ingredient.unit;
-                    if (dataSnapshot.child(ingredient.name).exists()) {
+                    if (dataSnapshot.child(ingredient.name).exists() && dataSnapshot.child("amount").exists()) {
                         double existingVal = Double.parseDouble(dataSnapshot.child(ingredient.name).child("amount").getValue().toString());
                         String dbUnit = dataSnapshot.child(ingredient.name).child("unit").toString();
                         double addVal;
