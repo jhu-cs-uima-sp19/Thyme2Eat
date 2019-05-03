@@ -81,8 +81,9 @@ public class ShoppingListItemsFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 stringShopList = new ArrayList<>();
+                Log.w("data", "in snap");
                 String name;
-                double num;
+                double num = 0;
                 String theunit = "";
                 String wholeitem;
 
@@ -91,10 +92,9 @@ public class ShoppingListItemsFragment extends Fragment {
                     if (name.indexOf(':') != -1) {
                         name = name.substring(0, name.indexOf(':') - 1);
                     }
-                    num = 0;
-                    if (items.child("amount").exists())
+                    if (items.child("amount").exists()) {
                         num = Double.valueOf(items.child("amount").getValue().toString());
-
+                    }
                     if (items.child("unit").exists())
                         theunit = items.child("unit").getValue().toString();
                     if (num % 1 == 0) {
@@ -120,6 +120,7 @@ public class ShoppingListItemsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.w("myApp", "atShopFrag");
         final View shopview = inflater.inflate(R.layout.fragment_shoppinglistitems_list, container, false);
         RecyclerView shoprec = (RecyclerView) shopview.findViewById(R.id.shoppingListID);
         shoprec.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -169,7 +170,9 @@ public class ShoppingListItemsFragment extends Fragment {
                                         double existingVal = Double.parseDouble(dataSnapshot.child(i.name).child("amount").getValue().toString());
                                         String dbUnit = dataSnapshot.child(i.name).child("unit").toString();
                                         double addVal;
+                                        Log.w("convert", "dbunit: " + dbUnit);
                                         if (i.unit.equals(dbUnit) || i.unit.contains(dbUnit) || dbUnit.contains(i.unit)) {
+                                            Log.w("convert", "here with " + dbUnit);
                                             shopDatabase.child(i.name).child("amount").setValue(existingVal + i.amount);
                                         } else {
                                             Spoonacular.skip = true;
@@ -179,6 +182,12 @@ public class ShoppingListItemsFragment extends Fragment {
                                                 e.printStackTrace();
                                             }
                                             long startTime = System.currentTimeMillis();
+                                            /*
+                                            while(!Spoonacular.wentThrough || (System.currentTimeMillis()-startTime)<3000) {
+                                                Log.w("loop", "in while loop");
+                                                continue;
+                                            }
+                                            */
                                             Spoonacular.wentThrough = false;
                                             addVal = RecipesRecyclerViewAdapter.convertedAmount;
                                             if (addVal != -1)
@@ -188,7 +197,10 @@ public class ShoppingListItemsFragment extends Fragment {
                                                 shopDatabase.child(i.name).child("amount").setValue(i.amount);
                                                 shopDatabase.child(i.name).child("unit").setValue(i.unit);
                                             }
+                                            //shopDatabase.child(ingredient.name).child("unit").setValue("oz");
                                         }
+//                            shopDatabase.child(ingredient.name).child("amount").setValue(ing.amount);
+//                            shopDatabase.child(ingredient.name).child("unit").setValue(ing.unit);
                                     } else {
                                         shopDatabase.child(i.name).child("amount").setValue(i.amount);
                                         shopDatabase.child(i.name).child("unit").setValue(i.unit);
@@ -205,6 +217,85 @@ public class ShoppingListItemsFragment extends Fragment {
                     }
                 });
 
+//                Log.w("in on click", "here");
+//                AlertDialog.Builder dialog = new AlertDialog.Builder(shopview.getContext());
+//                dialog.setTitle("Add your shopping list item:");
+//
+//                final EditText nameinput = new EditText(shopview.getContext());
+//
+//                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+//                        LinearLayout.LayoutParams.MATCH_PARENT,
+//                        LinearLayout.LayoutParams.MATCH_PARENT);
+//                nameinput.setLayoutParams(lp);
+//                dialog.setView(nameinput);
+//                nameinput.setGravity(Gravity.CENTER_HORIZONTAL);
+//
+//
+//                dialog.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+//                    public void onClick (DialogInterface dialog, int which) {
+//                        String strname = nameinput.getText().toString();
+//                        MainActivity.mDatabase.child("shop").setValue(strname);
+//                        rcshopAdapter.notifyDataSetChanged();
+//                        dialog.cancel();
+
+                        // TO BE USED FOR SECOND SPRINT!!
+
+//                        AlertDialog.Builder dialog2 = new AlertDialog.Builder(shopview.getContext());
+//
+//                        dialog2.setTitle("What unit?");
+//
+//                        final EditText unitinput = new EditText(shopview.getContext());
+//
+//                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+//                                LinearLayout.LayoutParams.MATCH_PARENT,
+//                                LinearLayout.LayoutParams.MATCH_PARENT);
+//                        unitinput.setLayoutParams(lp);
+//                        dialog2.setView(unitinput);
+//                        unitinput.setGravity(Gravity.CENTER_HORIZONTAL);
+//
+//
+//                        dialog2.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+//                            public void onClick (DialogInterface dialog2, int which) {
+//                                String strunit = unitinput.getText().toString();
+//                                MainActivity.mDatabase.child("shop").setValue(strunit);
+//                                rcshopAdapter.notifyDataSetChanged();
+//                                dialog2.cancel();
+//                                AlertDialog.Builder dialog3 = new AlertDialog.Builder(shopview.getContext());
+//                                dialog3.setTitle("How many?");
+//
+//                                final EditText numinput = new EditText(shopview.getContext());
+//
+//                                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+//                                        LinearLayout.LayoutParams.MATCH_PARENT,
+//                                        LinearLayout.LayoutParams.MATCH_PARENT);
+//                                numinput.setLayoutParams(lp);
+//                                dialog3.setView(unitinput);
+//                                numinput.setGravity(Gravity.CENTER_HORIZONTAL);
+//
+//
+//                                dialog3.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+//                                    public void onClick (DialogInterface dialog3, int which) {
+//                                        String strnum = numinput.getText().toString();
+//                                        MainActivity.mDatabase.child("shop").setValue(strnum);
+//                                        rcshopAdapter.notifyDataSetChanged();
+//                                        dialog3.cancel();
+//                                    }
+//                                });
+//                                dialog3.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                                    public void onClick (DialogInterface dialog3, int which) {
+//                                        dialog3.cancel();
+//                                    }
+//                                });
+//                                dialog3.show();
+//
+//                            }
+//                        });
+//                        dialog2.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                            public void onClick (DialogInterface dialog2, int which) {
+//                                dialog2.cancel();
+//                            }
+//                        });
+//                        dialog2.show();
                     }
                 });
 

@@ -36,7 +36,7 @@
         <EditText
             android:id="@+id/name_choice"
             android:layout_width="181dp"
-            android:layout_height="53dp"
+            android:layout_height="47dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="24dp"
             android:layout_marginBottom="8dp"
@@ -90,7 +90,7 @@
             android:layout_marginBottom="8dp"
             android:layout_toEndOf="@+id/toText"
             android:ems="10"
-            android:hint="Choose quantity"
+            android:hint="Choose Quantity"
             android:inputType="numberDecimal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
