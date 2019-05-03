@@ -35,10 +35,10 @@
 
         <EditText
             android:id="@+id/name_choice"
-            android:layout_width="184dp"
-            android:layout_height="41dp"
+            android:layout_width="181dp"
+            android:layout_height="36dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="24dp"
             android:layout_marginBottom="8dp"
             android:ems="10"
             android:hint="Name of ingredient"
@@ -46,7 +46,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.65" />
+            app:layout_constraintVertical_bias="0.571" />
 
     </android.support.constraint.ConstraintLayout>
 
@@ -114,7 +114,7 @@
             android:layout_marginTop="52dp"
             android:layout_marginEnd="24dp"
             android:text="Confirm"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/colorPrimaryDark"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
