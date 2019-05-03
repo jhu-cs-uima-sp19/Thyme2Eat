@@ -1,6 +1,8 @@
 # Thyme2Eat
 User Interfaces and Mobile Applications 
 
+Spring 2019
+
 Team K
 
 # How to use Thyme2Eat
@@ -30,7 +32,7 @@ When you add a recipe to your meal plan, all of the ingredients and their amount
 - Deleting shopping list items using the checkbox or the X button.
 - Seeing calendar view when you hit "Add Meals" button.
 - Click and unclick calendar dates to add and remove meal planning for that day.
--CHANGE: Instead of graying out past dates, an error message pops up when you try to click on a past date to add a meal.
+- CHANGE: Instead of graying out past dates, an error message pops up when you try to click on a past date to add a meal.
 - Scroll through months on the calendar.
 - Confirm button on the calendar confirms days you want to plan and calls the API. It takes you to the main activity with potential meals for the days you wanted to plan.
 - X on calendar screen takes you back to the Main Activity without saving any changes.
@@ -54,6 +56,7 @@ When you add a recipe to your meal plan, all of the ingredients and their amount
 # Completed in the Second Sprint:
 - We implemented the Favorites feature, which users can use for recipes that they enjoy and would like quick access to in case the would like to cook it again.
 - The addition and deletion of shopping list items based on the addition and deletion of the meal plan items have been optimized.
+- Adding a shopping list item now has a functional dialog box with error handling built in.
 - The checkboxes within the shopping list function properly and are used to mass delete items from the list for easy use.
 - Conglomerating like ingredients based on quantities has been optimized.
 - Data persistence of the calendar for both adding new meals and adding favorited meals is functional.
