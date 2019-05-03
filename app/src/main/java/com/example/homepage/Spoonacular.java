@@ -263,7 +263,10 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                                     } else {
                                         shoppingList.put(altKey, ingredient);
                                     }
+                                    //shopDatabase.child(ingredient.name).child("unit").setValue("oz");
                                 }
+//                            shopDatabase.child(ingredient.name).child("amount").setValue(ing.amount);
+//                            shopDatabase.child(ingredient.name).child("unit").setValue(ing.unit);
                             } else {
                                 Log.w("add", "Adding " + ingredient.name + " " + ingredient.amount + " " + ingredient.unit);
                                 shoppingList.put(ingredient.name, ingredient);
@@ -310,6 +313,14 @@ public class Spoonacular extends AsyncTask <String, String, String> {
             String target = args[3];
             try {
                 RecipesRecyclerViewAdapter.convertedAmount = convertUnit(i, args[3]).amount;
+                //Double temp = convertUnit(i, args[3]).amount;
+                /*
+                if (temp == -1) {
+                    RecipesRecyclerViewAdapter.convertedAmount = 0;
+                } else {
+                    RecipesRecyclerViewAdapter.convertedAmount = temp;
+                }
+                */
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -325,6 +336,48 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                 r = Favorites.favoritesList.get(idx);
                 updateShopList(r, r.date, false, false, "");
             }
+//            shopDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot ds) {
+//                    for (Ingredient i : r.extendedIngredients) {
+//                        if (ds.child(i.name).exists()) {
+//                            double toAdd = 0;
+//                            double newVal = Double.parseDouble(ds.child(i.name).child("amount").getValue().toString());
+//                            if (ds.child("unit").exists()) {
+//                                String unit = ds.child("unit").getValue().toString();
+//                                if (i.unit.equals(unit)) {
+//                                    toAdd = i.amount;
+//                                } else {
+//                                    try {
+//                                        toAdd = convertUnit(i, unit).amount;
+//                                    } catch (JSONException e) {
+//                                        e.printStackTrace();
+//                                    }
+//                                }
+//                                newVal += toAdd;
+//                                shopDatabase.child(i.name).child("amount").setValue(newVal);
+//                            } else if (i.name.charAt(i.name.length() - 1) == 's'){
+//                                i.name = i.name.substring(0, i.name.length() - 1);
+//                                shopDatabase.child(i.name).child("amount").setValue(i.amount);
+//                                shopDatabase.child(i.name).child("unit").setValue(i.unit);
+//                            } else {
+//                                i.name = i.name + 's';
+//                                shopDatabase.child(i.name).child("amount").setValue(i.amount);
+//                                shopDatabase.child(i.name).child("unit").setValue(i.unit);
+//                            }
+//                        } else {
+//                            Log.w("trying to add", i.name);
+//                            shopDatabase.child(i.name).child("amount").setValue(i.amount);
+//                            shopDatabase.child(i.name).child("unit").setValue(i.unit);
+//                        }
+//                    }
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                }
+//            });
         }
         return "Success";
     }
