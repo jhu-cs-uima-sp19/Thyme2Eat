@@ -23,7 +23,6 @@ public class MyShoppingListItemsRecyclerViewAdapter extends RecyclerView.Adapter
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Log.w("myApp", "at holder add");
         //final Button add;
         final View shopview = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_shoppinglistitems, parent, false);
@@ -32,14 +31,12 @@ public class MyShoppingListItemsRecyclerViewAdapter extends RecyclerView.Adapter
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        Log.w("myApp", "atBindView");
         ((ViewHolder) holder).bindView(position);
 
     }
 
     @Override
     public int getItemCount() {
-        Log.w("here", "" + ShoppingListItemsFragment.stringShopList.size());
         return ShoppingListItemsFragment.stringShopList.size();
     }
 
@@ -90,10 +87,6 @@ public class MyShoppingListItemsRecyclerViewAdapter extends RecyclerView.Adapter
                     }
                 }
             });
-
-            if (mContentView == null) {
-                Log.w("empty", "content is null");
-            }
         }
 
         public void bindView(int position) {

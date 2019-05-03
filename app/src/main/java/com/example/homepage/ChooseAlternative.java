@@ -111,7 +111,6 @@ public class ChooseAlternative extends AppCompatActivity {
         swap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.w("swap", "clicked");
                 final Recipe r = rcAdapter.alternatives.get(rcAdapter.selected);
                 final DatabaseReference db = MainActivity.mDatabase.child("plan").child(r.date);
                 db.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -124,21 +123,10 @@ public class ChooseAlternative extends AppCompatActivity {
                         newRecipeAlts.child(r.title).setValue(null);
                         newRecipeAlts.child(oldName).setValue(dataSnapshot.child(oldName).getValue());
                         newRecipeAlts.child(oldName).child("alts").setValue(null);
-                        Log.w("replacing", oldName);
                         db.child(oldName).setValue(null);
 
                         ChooseAlternative.spoonacularArgs = new String[]{rcAdapter.selected + "", r.date, "true", "false", ""};
-                        //Spoonacular.updateShopList(r, r.date, true, false, "");
                         Spoonacular.skip = true;
-                        /*
-                        RecipesRecyclerViewAdapter.deleteIngreds(ChooseAlternative.this, oldRecipe);
-                        long startTime = System.currentTimeMillis();
-                        RecipesRecyclerViewAdapter.deleting = true;
-                        while(RecipesRecyclerViewAdapter.deleting && (System.currentTimeMillis()-startTime)<3000) {
-                            continue;
-                        }
-                        Log.w("deleting ingreds", oldRecipe.extendedIngredients.toString());
-                        */
                         new Spoonacular(ChooseAlternative.this).execute("updateShop", "alts");
                     }
 

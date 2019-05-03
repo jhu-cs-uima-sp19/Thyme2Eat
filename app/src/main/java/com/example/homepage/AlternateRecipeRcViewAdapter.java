@@ -85,7 +85,6 @@ public class AlternateRecipeRcViewAdapter extends RecyclerView.Adapter<Alternate
             image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.w("alternate ingreds", alternatives.get(getAdapterPosition()).extendedIngredients.toString());
                     Intent intent = new Intent(mView.getContext(), ViewRecipe.class);
                     intent.putExtra("index", getAdapterPosition());
                     intent.putExtra("array", 1);
