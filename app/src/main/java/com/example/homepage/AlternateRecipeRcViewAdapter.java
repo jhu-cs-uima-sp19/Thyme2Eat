@@ -5,7 +5,6 @@ import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -62,12 +61,36 @@ public class AlternateRecipeRcViewAdapter extends RecyclerView.Adapter<Alternate
             image = (ImageView) view.findViewById(R.id.altImage);
 
             checkbox = (CheckBox) view.findViewById(R.id.alternate_choose);
+
+
+            title = (TextView) view.findViewById(R.id.titleText);
+        }
+
+        public void bindView(final int position) {
+            onBind = true;
+            if (position == selected) {
+                this.checkbox.setChecked(true);
+            } else {
+                this.checkbox.setChecked(false);
+            }
+
+            image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.w("alternate ingreds", alternatives.get(position).extendedIngredients.toString());
+                    Intent intent = new Intent(mView.getContext(), ViewRecipe.class);
+                    intent.putExtra("index",position);
+                    intent.putExtra("array", 1);
+                    mView.getContext().startActivity(intent);
+                }
+            });
+
             checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (!onBind) {
                         if (isChecked) {
-                            selected = getAdapterPosition();
+                            selected = position;
                         } else {
                             selected = -1;
                         }
@@ -82,25 +105,6 @@ public class AlternateRecipeRcViewAdapter extends RecyclerView.Adapter<Alternate
                     }
                 }
             });
-            image.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mView.getContext(), ViewRecipe.class);
-                    intent.putExtra("index", getAdapterPosition());
-                    intent.putExtra("array", 1);
-                    mView.getContext().startActivity(intent);
-                }
-            });
-            title = (TextView) view.findViewById(R.id.titleText);
-        }
-
-        public void bindView(int position) {
-            onBind = true;
-            if (position == selected) {
-                this.checkbox.setChecked(true);
-            } else {
-                this.checkbox.setChecked(false);
-            }
 
             String cache = "/data/user/0/com.example.homepage/cache";
             Recipe recipe = alternatives.get(position);

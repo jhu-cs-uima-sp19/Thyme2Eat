@@ -3,10 +3,8 @@ package com.example.homepage;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
@@ -14,8 +12,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -31,9 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 
 public class FavoritesRcViewAdapter extends RecyclerView.Adapter<FavoritesRcViewAdapter.ViewHolder> {
 
@@ -92,19 +86,6 @@ public class FavoritesRcViewAdapter extends RecyclerView.Adapter<FavoritesRcView
                                     r.date = year + ";" +
                                             String.valueOf(f.format(month)) + ";" + String.valueOf(f.format(day));
                                     r.dateText = Recipe.makeDateText(r.date);
-//                                    final DatabaseReference db = MainActivity.mDatabase;
-//                                    db.addListenerForSingleValueEvent(new ValueEventListener() {
-//                                        @Override
-//                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                                            db.child("plan").child(r.date).child(r.title).setValue(dataSnapshot.child("favs").child(r.title).getValue());
-//                                            new Spoonacular(mView.getContext()).execute("updateShop", "favs", getAdapterPosition() + "");
-//                                        }
-//
-//                                        @Override
-//                                        public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                                        }
-//                                    });
                                     final Calendar c = Calendar.getInstance();
                                     final int hour = c.get(Calendar.HOUR_OF_DAY);
                                     final int min = c.get(Calendar.MINUTE);

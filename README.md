@@ -6,7 +6,7 @@ Spring 2019
 Team K
 
 # How to use Thyme2Eat
-Welcome, and thank you for trying out Thyme2Eat.
+Welcome, and thank you for trying out Thyme2Eat. **Internet connection is a must for using the application.**
 
 Thyme2Eat is a mobile application that focuses on creating meal plan for users based on their preferences.
 
@@ -57,11 +57,11 @@ When you add a recipe to your meal plan, all of the ingredients and their amount
 
 # Completed in the Second Sprint:
 - We implemented the Favorites feature, which users can use for recipes that they enjoy and would like quick access to in case the would like to cook it again.
-- The addition and deletion of shopping list items based on the addition and deletion of the meal plan items have been optimized.
+- The addition and deletion of shopping list items based on the addition and deletion of the meal plan items have been optimized. Ingredients of the same name will have their amounts added together. If the units are different, the app tries its best to convert the unit. If there is no conversion possible, they will be listed as different items.
 - Adding a shopping list item now has a functional dialog box with error handling built in.
 - The checkboxes within the shopping list function properly and are used to mass delete items from the list for easy use.
 - Conglomerating like ingredients based on quantities has been optimized.
-- Data persistence of the calendar for both adding new meals and adding favorited meals is functional.
-- Alternative meals are suggested to the user by clicking the fork and knife button beside a meal; this is based on the type of recipe and the ingredients within it.
+- Data persistence of the calendar, where the user will be shown if they already have a meal planned for a date. They will also be shown an error message if a date they chose is in the past, or if they have a meal planned already.
+- Alternative meals are suggested to the user by clicking the fork and knife button beside a meal; this is based on the type of recipe and the ingredients within it. Users can only check off one alternative recipe and can only swap to one alternative recipe.
 - We changed buttons, colors, layouts, and overall UI to make it resemble an Android application more.
 

@@ -192,11 +192,17 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                     Recipe recipe = recipes.get(i + d*numMealsPerDay);
                     if (recipe.instructions == null)
                         break;
+
+
                     recipe.title = recipe.title.replace("[", "(");
                     recipe.title = recipe.title.replace("]", ")");
                     recipe.title = recipe.title.replace(".", "");
                     recipe.title = recipe.title.replace("#", "");
                     recipe.title = recipe.title.replace("$", "");
+
+                    if (recipe.title.equals(args[2])) {
+                        break;
+                    }
 
                     String root;
                     if (roots.get(0).equals("alts")) {
