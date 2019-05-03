@@ -306,15 +306,15 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
         }
 
         public void bindView(int position) {
-            if (RecipeFragment.mealList.get(getAdapterPosition()).withPrev) {
+            if (RecipeFragment.mealList.get(position).withPrev) {
                 dateView.setVisibility(View.GONE);
             } else {
                 dateView.setVisibility(View.VISIBLE);
-                dateView.setText(RecipeFragment.mealList.get(getAdapterPosition()).dateText);
+                dateView.setText(RecipeFragment.mealList.get(position).dateText);
             }
             timeView.setText(RecipeFragment.mealList.get(position).getTime());
             String cache = "/data/user/0/com.example.homepage/cache";
-            Recipe recipe = RecipeFragment.mealList.get(getAdapterPosition());
+            Recipe recipe = RecipeFragment.mealList.get(position);
             File file = new File(cache,
                     recipe.image.substring((recipe.image.lastIndexOf('/') + 1)));
             if (file.exists()) {

@@ -4,24 +4,20 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
-import android.support.constraint.solver.widgets.Snapshot;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -111,7 +107,6 @@ public class ChooseAlternative extends AppCompatActivity {
         swap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.w("swap", "clicked");
                 final Recipe r = rcAdapter.alternatives.get(rcAdapter.selected);
                 final DatabaseReference db = MainActivity.mDatabase.child("plan").child(r.date);
                 db.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -124,21 +119,10 @@ public class ChooseAlternative extends AppCompatActivity {
                         newRecipeAlts.child(r.title).setValue(null);
                         newRecipeAlts.child(oldName).setValue(dataSnapshot.child(oldName).getValue());
                         newRecipeAlts.child(oldName).child("alts").setValue(null);
-                        Log.w("replacing", oldName);
                         db.child(oldName).setValue(null);
 
                         ChooseAlternative.spoonacularArgs = new String[]{rcAdapter.selected + "", r.date, "true", "false", ""};
-                        //Spoonacular.updateShopList(r, r.date, true, false, "");
                         Spoonacular.skip = true;
-                        /*
-                        RecipesRecyclerViewAdapter.deleteIngreds(ChooseAlternative.this, oldRecipe);
-                        long startTime = System.currentTimeMillis();
-                        RecipesRecyclerViewAdapter.deleting = true;
-                        while(RecipesRecyclerViewAdapter.deleting && (System.currentTimeMillis()-startTime)<3000) {
-                            continue;
-                        }
-                        Log.w("deleting ingreds", oldRecipe.extendedIngredients.toString());
-                        */
                         new Spoonacular(ChooseAlternative.this).execute("updateShop", "alts");
                     }
 
