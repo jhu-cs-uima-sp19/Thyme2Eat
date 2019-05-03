@@ -1,3 +1,5 @@
+# Meeting Minutes for First and Second Sprints
+
 Apr 3:
 
 -We met in Brody around 8:00pm to discuss how to start the project and our tasks for the week.
@@ -9,8 +11,7 @@ Apr 3:
 
 Apr 7:
 
-Brody Tech Room
-11 am
+-We met in Brody Tech Room at 11 am
 -After our meeting with Simon
 -We went over how to use the API and the database
 assigned each other more specific and well designed roles
@@ -20,8 +21,7 @@ assigned each other more specific and well designed roles
 
 Apr 11:
 
-Brody Tech Room
-8 pm
+-We met in Brody Tech Room at 8 pm
 -We went over our progress since our last meeting
 -Identified where people needed help
 -Continued working on the main activity and settings and shopping list
@@ -40,4 +40,74 @@ Apr 14:
 -Some of our demo videos were also filmed.
 -Our meeting ended at 10:00pm.
 
+Apr 20:
+
+-We met in Brody at 11:15am to get started on our second sprint.
+-To begin, we made a list of things to do:
+Sonny
+  Add the buttons on the shopping list
+  Add button to a recipe for the favorites fragment
+  Make sure the checkboxes work for deleting multiple ingredients
+Emre
+  Favorite button/fragment
+  Delete recipe ingredients off the shopping list when the recipe is removed.
+  Choose alternative activity layout
+  Linking of adding a recipe and deleting a recipe to the shopping list items
+Mehk
+  Data persistence on calendar
+  Communication between calendar on main page and calendar activity
+  Communication between calendar in favorited recipes and calendar activity
+  Add option for meals a day in settings
+Julian
+  Combine like ingredients in shopping list
+  Choose alternatives backend
+  Rework the search algorithm
+  Make a small cache depending on if recipes are repeated
+  How long a meal takes -> start and finish time
+-We ended the meeting at 12:00pm.
+-Amendments → adding budget preference in settings, adding notification toggle separate time and preferences 
+
+Apr 21:
+
+-We met at 10:00am in M level with Simon.
+-Together, we went over some of the issues that were present while running the app.
+-After pulling the appropriate versions, we presented that the app functioned on different laptops.
+-Simon and the team clarified certain functionalities of already implemented features and future features as well.
+-We discussed what the next steps were for improving the app.
+-Simon suggested some small edits to our implementation such as changing buttons, moving around text-views, restricting the number of days/meals to plan for, and more that we collectively talked about.
+-We also updated the Github tasks.
+-The meeting ended at 11:00am, and the team will be meeting at least twice this next week.
+
+Apr 28:
+
+-We met with Simon at 10:00am in M level to discuss our second sprint progress.
+-At this point, we have to fix some of our bugs in our code and start our presentation for Thursday.
+-We went over our tasks for the upcoming week so that our second sprint would be done by Friday.
+-The main things to do are lots of error checking, adding ingredients to the shopping list, making sure the favorites page works, generating the alternative meal plans, and optimizing the conglomeration and deletion of like ingredients in the shopping list.
+-To make sure we are on the same page, we made plans to meet during the week at least twice to finalize the presentation and to make sure that our app functions on all major devices.
+-We ended the meeting at 11:00am.
+
+Apr 30:
+
+-We met in Brody at 8:00pm to work on the app further.
+-Together, we made a list of aspects to test on our app, since some of our versions were faulty for different people.
+-Individually, we worked on optimizing the addition and deletion of items in the shopping list as meals were added and deleted.
+-We also worked on making the layout for the dialog box for adding shopping list ingredients.
+-The meeting ended around 9:00pm.
+
+May 1:
+
+-We met at 8:30pm to work on our presentation deliverables.
+-By testing the app, we fixed small bugs to create a demo that could be presentable for the class tomorrow.
+-Our presentation materials were collaboratively edited to include the major aspects of the app.
+-We recorded several demos to choose the best video that represents all features of the app.
+-The meeting ended at 11:30pm when we were finished with our presentation.
+
+May 3:
+
+-We met in the Tech Room at 3pm to finalize the deliverables of our second sprint.
+-First, we went over the bugs that each person was dealing with, and we made sure that we fixed all the ones we detected.
+-Second, we tested the app on different devices to ensure the layouts were consistent.
+-We then tested different scenarios that users could go through.
+-With our tests done, we cleaned our code so that large comments and Logs were deleted.
 

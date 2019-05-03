@@ -356,13 +356,14 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (Ingredient ingredient : r.extendedIngredients) {
                     String altKey = ingredient.name + " :" + ingredient.unit;
-                    if (dataSnapshot.child(ingredient.name).exists()) {
+                    if (dataSnapshot.child(ingredient.name).exists() && dataSnapshot.child("amount").exists()) {
                         double existingVal = Double.parseDouble(dataSnapshot.child(ingredient.name).child("amount").getValue().toString());
                         String dbUnit = dataSnapshot.child(ingredient.name).child("unit").toString();
                         double addVal;
                         Log.w("convert", "dbunit: " + dbUnit);
                         if (ingredient.unit.equals(dbUnit) || ingredient.unit.contains(dbUnit) || dbUnit.contains(ingredient.unit)) {
                             Double newAmount = existingVal - ingredient.amount;
+                            Log.w("delete", "Deleting " + ingredient.name + " " + ingredient.amount + " " + ingredient.unit);
                             if (newAmount > 0.1) {
                                 shopDatabase.child(ingredient.name).child("amount").setValue(newAmount);
                             } else {
@@ -388,14 +389,16 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                             Log.w("convert", "Converted amount is " + +RecipesRecyclerViewAdapter.convertedAmount);
                             if (addVal != -1) {
                                 Double newAmount = existingVal - addVal;
+                                Log.w("delete", "Deleting " + ingredient.name + " " + addVal + " " + dbUnit);
                                 if (newAmount > 0.1) {
                                     shopDatabase.child(ingredient.name).child("amount").setValue(newAmount);
                                 } else {
                                     shopDatabase.child(ingredient.name).setValue(null);
                                 }
                             } else if (dataSnapshot.child(altKey).exists()){
-                                existingVal = Double.parseDouble(dataSnapshot.child(ingredient.name).child("amount").getValue().toString());
+                                existingVal = Double.parseDouble(dataSnapshot.child(altKey).child("amount").getValue().toString());
                                 Double newAmount = existingVal - ingredient.amount;
+                                Log.w("delete", "Deleting " + altKey + " " + ingredient.amount + " " + ingredient.unit);
                                 if (newAmount > 0.1) {
                                     shopDatabase.child(altKey).child("amount").setValue(newAmount);
                                 } else {
@@ -407,6 +410,7 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
 //                            shopDatabase.child(ingredient.name).child("amount").setValue(ing.amount);
 //                            shopDatabase.child(ingredient.name).child("unit").setValue(ing.unit);
                     } else if (dataSnapshot.child(altKey).exists()){
+                        Log.w("delete", "Deleting " + altKey + " " + ingredient.amount + " " + ingredient.unit);
                         Double existingVal = Double.parseDouble(dataSnapshot.child(altKey).child("amount").getValue().toString());
                         Double newAmount = existingVal - ingredient.amount;
                         if (newAmount > 0.1) {

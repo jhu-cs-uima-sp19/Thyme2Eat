@@ -2,7 +2,6 @@ package com.example.homepage;
 
 import android.app.Dialog;
 import android.app.TimePickerDialog;
-import android.content.SharedPreferences;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;

@@ -273,35 +273,6 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                             }
                         }
                     }
-//                    for (Ingredient ingredient : recipe.extendedIngredients) {
-//                        mDatabase.child(root).child(recipe.title).child("ingredients").child(ingredient.name).child("amount").setValue(ingredient.amount);
-//                        mDatabase.child(root).child(recipe.title).child("ingredients").child(ingredient.name).child("unit").setValue(ingredient.unit);
-//                        boolean contains = false;
-//                        for (Ingredient ing : ingredients) {
-//                            if (ingredient.name.equals(ing.name)) {
-//                                contains = true;
-//                                if (ingredient.unit.equals(ing.unit)) {
-//                                    ing.amount += ingredient.amount;
-//                                } else {
-//                                    try {
-//                                        ingredient = convertUnit(ingredient, "oz");
-//                                    } catch (JSONException e) {
-//                                        e.printStackTrace();
-//                                    }
-//                                    ing.amount += ingredient.amount;
-//                                    shopDatabase.child(ingredient.name).child("unit").setValue("oz");
-//                                }
-//                                shopDatabase.child(ingredient.name).child("amount").setValue(ing.amount);
-//                                shopDatabase.child(ingredient.name).child("unit").setValue(ing.unit);
-//                                break;
-//                            }
-//                        }
-//                        if (!contains) {
-//                            ingredients.add(ingredient);
-//                            shopDatabase.child(ingredient.name).child("amount").setValue(ingredient.amount);
-//                            shopDatabase.child(ingredient.name).child("unit").setValue(ingredient.unit);
-//                        }
-//                    }
 
                     mDatabase.child(root).child(recipe.title).child("instructions").setValue(recipe.instructions);
                     String start = MainActivity.myPreferences.getString("Meal " + (i + 1) + " start", "14:00");
@@ -522,7 +493,7 @@ public class Spoonacular extends AsyncTask <String, String, String> {
                                         shopDatabase.child(ingredient.name).setValue(null);
                                     }
                                 } else if (dataSnapshot.child(altKey).exists()){
-                                    existingVal = Double.parseDouble(dataSnapshot.child(ingredient.name).child("amount").getValue().toString());
+                                    existingVal = Double.parseDouble(dataSnapshot.child(altKey).child("amount").getValue().toString());
                                     Double newAmount = existingVal - ingredient.amount;
                                     if (newAmount > 0.1) {
                                         shopDatabase.child(altKey).child("amount").setValue(newAmount);

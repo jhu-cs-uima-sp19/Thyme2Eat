@@ -1,8 +1,6 @@
 package com.example.homepage;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -11,19 +9,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
-import android.util.Pair;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 
 import com.example.homepage.dummy.DummyContent.DummyItem;
@@ -89,7 +83,7 @@ public class ShoppingListItemsFragment extends Fragment {
                 stringShopList = new ArrayList<>();
                 Log.w("data", "in snap");
                 String name;
-                double num;
+                double num = 0;
                 String theunit = "";
                 String wholeitem;
 
@@ -98,8 +92,9 @@ public class ShoppingListItemsFragment extends Fragment {
                     if (name.indexOf(':') != -1) {
                         name = name.substring(0, name.indexOf(':') - 1);
                     }
-                    num = Double.valueOf(items.child("amount").getValue().toString());
-
+                    if (items.child("amount").exists()) {
+                        num = Double.valueOf(items.child("amount").getValue().toString());
+                    }
                     if (items.child("unit").exists())
                         theunit = items.child("unit").getValue().toString();
                     if (num % 1 == 0) {
