@@ -28,6 +28,7 @@ public class Favorites extends Fragment {
 
     public static ArrayList<Recipe> favoritesList;
 
+
     public Favorites() {}
 
     @Override

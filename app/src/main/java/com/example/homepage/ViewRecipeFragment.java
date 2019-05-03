@@ -3,7 +3,6 @@ package com.example.homepage;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -15,7 +14,6 @@ import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
@@ -115,7 +113,6 @@ public class ViewRecipeFragment extends Fragment {
         recipe_text = (TextView)view.findViewById(R.id.recipe_text);
         ViewRecipe.instructions = ViewRecipe.instructions.replace(".", ".\n\n");
         recipe_text.setText(ViewRecipe.instructions);
-        // Inflate the layout for this fragment
         return view;
     }
 
