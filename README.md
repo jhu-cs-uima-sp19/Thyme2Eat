@@ -18,7 +18,9 @@ In order to get started, make your way to the SETTINGS, easily located using the
 
 Next, make your way back to the MEAL PLAN using the navigation drawer again. When you are here, press the ADD MEALS button. This will direct you to a calendar view where you can choose which dates you want to plan meals for. (You can only chose future dates). After you have chosen your dates, press CONFIRM. This will bring you back to the MEAL PLAN screen. From here, wait until your new meal plan loads. 
 
-With your new meal plan, you have several options. You can long click on the meals to change the dates, change the time, or delete each of the recipes that you have in your plan. Otherwise, you can click on each recipe to bring you to VIEW RECIPE. Here you have the option to either view the ingredients or the recipe.
+With your new meal plan, you have several options. You can long click on the meals to change the dates, change the time, or delete each of the recipes that you have in your plan. Otherwise, you can click on each recipe to bring you to VIEW RECIPE. Here you have the option to either view the ingredients or the recipe. You can also find ALTERNATIVE RECIPES which are suggested if you click on the fork and knife button beside each meal. If you like one of these meals better than your suggested meal, you can choose to SWAP it.
+
+If you view a meal that you love and want to save it for future use, you can press the star button to add it to your FAVORITES. In the favorites section, you can choose to add this favorited meal into your future meal schedule.
 
 When you add a recipe to your meal plan, all of the ingredients and their amounts are automatically added to the shopping list. To access the shopping list, simpily go to the SHOPPING LIST in the navigation drawer. There, you can check off items that you have purchased, delete items that you no longer want, or add other items that you wish to purchase.
 
