@@ -38,7 +38,6 @@ public class CreateMealPlan extends AppCompatActivity{
     private SharedPreferences myDates;
     private SharedPreferences.Editor dateEditor;
     private static int i = 0;
-    //boolean confPress = false;
 
 
     @Override
@@ -63,7 +62,6 @@ public class CreateMealPlan extends AppCompatActivity{
         int m = c.get(Calendar.MONTH);
         String month = convertMonth(m);
         monthTV.setText(month + " " + y);
-        //Log.d(TAG, "start");
 
 
 
@@ -71,7 +69,6 @@ public class CreateMealPlan extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 String dates =  "";
-                //confPress = true;
                 for (Date d: datesPicked) {
                     dates+=convertDate(d);
                     selectedDates.add(d);
@@ -95,12 +92,10 @@ public class CreateMealPlan extends AppCompatActivity{
                 Event ev = new Event(Color.BLACK, epoch, "Meal");
                 if ((!todayDate.after(dateClicked) || todayDate.getTime() - epoch < 86400000)
                         && !datesPicked.contains(dateClicked) && !selectedDates.contains(dateClicked)) {
-                    //selectedDates.add(dateClicked);
                     datesPicked.add(dateClicked);
                     calendar.addEvent(ev);
                 }else if ((!todayDate.after(dateClicked) || todayDate.getTime() - epoch < 86400000)
                         && datesPicked.contains(dateClicked) && !selectedDates.contains(dateClicked)){
-                    //selectedDates.remove(dateClicked);
                     datesPicked.remove(dateClicked);
                     calendar.removeEvent(ev);
                 }
@@ -139,19 +134,8 @@ public class CreateMealPlan extends AppCompatActivity{
     @Override
     protected void onResume(){
         super.onResume();
-        /*int n = myDates.getInt("num", 0);
-        Log.d(TAG, n + " resuming");
-        for(int m = 0; m < n; m++){
-            //Log.d(TAG, myDates.getLong("date" + m, 0) + " " + m);
-            Event ev = new Event(Color.GRAY, myDates.getLong("date" + m, 0),
-                    "Meal");
-            calendar.addEvent(ev);
-        }
-        */
         int n = myDates.getInt("numDates", 0);
-        Log.d(TAG, n + " resuming");
         for(int m = 0; m < n; m++){
-            Log.d(TAG, myDates.getLong("date" + m, 0) + " " + m);
             Event ev = new Event(Color.GRAY, myDates.getLong("date" + m, 0), "Meal");
             calendar.addEvent(ev);
         }
@@ -160,31 +144,11 @@ public class CreateMealPlan extends AppCompatActivity{
 
     @Override
     protected void onPause() {
-        /*i = 0;
-        for(Date d: selectedDates){
-            dateEditor.putLong("date" + i, d.getTime());
-            //Log.d(TAG, d.getTime() + " " + i);
-            i++;
-        }
-        dateEditor.putInt("num", i);
-        dateEditor.commit();
-        Log.d(TAG, i+" stopping");
-        */
         super.onPause();
     }
 
     @Override
     protected void onStop() {
-        /*i = 0;
-        for(Date d: selectedDates){
-            dateEditor.putLong("date" + i, d.getTime());
-            //Log.d(TAG, d.getTime() + " " + i);
-            i++;
-        }
-        dateEditor.putInt("num", i);
-        dateEditor.commit();
-        Log.d(TAG, i+" stopping");
-        */
         super.onStop();
     }
 
@@ -192,16 +156,6 @@ public class CreateMealPlan extends AppCompatActivity{
 
     @Override
     protected void onDestroy() {
-        /*i = 0;
-        for(Date d: selectedDates){
-            dateEditor.putLong("date" + i, d.getTime());
-            //Log.d(TAG, d.getTime() + " " + i);
-            i++;
-        }
-        dateEditor.putInt("num", i);
-        dateEditor.commit();
-        Log.d(TAG, i+" stopping");
-        */
         super.onDestroy();
     }
 
