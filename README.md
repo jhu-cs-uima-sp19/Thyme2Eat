@@ -1,5 +1,6 @@
 # Thyme2Eat
 User Interfaces and Mobile Applications 
+
 Team K
 
 # How to use Thyme2Eat
@@ -19,7 +20,7 @@ With your new meal plan, you have several options. You can long click on the mea
 
 When you add a recipe to your meal plan, all of the ingredients and their amounts are automatically added to the shopping list. To access the shopping list, simpily go to the SHOPPING LIST in the navigation drawer. There, you can check off items that you have purchased, delete items that you no longer want, or add other items that you wish to purchase.
 
-# Implemented features for 1st Sprint:
+# Implemented features for First Sprint:
 - Integration with Spoonacular API and Firebase
 - Viewing the current meal plan from the home page.
 - Ability to change the time and date for a planned meal or to delete the meal, by long pressing on a recipe.
@@ -35,7 +36,7 @@ When you add a recipe to your meal plan, all of the ingredients and their amount
 - X on calendar screen takes you back to the Main Activity without saving any changes.
 - Different databases for different users.
 
-# Not Complete in the First Sprint:
+# Not complete in the First Sprint:
 - We have not added data persistence for meals that have already been planned for certain days. This means that dates that you clicked on for meal planning before will not have a black dot the next time you open the calendar, but on the meal plan screen, those days will still have meals planned.
 - Right now, unclicking a calendar date means that you do not want to plan for that day. However, because there is no data persistence right now, if you open the calendar again, you can add another meal to the same day by clicking on it. In the next sprint, we will add data persistence and come up with a conclusive way to set number of meals per day (either through settings or the calendar).
 - The "Add" button for adding items to the shopping list does not function entirely properly because only one dialog box is present to take the name input.
