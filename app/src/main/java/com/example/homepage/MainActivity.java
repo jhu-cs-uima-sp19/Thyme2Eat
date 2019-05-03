@@ -111,7 +111,6 @@ public class MainActivity extends AppCompatActivity
                     String date = planDate.getKey();
                     try {
                         Date datePlanned = new SimpleDateFormat("yyyy;MM;dd").parse(date);
-                        Log.d(TAG, "date planned" + datePlanned);
                         dateEditor.putLong("date" + i, datePlanned.getTime());
                     }
                     catch(java.text.ParseException e) {
