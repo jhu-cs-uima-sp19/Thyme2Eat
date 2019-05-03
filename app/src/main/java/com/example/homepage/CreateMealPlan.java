@@ -38,6 +38,7 @@ public class CreateMealPlan extends AppCompatActivity{
     private SharedPreferences myDates;
     private SharedPreferences.Editor dateEditor;
     private static int i = 0;
+    //boolean confPress = false;
 
 
     @Override
@@ -65,10 +66,12 @@ public class CreateMealPlan extends AppCompatActivity{
         Log.d(TAG, "start");
 
 
+
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String dates =  "";
+                //confPress = true;
                 for (Date d: datesPicked) {
                     dates+=convertDate(d);
                 }
@@ -89,11 +92,13 @@ public class CreateMealPlan extends AppCompatActivity{
                 Context context = getApplicationContext();
                 long epoch = dateClicked.getTime();
                 Event ev = new Event(Color.BLACK, epoch, "Meal");
-                if (!todayDate.after(dateClicked)  && !selectedDates.contains(dateClicked)) {
+                if ((!todayDate.after(dateClicked) || todayDate.getTime() - epoch < 86400000)
+                        && !selectedDates.contains(dateClicked)) {
                     selectedDates.add(dateClicked);
                     datesPicked.add(dateClicked);
                     calendar.addEvent(ev);
-                }else if (!todayDate.after(dateClicked)    && selectedDates.contains(dateClicked)){
+                }else if ((!todayDate.after(dateClicked) || todayDate.getTime() - epoch < 86400000)
+                        && selectedDates.contains(dateClicked)){
                     selectedDates.remove(dateClicked);
                     datesPicked.remove(dateClicked);
                     calendar.removeEvent(ev);
