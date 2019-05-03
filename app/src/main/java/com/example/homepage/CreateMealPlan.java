@@ -74,6 +74,7 @@ public class CreateMealPlan extends AppCompatActivity{
                 //confPress = true;
                 for (Date d: datesPicked) {
                     dates+=convertDate(d);
+                    selectedDates.add(d);
                 }
                 if (selectedDates.size() == 0) {
                     Toast.makeText(CreateMealPlan.this, "Please select at least one date!", Toast.LENGTH_SHORT).show();
@@ -93,18 +94,21 @@ public class CreateMealPlan extends AppCompatActivity{
                 long epoch = dateClicked.getTime();
                 Event ev = new Event(Color.BLACK, epoch, "Meal");
                 if ((!todayDate.after(dateClicked) || todayDate.getTime() - epoch < 86400000)
-                        && !selectedDates.contains(dateClicked)) {
-                    selectedDates.add(dateClicked);
+                        && !datesPicked.contains(dateClicked) && !selectedDates.contains(dateClicked)) {
+                    //selectedDates.add(dateClicked);
                     datesPicked.add(dateClicked);
                     calendar.addEvent(ev);
                 }else if ((!todayDate.after(dateClicked) || todayDate.getTime() - epoch < 86400000)
-                        && selectedDates.contains(dateClicked)){
-                    selectedDates.remove(dateClicked);
+                        && datesPicked.contains(dateClicked) && !selectedDates.contains(dateClicked)){
+                    //selectedDates.remove(dateClicked);
                     datesPicked.remove(dateClicked);
                     calendar.removeEvent(ev);
                 }
                 else if (todayDate.after(dateClicked)) {
                     Toast.makeText(context, "Error: Past Date", Toast.LENGTH_SHORT).show();
+                }
+                else if (selectedDates.contains(dateClicked)) {
+                    Toast.makeText(context, "Edit in Meal Plan", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -139,7 +143,7 @@ public class CreateMealPlan extends AppCompatActivity{
         Log.d(TAG, n + " resuming");
         for(int m = 0; m < n; m++){
             Log.d(TAG, myDates.getLong("date" + m, 0) + " " + m);
-            Event ev = new Event(Color.BLACK, myDates.getLong("date" + m, 0),
+            Event ev = new Event(Color.GRAY, myDates.getLong("date" + m, 0),
                     "Meal");
             calendar.addEvent(ev);
         }
