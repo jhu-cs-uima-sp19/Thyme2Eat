@@ -1,5 +1,5 @@
 # Thyme2Eat
-User Interfaces and Mobile Applications
+User Interfaces and Mobile Applications 
 Team K
 
 # How to use Thyme2Eat
