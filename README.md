@@ -6,7 +6,7 @@ Spring 2019
 Team K
 
 # How to use Thyme2Eat
-Welcome, and thank you for trying out Thyme2Eat. ''Internet connection is a must for using the application.''
+Welcome, and thank you for trying out Thyme2Eat. **Internet connection is a must for using the application.**
 
 Thyme2Eat is a mobile application that focuses on creating meal plan for users based on their preferences.
 
